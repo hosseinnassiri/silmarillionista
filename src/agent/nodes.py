@@ -27,6 +27,21 @@ events_between.
 character_comparison, related_topics, or anything combining the two.
 
 When in doubt between semantic and relational, prefer "both".
+
+Examples:
+Q: "What is Turin's assumed name in Nargothrond?" -> relational (alias_resolution)
+Q: "Who is Galadriel?" -> semantic (character_explainer)
+Q: "Who were the sons of Finarfin?" -> relational (family_tree)
+Q: "Compare Thingol and Finwe as kings." -> both (character_comparison)
+Q: "What happened during the Dagor Bragollach?" -> semantic (event_explainer)
+Q: "Did the founding of Gondolin happen before or after the Dagor Aglareb?" -> relational (timeline)
+Q: "What happened between the founding of Doriath and the coming of the Noldor?" -> both (events_between)
+Q: "Describe the city of Nargothrond." -> semantic (location_description)
+Q: "How did the Noldor cross into Middle-earth from Aman?" -> relational (journey_path)
+Q: "What did Feanor say when he swore his oath?" -> semantic (quotes)
+Q: "What is connected to the theme of the Silmarils' curse?" -> both (related_topics)
+Q: "How is Galadriel related to Finwe?" -> relational (relationships)
+Q: "Who are the enemies of Doriath?" -> relational (allies_enemies)
 """
 
 
