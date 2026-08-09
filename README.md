@@ -18,18 +18,22 @@ alliances, aliases) via a Neo4j knowledge graph.
 `main.py` is the single "ask a question, get a cited answer" entrypoint (see
 below). The vector store and graph can also still be queried independently.
 
-Current eval results: **93% routing accuracy** (26/28), **4.43/5 avg answer
-quality** (LLM-as-judge). See
+Current eval results: **93% routing accuracy** (26/28), **~4.4/5 avg answer
+quality** (LLM-as-judge, fluctuates ±0.1 run-to-run). See
 [data/eval/scored_results.json](data/eval/scored_results.json) for full
-details. Three changes drove routing from 79%→93% and fixed real gaps:
+details. Changes that drove routing from 79%→93% and fixed real gaps:
 few-shot examples in the router prompt (79%→89%); `graph_query()` in
 `src/graph/query.py` rewritten to call only the Cypher-generation step
 directly instead of the full `GraphCypherQAChain`, since its own built-in
 QA-synthesis call was discarded unused (our `synthesize_node` redoes that
 work from the records) — roughly halves LLM calls per graph question with
-no quality change; and `src/graph/timeline.py`, a hand-curated era timeline
+no quality change; `src/graph/timeline.py`, a hand-curated era timeline
 (`HAPPENED_DURING` extraction was too sparse for ordering questions —
-`timeline_01` went from empty graph results to a correct, cited answer).
+`timeline_01` went from empty graph results to a correct, cited answer);
+and `src/graph/templates.py`, hand-written Cypher for known question shapes
+(family tree, allies-of-enemies, aliases) as a fallback when LLM-generated
+Cypher returns nothing — a robustness net for cases outside the current
+28-question eval set, since none of those happened to need it this round.
 Also fixed along the way: `synthesize_node` was storing `response.content`
 directly, which can be a list of content blocks (thinking + text) rather
 than a plain string — now uses `response.text`, which extracts just the
@@ -230,6 +234,7 @@ src/
 │   ├── extract.py           # chunks.json -> Neo4j (LLMGraphTransformer)
 │   ├── dedupe.py             # merge duplicate entity nodes
 │   ├── timeline.py           # curated era timeline -> HAPPENED_DURING edges
+│   ├── templates.py           # hand-written Cypher fallback for known question shapes
 │   └── query.py             # graph_query(question) -> cypher + records
 └── agent/
     ├── state.py             # LangGraph state schema

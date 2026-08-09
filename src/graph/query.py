@@ -10,6 +10,7 @@ from langchain_neo4j.chains.graph_qa.cypher import CYPHER_GENERATION_PROMPT, ext
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from src.config import CHAT_MODEL, NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME
+from src.graph.templates import match_template
 
 _chain: GraphCypherQAChain | None = None
 
@@ -88,6 +89,12 @@ def graph_query(question: str) -> dict:
     from the records anyway and never reads the chain's own answer. Roughly
     halves the LLM calls per graph query.
 
+    If the LLM-generated Cypher returns nothing, falls back to a hand-written
+    template for known question shapes (family tree, allies-of-enemies, etc.)
+    — see src/graph/templates.py — before giving up, since LLM-generated
+    Cypher can be unreliable for these exact patterns even though they have
+    an obvious, fixed translation.
+
     Returns {"cypher": str, "records": list}.
     """
     chain = _get_chain()
@@ -101,6 +108,16 @@ def graph_query(question: str) -> dict:
 
     records = chain.graph.query(generated_cypher)[: chain.top_k] if generated_cypher else []
     records = [row for row in records if not _contains_document_node(row)]
+
+    if not records:
+        template_match = match_template(question)
+        if template_match:
+            template_cypher, params, _template_name = template_match
+            template_records = chain.graph.query(template_cypher, params=params)[: chain.top_k]
+            template_records = [row for row in template_records if not _contains_document_node(row)]
+            if template_records:
+                return {"cypher": template_cypher, "records": template_records}
+
     return {"cypher": generated_cypher, "records": records}
 
 

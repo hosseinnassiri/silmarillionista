@@ -5,73 +5,105 @@
     "question": "What is Beren also known as?",
     "expected_route": "relational",
     "actual_route": "relational",
-    "answer": "Based on the text, Beren is also known by these names/epithets:\n\n- **Erchamion** and **Beren Erchamion** (\"One-Hand\")\n- **Camlost** and **Beren Camlost** (\"Empty-handed\")\n\nThese epithets refer to key aspects of his story: he lost his hand (to Carcharoth, the wolf) while grasping a **Silmaril**, which he had cut from Morgoth's crown using the knife **Angrist**.",
+    "answer": "Based on the text, Beren is also known by several names/epithets:\n\n- **Erchamion** (\"One-Hand\")\n- **Camlost** (\"Empty-handed\")\n- **Beren Erchamion**\n- **Beren Camlost**\n- **One-Hand**\n\nThese names reflect key episodes in his story (found in the chapter \"Of Beren and Lúthien\") — Erchamion/One-Hand refers to the loss of his hand (which had held a Silmaril) to Carcharoth the wolf, and Camlost (\"Empty-handed\") refers to his returning from Angband without the Silmaril still in his grasp.",
     "sources": [
       "knowledge graph"
     ],
     "vector_context": [],
     "graph_context": {
-      "cypher": "MATCH (n)-[:ALSO_KNOWN_AS]->(m)\nWHERE apoc.text.clean(n.id) = apoc.text.clean(\"Beren\")\nRETURN n.id AS Beren, m.id AS AlsoKnownAs, labels(m) AS Type\n",
+      "cypher": "MATCH (n)-[:ALSO_KNOWN_AS]->(m)\nWHERE apoc.text.clean(n.id) = apoc.text.clean(\"Beren\")\nRETURN n.id AS Name, labels(n) AS NodeType, m.id AS AlsoKnownAs, labels(m) AS AliasType\n",
       "records": [
         {
-          "Beren": "Beren",
+          "Name": "Beren",
+          "NodeType": [
+            "__Entity__",
+            "Man"
+          ],
           "AlsoKnownAs": "Silmaril",
-          "Type": [
+          "AliasType": [
             "__Entity__",
             "Object"
           ]
         },
         {
-          "Beren": "Beren",
+          "Name": "Beren",
+          "NodeType": [
+            "__Entity__",
+            "Man"
+          ],
           "AlsoKnownAs": "One-Hand",
-          "Type": [
+          "AliasType": [
             "__Entity__"
           ]
         },
         {
-          "Beren": "Beren",
+          "Name": "Beren",
+          "NodeType": [
+            "__Entity__",
+            "Man"
+          ],
           "AlsoKnownAs": "Seven Stars",
-          "Type": [
+          "AliasType": [
             "__Entity__",
             "Object"
           ]
         },
         {
-          "Beren": "Beren",
+          "Name": "Beren",
+          "NodeType": [
+            "__Entity__",
+            "Man"
+          ],
           "AlsoKnownAs": "Angrist",
-          "Type": [
+          "AliasType": [
             "__Entity__",
             "Object"
           ]
         },
         {
-          "Beren": "Beren",
+          "Name": "Beren",
+          "NodeType": [
+            "__Entity__",
+            "Man"
+          ],
           "AlsoKnownAs": "Erchamion",
-          "Type": [
+          "AliasType": [
             "__Entity__",
             "Man"
           ]
         },
         {
-          "Beren": "Beren",
+          "Name": "Beren",
+          "NodeType": [
+            "__Entity__",
+            "Man"
+          ],
           "AlsoKnownAs": "Camlost",
-          "Type": [
+          "AliasType": [
             "__Entity__",
             "Man"
           ]
         },
         {
-          "Beren": "Beren",
+          "Name": "Beren",
+          "NodeType": [
+            "__Entity__",
+            "Man"
+          ],
           "AlsoKnownAs": "Beren Erchamion",
-          "Type": [
+          "AliasType": [
             "__Entity__",
             "Man"
           ]
         },
         {
-          "Beren": "Beren",
+          "Name": "Beren",
+          "NodeType": [
+            "__Entity__",
+            "Man"
+          ],
           "AlsoKnownAs": "Beren Camlost",
-          "Type": [
+          "AliasType": [
             "__Entity__",
             "Man"
           ]
@@ -86,7 +118,7 @@
     "question": "What other names does Turin Turambar have?",
     "expected_route": "relational",
     "actual_route": "relational",
-    "answer": "Based on this context, Túrin is called by several names throughout the narrative:\n\n- **Turambar** – meaning \"Master of Doom\" in the High-elven speech, the name he took for himself among the woodmen of Brethil to hide his past.\n- **Agarwaen son of Úmarth** – meaning \"the Bloodstained, son of Ill-fate,\" the false name he gave upon arriving at Nargothrond, calling himself \"a hunter in the woods.\"\n- **Mormegil** – \"the Black Sword,\" a name he earned for his prowess in battle at Nargothrond, also tied to his sword Gurthang.\n- **Adanedhel** – \"the Elf-Man,\" a name given by many because of his bearing and beauty, which made him seem as one of the great houses of the Noldor.",
+    "answer": "Based on this context, Túrin uses or is given several names:\n\n- **Neithan** — not mentioned in this excerpt, but the passages here do give these: \n- **Agarwaen son of Úmarth** (\"the Bloodstained, son of Ill-fate\") — the false identity he gives at Nargothrond, to hide who he is.\n- **Adanedhel** (\"the Elf-Man\") — a name many called him in Nargothrond, because of his bearing and beauty, which made him seem almost of the great houses of the Noldor.\n- **Mormegil** (\"the Black Sword\") — the name he earned through his prowess in war on the Guarded Plain.\n- **Turambar** (\"Master of Doom\") — the name he takes for himself among the Woodmen of Brethil, when he casts off his past and seeks to hide his identity again.\n\nHis true name, revealed by Gwindor, is **Túrin son of Húrin**.",
     "sources": [
       "Quenta Silmarillion #21: Of Túrin Turambar"
     ],
@@ -113,7 +145,7 @@
       }
     ],
     "graph_context": {
-      "cypher": "\nMATCH (n)-[:ALSO_KNOWN_AS]->(m)\nWHERE apoc.text.clean(n.id) = apoc.text.clean(\"Turin Turambar\")\nRETURN n.id AS name, m.id AS alsoKnownAs\n",
+      "cypher": "MATCH (n)-[:ALSO_KNOWN_AS]->(m)\nWHERE apoc.text.clean(n.id) = apoc.text.clean(\"Turin Turambar\")\nRETURN n.id AS name, labels(n) AS nameLabel, m.id AS alsoKnownAs, labels(m) AS alsoKnownAsLabel\n",
       "records": []
     },
     "error": null
@@ -124,7 +156,7 @@
     "question": "Who is Feanor?",
     "expected_route": "semantic",
     "actual_route": "semantic",
-    "answer": "Fëanor (born Curufinwë) is the eldest son of Finwë, King of the Noldor, and his mother Míriel Serindé — so named \"the Spirit of Fire\" by her. He is described in \"Of Eldamar and the Princes of the Eldalië\" as \"the mightiest in skill of word and of hand, more learned than his brothers; his spirit burned as a flame.\"\n\nIn \"Of Fëanor and the Unchaining of Melkor,\" he is called \"of all the Noldor, then or after, the most subtle in mind and the most skilled in hand.\" He grew up tall, fair-faced, and masterful, with piercingly bright eyes and raven-dark hair. Among his achievements: he improved upon Rúmil's letters to create the writing system used thereafter by the Eldar (Fëanorian letters), and he was the first to discover how to make gems brighter than any found in the Earth. He wedded Nerdanel, daughter of the smith Mahtan, and had seven sons, including Maedhros, Maglor, Celegorm, Caranthir, Curufin, and the twins Amrod and Amras.\n\nHe was the bitterest enemy of Melkor among the Eldar, being the one who first named him Morgoth (\"none of the Eldalié ever hated Melkor more than Féanor son of Finwé\"). His pride and fiery spirit ultimately led him to defy the Valar and lead the Noldor's return to Middle-earth.\n\nIn \"Of the Return of the Noldor,\" Fëanor meets his end after being mortally wounded; with his last sight he beholds Thangorodrim and curses Morgoth thrice, charging his sons to fulfill their oath and avenge him. The text notes: \"so fiery was his spirit that as it sped his body fell to ash, and was borne away like smoke,\" and concludes that he was \"the mightiest of the Noldor, of whose deeds came both their greatest renown and their most grievous woe.\"",
+    "answer": "Based on this context, Fëanor is the eldest son of Finwë, King of the Noldor, born in Tirion in Eldamar. His mother was Míriel Serindé, who died (in spirit) after his birth, saying \"strength that would have nourished the life of many has gone forth into Féanor\" (*Of Fëanor and the Unchaining of Melkor*).\n\nKey details from the text:\n\n- **Name and character**: His father-name was Curufinwë, but his mother called him Féanor, \"Spirit of Fire,\" and \"his spirit burned as a flame\" (*Of Eldamar and the Princes of the Eldalië*). He was tall, fair of face, masterful, with piercingly bright eyes and raven-dark hair — \"eager and steadfast\" in his purposes, and \"of all the Noldor, then or after, the most subtle in mind and the most skilled in hand.\"\n\n- **Achievements**: He devised the letters (improving on Rúmil's work) used ever after by the Eldar, and was first to discover how to make gems brighter than those of the Earth — including the crystals that later became relevant to his greatest works.\n\n- **Family**: He wedded Nerdanel, daughter of the smith Mahtan, and had seven sons: Maedhros, Maglor, Celegorm, Caranthir, Curufin, and the twins Amrod and Amras. His half-brothers (through Finwë's second wife Indis) were Fingolfin and Finarfin.\n\n- **Relationship to Melkor**: Despite Melkor's later claims of having taught him, the text states plainly that \"none of the Eldalié ever hated Melkor more than Féanor,\" who was the first to name him Morgoth. He worked \"swiftly and alone,\" seeking counsel from none save briefly from Nerdanel.\n\n- **Death**: In *Of the Return of the Noldor*, Fëanor dies from wounds after glimpsing Thangorodrim, cursing Morgoth and charging his sons to fulfill their oath of vengeance. So fiery was his spirit that his body turned to ash upon death — \"the mightiest of the Noldor, of whose deeds came both their greatest renown and their most grievous woe.\"",
     "sources": [
       "Quenta Silmarillion #13: Of the Return of the Noldor",
       "Quenta Silmarillion #5: Of Eldamar and the Princes of the Eldalië",
@@ -161,7 +193,7 @@
     "question": "Who is Melian?",
     "expected_route": "semantic",
     "actual_route": "semantic",
-    "answer": "Melian is a Maia — one of the divine race of the Valar — who dwelt in the gardens of Lórien in Valinor, \"and among all his people there were none more beautiful than Melian, nor more wise, nor more skilled in songs of enchantment\" (*Of Thingol and Melian*). She was akin to Yavanna before the World was made, and she departed Valinor for Middle-earth before the awakening of the Sun and Moon, filling the silence of Middle-earth \"with her voice and the voices of her birds.\"\n\nIn Middle-earth she enchanted Elwë (Thingol) with her song in the wood of Nan Elmoth; he fell in love with her, and \"a spell was laid on him,\" binding them together for long years. She became his Queen in Doriath, ruling with him from Menegroth, the Thousand Caves. As noted in *Of the Ruin of Doriath*, though a Maia, \"for love of Elwë Singollo she took upon herself the form of the Elder Children of Ilúvatar,\" becoming subject to \"the chain and trammels of the flesh of Arda.\" In that form she bore Lúthien Tinúviel, called the fairest of all the Children of Ilúvatar.\n\nHer power sustained the Girdle of Melian, a protective enchantment that defended Doriath for long ages. She had great foresight (*Of the Sindar*) and counseled Thingol to fortify his kingdom. After Thingol's death, her power was withdrawn from Doriath, and she departed Middle-earth, returning to the gardens of Lórien in Valinor to \"muse upon her sorrows\" — and, as the text says, \"this tale speaks of her no more.\"",
+    "answer": "Melian is a Maia, of the race of the Valar, described as more beautiful, wise, and skilled in songs of enchantment than any among her people (*Of Thingol and Melian*). She dwelt in the gardens of Lórien in Valinor, where nightingales attended her and she taught them their song, but before the World was made she departed Valinor for Middle-earth, filling its silence \"before the dawn with her voice and the voices of her birds.\"\n\nIn Middle-earth she encountered Elwë (Elu Thingol) in the starlit wood of Nan Elmoth, and he fell under her enchantment; they stood together as long years passed. She became his Queen, and together they ruled the Sindar from their hidden halls of Menegroth in Doriath. As *Of the Ruin of Doriath* explains, \"for love of Elwë Singollo she took upon herself the form of the Elder Children of Ilúvatar,\" binding herself to the flesh of Arda, and through this union bore Lúthien Tinúviel. In this form she also gained \"a power over the substance of Arda,\" which she used to raise the Girdle of Melian, a protective enchantment that defended Doriath for long ages.\n\nShe had great foresight \"after the manner of the Maiar\" (*Of the Sindar*), counseling Thingol to fortify Menegroth in anticipation that peace would not last. After Thingol's death, her power waned and she departed Middle-earth, returning to Lórien in Valinor to \"muse upon her sorrows,\" and the tale speaks of her no more.",
     "sources": [
       "Quenta Silmarillion #10: Of the Sindar",
       "Quenta Silmarillion #22: Of the Ruin of Doriath",
@@ -198,62 +230,34 @@
     "question": "Who are the children of Feanor?",
     "expected_route": "relational",
     "actual_route": "relational",
-    "answer": "Based on the context provided, Fëanor's children (the seven sons of Fëanor) are:\n\n- Maedhros\n- Maglor\n- Celegorm\n- Caranthir\n- Curufin\n- Amrod\n- Amras",
+    "answer": "Based on the text, Fëanor's children are: **Maedhros**, **Maglor**, **Celegorm**, **Caranthir**, **Curufin**, and the twins **Amrod** and **Amras**.",
     "sources": [
       "knowledge graph"
     ],
     "vector_context": [],
     "graph_context": {
-      "cypher": "MATCH (f)-[:PARENT_OF]->(child)\nWHERE apoc.text.clean(f.id) = apoc.text.clean(\"Feanor\")\nRETURN child.id AS ChildName, labels(child) AS ChildType\n",
+      "cypher": "\nMATCH (p)-[:PARENT_OF]->(c)\nWHERE apoc.text.clean(p.id) = apoc.text.clean(\"Feanor\")\nRETURN c.id AS child\n",
       "records": [
         {
-          "ChildName": "Amrod",
-          "ChildType": [
-            "__Entity__",
-            "Elf"
-          ]
+          "child": "Amrod"
         },
         {
-          "ChildName": "Amras",
-          "ChildType": [
-            "__Entity__",
-            "Elf"
-          ]
+          "child": "Amras"
         },
         {
-          "ChildName": "Celegorm",
-          "ChildType": [
-            "__Entity__",
-            "Elf"
-          ]
+          "child": "Celegorm"
         },
         {
-          "ChildName": "Curufin",
-          "ChildType": [
-            "__Entity__",
-            "Elf"
-          ]
+          "child": "Curufin"
         },
         {
-          "ChildName": "Maglor",
-          "ChildType": [
-            "__Entity__",
-            "Elf"
-          ]
+          "child": "Maglor"
         },
         {
-          "ChildName": "Caranthir",
-          "ChildType": [
-            "__Entity__",
-            "Elf"
-          ]
+          "child": "Caranthir"
         },
         {
-          "ChildName": "Maedhros",
-          "ChildType": [
-            "__Entity__",
-            "Elf"
-          ]
+          "child": "Maedhros"
         }
       ]
     },
@@ -265,88 +269,192 @@
     "question": "List all descendants of Finwe.",
     "expected_route": "relational",
     "actual_route": "relational",
-    "answer": "Based on the context, the descendants of Finwë recorded are:\n\n- **Féanor** (and his sons: Maedhros, Maglor, Celegorm, Caranthir, Curufin [also listed as Curufinwë], Amrod, Amras)\n- **Fingolfin** (and his children: Fingon, Turgon, Aredhel Ar-Feiniel)\n- **Finarfin** (and his children: Finrod/Finrod Felagund/Felagund, Orodreth, Angrod, Aegnor, Galadriel)\n\nFurther descendants through these lines include:\n- **Idril** (Idril Celebrindal), daughter of Turgon\n- **Eärendil**, who married Idril\n- **Elrond**, son of Eärendil\n\nThis traces Finwë's line through his three sons (Fëanor, Fingolfin, and Finarfin) and onward through Turgon's daughter Idril to Eärendil and Elrond, as recounted in *The Silmarillion*'s genealogies (see \"Of the Sindar,\" \"Of Eldamar,\" and the later chapters covering the House of Fëanor and House of Fingolfin).",
+    "answer": "Based on the genealogical data in this text, the descendants of Finwë include:\n\n**Sons:**\n- Fëanor\n- Fingolfin\n- Finarfin\n\n**Grandchildren (and further descendants) via Fëanor:**\n- Maedhros, Maglor, Celegorm, Caranthir, Curufin, Amrod, Amras (the sons of Fëanor)\n- Curufinwë (a name also associated with this line)\n\n**Via Fingolfin:**\n- Fingon\n- Turgon\n- Aredhel Ar-Feiniel\n\n**Via Finarfin:**\n- Finrod (also called Finrod Felagund, or Felagund)\n- Orodreth\n- Angrod\n- Aegnor\n- Galadriel\n\n**Further descendants (great-grandchildren and beyond):**\n- Idril (Idril Celebrindal), daughter of Turgon\n- Eärendil, who married Idril\n- Elrond, descended through Eärendil\n\nThis lineage reflects the House of Finwë as chronicled in *The Silmarillion*, particularly in the *Quenta Silmarillion* sections dealing with the Noldor and their princes.",
     "sources": [
       "knowledge graph"
     ],
     "vector_context": [],
     "graph_context": {
-      "cypher": "MATCH (n)-[:PARENT_OF*1..]->(descendant)\nWHERE apoc.text.clean(n.id) = apoc.text.clean(\"Finwe\")\nRETURN DISTINCT descendant.id AS Descendant\n",
+      "cypher": "MATCH (n)\nWHERE apoc.text.clean(n.id) = apoc.text.clean(\"Finwe\")\nMATCH (n)-[:PARENT_OF*1..]->(descendant)\nRETURN DISTINCT descendant.id AS Descendant, labels(descendant) AS Type",
       "records": [
         {
-          "Descendant": "Féanor"
+          "Descendant": "Féanor",
+          "Type": [
+            "__Entity__",
+            "Elf",
+            "House"
+          ]
         },
         {
-          "Descendant": "Fingolfin"
+          "Descendant": "Fingolfin",
+          "Type": [
+            "__Entity__",
+            "Elf",
+            "House"
+          ]
         },
         {
-          "Descendant": "Finarfin"
+          "Descendant": "Finarfin",
+          "Type": [
+            "__Entity__",
+            "Elf",
+            "House"
+          ]
         },
         {
-          "Descendant": "Maedhros"
+          "Descendant": "Maedhros",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Maglor"
+          "Descendant": "Maglor",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Celegorm"
+          "Descendant": "Celegorm",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Caranthir"
+          "Descendant": "Caranthir",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Curufin"
+          "Descendant": "Curufin",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Amrod"
+          "Descendant": "Amrod",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Amras"
+          "Descendant": "Amras",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Fingon"
+          "Descendant": "Fingon",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Turgon"
+          "Descendant": "Turgon",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Finrod"
+          "Descendant": "Finrod",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Felagund"
+          "Descendant": "Felagund",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Orodreth"
+          "Descendant": "Orodreth",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Angrod"
+          "Descendant": "Angrod",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Aegnor"
+          "Descendant": "Aegnor",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Galadriel"
+          "Descendant": "Galadriel",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Curufinwe"
+          "Descendant": "Curufinwe",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Eärendil"
+          "Descendant": "Eärendil",
+          "Type": [
+            "__Entity__",
+            "Man",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Elrond"
+          "Descendant": "Elrond",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Finrod Felagund"
+          "Descendant": "Finrod Felagund",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Idril"
+          "Descendant": "Idril",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Aredhel Ar-Feiniel"
+          "Descendant": "Aredhel Ar-Feiniel",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Descendant": "Idril Celebrindal"
+          "Descendant": "Idril Celebrindal",
+          "Type": [
+            "__Entity__",
+            "Elf"
+          ]
         }
       ]
     },
@@ -358,7 +466,7 @@
     "question": "Compare Feanor and Fingolfin.",
     "expected_route": "both",
     "actual_route": "both",
-    "answer": "**Féanor and Fingolfin** were half-brothers, sons of Finwé, King of the Noldor — but by different mothers: Féanor's mother was Míriel Serindé, while Fingolfin's (and Finarfin's) mother was Indis of the Vanyar (*Of Eldamar and the Princes of the Eldalië*).\n\n**Character:**\n- Féanor was \"the mightiest in skill of word and of hand, more learned than his brothers; his spirit burned as a flame.\" He was also famed as the maker of the Silmarils, the deviser of the Fëanorian letters, and the first to craft great gems (*Of Eldamar...*; *Of Fëanor and the Unchaining of Melkor*). He is described as \"tall, and fair of face, and masterful, his eyes piercingly bright and his hair raven-dark,\" eager and steadfast in his purposes, changed by counsel from few and by force from none.\n- Fingolfin was \"the strongest, the most steadfast, and the most valiant\" of Finwë's sons (*Of Eldamar...*).\n\n**Conflict between them:**\nIn *Of the Silmarils and the Unrest of the Noldor*, tension boils over when Fingolfin confronts Finwë about Féanor's presumption, asking \"wilt thou not restrain the pride of our brother, Curufinwë... By what right does he speak for all our people, as if he were King?\" Féanor responds by arming himself, drawing his sword on Fingolfin, and threatening him: \"Try but once more to usurp my place and the love of my father, and maybe it will rid the Noldor of one who seeks to be the master of thralls.\" Fingolfin makes no answer and departs in silence both times — showing restraint against Féanor's fiery aggression. The knowledge graph also marks them explicitly as **ENEMY_OF** one another, alongside being listed as **ALLIED_WITH** each other (reflecting how, despite this rivalry, they were later reconciled and fought together against Morgoth).\n\n**Fates:**\nFéanor's arc is bound to the Oath of the Silmarils, the Kinslaying at Alqualondë, and the burning of the ships at Losgar — deeds of pride and vengeance following him into Middle-earth.\nFingolfin's end comes in *Of the Ruin of Beleriand and the Fall of Fingolfin*: driven to despair by news of the Noldor's ruin, he rides alone to Angband and challenges Morgoth himself to single combat — described in that duel as gleaming \"beneath [Morgoth's shadow] as a star,\" wielding his sword Ringil, \"that glittered like ice.\" This contrasts with Féanor, who was likewise driven by wrath and pride but whose fire was self-consuming and divisive, whereas Fingolfin's final act is framed as heroic defiance in the face of hopeless ruin.\n\n**In sum:** Féanor is the brilliant, passionate, prideful creator and instigator whose fire drives much of the Noldor's tragedy, while Fingolfin is the steadfast, valiant, more restrained leader who nonetheless matches his half-brother in courage, ultimately dying in a solitary, doomed act of valor against Morgoth himself.",
+    "answer": "**Féanor and Fingolfin** were half-brothers, both sons of Finwé, King of the Noldor, but by different mothers — Féanor's mother was Míriel Serindé, while Fingolfin's (and Finarfin's) mother was Indis of the Vanyar (*Of Eldamar and the Princes of the Eldalië*).\n\n**Character:**\n- Féanor was \"the mightiest in skill of word and of hand, more learned than his brothers; his spirit burned as a flame.\" He was tall, fair of face, masterful, with piercingly bright eyes and raven-dark hair, \"eager and steadfast\" in his purposes, and \"few ever changed his courses by counsel, none by force.\" He was the most subtle in mind and skilled in hand of all the Noldor — creator of the Fëanorian letters and the Silmarils (*Of Fëanor and the Unchaining of Melkor*; *Of Eldamar and the Princes of the Eldalië*).\n- Fingolfin was \"the strongest, the most steadfast, and the most valiant\" (*Of Eldamar and the Princes of the Eldalië*).\n\n**Conflict between them:**\nTheir rivalry is dramatized in *Of the Silmarils and the Unrest of the Noldor*. Fingolfin urged their father Finwé to restrain Féanor's pride, questioning \"By what right does he speak for all our people, as if he were King?\" Féanor responded violently, drawing his sword on Fingolfin and threatening him: \"This is sharper than thy tongue. Try but once more to usurp my place and the love of my father, and maybe it will rid the Noldor of one who seeks to be the master of thralls.\" Fingolfin made no answer and withdrew in silence. The knowledge graph confirms they are marked as `ENEMY_OF` each other, alongside also being linked as `ALLIED_WITH` — reflecting their complex history of feud followed by eventual reconciliation and joint leadership of the Noldor in exile.\n\n**Fates:**\n- Féanor's story centers on the crafting of the Silmarils, his oath, the Kinslaying at Alqualondé, and the burning of the ships at Losgar — deeds of great skill and equally great pride and ruin.\n- Fingolfin's most famous act is his final ride to Angband in *Of the Ruin of Beleriand and the Fall of Fingolfin*, where, driven by wrath and despair at the ruin of the Noldor, he challenged Morgoth himself to single combat, wielding his sword Ringil \"that glittered like ice,\" while Morgoth \"alone of the Valas knew fear.\"\n\nIn sum, Féanor is portrayed as the greater genius and craftsman, fiery and prideful, sowing much of the division and doom of the Noldor; Fingolfin is portrayed as the stronger, steadier, and more valiant leader, who bore the brunt of holding the Noldor together after Féanor's death, ultimately dying in single combat against Morgoth himself.",
     "sources": [
       "Quenta Silmarillion #13: Of the Return of the Noldor",
       "Quenta Silmarillion #18: Of the Ruin of Beleriand and the Fall of Fingolfin",
@@ -390,218 +498,218 @@
       }
     ],
     "graph_context": {
-      "cypher": "MATCH (a)\nWHERE apoc.text.clean(a.id) = apoc.text.clean(\"Feanor\")\nOPTIONAL MATCH (a)-[r1]-(x)\nWITH a, collect(DISTINCT {relationship: type(r1), direction: CASE WHEN startNode(r1) = a THEN 'outgoing' ELSE 'incoming' END, other: x.id, otherLabels: labels(x)}) AS aRels\nMATCH (b)\nWHERE apoc.text.clean(b.id) = apoc.text.clean(\"Fingolfin\")\nOPTIONAL MATCH (b)-[r2]-(y)\nWITH a, aRels, b, collect(DISTINCT {relationship: type(r2), direction: CASE WHEN startNode(r2) = b THEN 'outgoing' ELSE 'incoming' END, other: y.id, otherLabels: labels(y)}) AS bRels\nRETURN a.id AS Feanor, aRels AS FeanorRelationships, b.id AS Fingolfin, bRels AS FingolfinRelationships\n",
+      "cypher": "MATCH (a)\nWHERE apoc.text.clean(a.id) = apoc.text.clean(\"Feanor\")\nOPTIONAL MATCH (a)-[r1]-(other1)\nWHERE NOT type(r1) IN [\"MENTIONS\"]\nWITH a, collect(DISTINCT {rel: type(r1), direction: CASE WHEN startNode(r1) = a THEN 'out' ELSE 'in' END, node: other1.id, labels: labels(other1)}) AS aRels\nMATCH (b)\nWHERE apoc.text.clean(b.id) = apoc.text.clean(\"Fingolfin\")\nOPTIONAL MATCH (b)-[r2]-(other2)\nWHERE NOT type(r2) IN [\"MENTIONS\"]\nWITH a, aRels, b, collect(DISTINCT {rel: type(r2), direction: CASE WHEN startNode(r2) = b THEN 'out' ELSE 'in' END, node: other2.id, labels: labels(other2)}) AS bRels\nRETURN a.id AS Feanor, aRels AS FeanorRelationships, b.id AS Fingolfin, bRels AS FingolfinRelationships\n",
       "records": [
         {
           "Feanor": "Féanor",
           "FeanorRelationships": [
             {
-              "other": "Curufinwe",
-              "relationship": "ALSO_KNOWN_AS",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Curufinwe",
+              "rel": "ALSO_KNOWN_AS",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Eldamar",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Eldamar",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Ered Wethrin",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Ered Wethrin",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Dor Daedeloth",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Dor Daedeloth",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Middle-Earth",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Middle-Earth",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Lammoth",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Lammoth",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Firth Of Drengist",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Firth Of Drengist",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Drengist",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Drengist",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Alqualondé",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Alqualondé",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place",
                 "Event"
               ]
             },
             {
-              "other": "Aman",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Aman",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Tirion",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Tirion",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Valmar",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Valmar",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Formenos",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Formenos",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Eldar",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Eldar",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf",
                 "House"
               ]
             },
             {
-              "other": "Ring Of Doom",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Ring Of Doom",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Manwë",
-              "relationship": "PARTICIPATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Manwë",
+              "rel": "PARTICIPATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Vala",
                 "Maia"
               ]
             },
             {
-              "other": "Dagor-Nuin-Giliath",
-              "relationship": "PARTICIPATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Dagor-Nuin-Giliath",
+              "rel": "PARTICIPATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Event"
               ]
             },
             {
-              "other": "Burning Of The Ships",
-              "relationship": "PARTICIPATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Burning Of The Ships",
+              "rel": "PARTICIPATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Event"
               ]
             },
             {
-              "other": "Haven",
-              "relationship": "PARTICIPATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Haven",
+              "rel": "PARTICIPATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Event"
               ]
             },
             {
-              "other": "Kinslaying At Alqualondé",
-              "relationship": "PARTICIPATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Kinslaying At Alqualondé",
+              "rel": "PARTICIPATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Event"
               ]
             },
             {
-              "other": "Oath Of Fëanor",
-              "relationship": "PARTICIPATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Oath Of Fëanor",
+              "rel": "PARTICIPATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Event"
               ]
             },
             {
-              "other": "Melkor",
-              "relationship": "ENEMY_OF",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Melkor",
+              "rel": "ENEMY_OF",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Vala",
                 "Maia"
               ]
             },
             {
-              "other": "Morgoth",
-              "relationship": "ENEMY_OF",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Morgoth",
+              "rel": "ENEMY_OF",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Vala",
                 "Maia",
@@ -609,59 +717,59 @@
               ]
             },
             {
-              "other": "Fingolfin",
-              "relationship": "ENEMY_OF",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Fingolfin",
+              "rel": "ENEMY_OF",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Elf",
                 "House"
               ]
             },
             {
-              "other": "Turgon",
-              "relationship": "ENEMY_OF",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Turgon",
+              "rel": "ENEMY_OF",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Manwë",
-              "relationship": "ENEMY_OF",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Manwë",
+              "rel": "ENEMY_OF",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Vala",
                 "Maia"
               ]
             },
             {
-              "other": "Melkor",
-              "relationship": "ENEMY_OF",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Melkor",
+              "rel": "ENEMY_OF",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Vala",
                 "Maia"
               ]
             },
             {
-              "other": "Fingolfin",
-              "relationship": "ENEMY_OF",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Fingolfin",
+              "rel": "ENEMY_OF",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf",
                 "House"
               ]
             },
             {
-              "other": "Morgoth",
-              "relationship": "ENEMY_OF",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Morgoth",
+              "rel": "ENEMY_OF",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Vala",
                 "Maia",
@@ -669,250 +777,250 @@
               ]
             },
             {
-              "other": "Féanor",
-              "relationship": "ENEMY_OF",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Féanor",
+              "rel": "ENEMY_OF",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf",
                 "House"
               ]
             },
             {
-              "other": "Finwé",
-              "relationship": "PARENT_OF",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Finwé",
+              "rel": "PARENT_OF",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Elf",
                 "House"
               ]
             },
             {
-              "other": "Maglor",
-              "relationship": "PARENT_OF",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Maglor",
+              "rel": "PARENT_OF",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Maedhros",
-              "relationship": "PARENT_OF",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Maedhros",
+              "rel": "PARENT_OF",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Míriel Serindé",
-              "relationship": "PARENT_OF",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Míriel Serindé",
+              "rel": "PARENT_OF",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Míriel",
-              "relationship": "PARENT_OF",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Míriel",
+              "rel": "PARENT_OF",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Man",
                 "Elf"
               ]
             },
             {
-              "other": "Maedhros",
-              "relationship": "PARENT_OF",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Maedhros",
+              "rel": "PARENT_OF",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Caranthir",
-              "relationship": "PARENT_OF",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Caranthir",
+              "rel": "PARENT_OF",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Curufin",
-              "relationship": "PARENT_OF",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Curufin",
+              "rel": "PARENT_OF",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Celegorm",
-              "relationship": "PARENT_OF",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Celegorm",
+              "rel": "PARENT_OF",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Maglor",
-              "relationship": "PARENT_OF",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Maglor",
+              "rel": "PARENT_OF",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Amrod",
-              "relationship": "PARENT_OF",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Amrod",
+              "rel": "PARENT_OF",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Amras",
-              "relationship": "PARENT_OF",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Amras",
+              "rel": "PARENT_OF",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Noldor",
-              "relationship": "ALLIED_WITH",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Noldor",
+              "rel": "ALLIED_WITH",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf",
                 "House"
               ]
             },
             {
-              "other": "Fingolfin",
-              "relationship": "ALLIED_WITH",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Fingolfin",
+              "rel": "ALLIED_WITH",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf",
                 "House"
               ]
             },
             {
-              "other": "Teleri",
-              "relationship": "ALLIED_WITH",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Teleri",
+              "rel": "ALLIED_WITH",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf",
                 "House"
               ]
             },
             {
-              "other": "Silmaril",
-              "relationship": "CREATED",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Silmaril",
+              "rel": "CREATED",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Object"
               ]
             },
             {
-              "other": "Silmarils",
-              "relationship": "CREATED",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Silmarils",
+              "rel": "CREATED",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Object"
               ]
             },
             {
-              "other": "Necklace Of The Dwarves",
-              "relationship": "CREATED",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Necklace Of The Dwarves",
+              "rel": "CREATED",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Object"
               ]
             },
             {
-              "other": "Silmaril",
-              "relationship": "CREATED",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Silmaril",
+              "rel": "CREATED",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Object"
               ]
             },
             {
-              "other": "Nerdanel",
-              "relationship": "SPOUSE_OF",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Nerdanel",
+              "rel": "SPOUSE_OF",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Nerdanel",
-              "relationship": "SPOUSE_OF",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Nerdanel",
+              "rel": "SPOUSE_OF",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "White Ships Of The Teleri",
-              "relationship": "DESTROYED",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "White Ships Of The Teleri",
+              "rel": "DESTROYED",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Object"
               ]
             },
             {
-              "other": "Losgar",
-              "relationship": "DESTROYED",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Losgar",
+              "rel": "DESTROYED",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Gothmog",
-              "relationship": "FOUGHT",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Gothmog",
+              "rel": "FOUGHT",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Maia"
               ]
             },
             {
-              "other": "Gothmog",
-              "relationship": "FOUGHT",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Gothmog",
+              "rel": "FOUGHT",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Maia"
               ]
             },
             {
-              "other": "Orcs",
-              "relationship": "FOUGHT",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Orcs",
+              "rel": "FOUGHT",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Man",
                 "Elf",
@@ -923,193 +1031,193 @@
           "Fingolfin": "Fingolfin",
           "FingolfinRelationships": [
             {
-              "other": "Tirion",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Tirion",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Gondolin",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Gondolin",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Angband",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Angband",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Dor-Nu-Fauglith",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Dor-Nu-Fauglith",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Araman",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Araman",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Outer Lands",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Outer Lands",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Helcaraxé",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Helcaraxé",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Middle-Earth",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Middle-Earth",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Dor Daedeloth",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Dor Daedeloth",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Grinding Ice",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Grinding Ice",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Mithrim",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Mithrim",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Lake Mithrim",
-              "relationship": "LOCATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Lake Mithrim",
+              "rel": "LOCATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Manwë",
-              "relationship": "PARTICIPATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Manwë",
+              "rel": "PARTICIPATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Vala",
                 "Maia"
               ]
             },
             {
-              "other": "Dagor Bragollach",
-              "relationship": "PARTICIPATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Dagor Bragollach",
+              "rel": "PARTICIPATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Event"
               ]
             },
             {
-              "other": "Eithel Sirion",
-              "relationship": "PARTICIPATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Eithel Sirion",
+              "rel": "PARTICIPATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place",
                 "Event"
               ]
             },
             {
-              "other": "Dagor Aglareb",
-              "relationship": "PARTICIPATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Dagor Aglareb",
+              "rel": "PARTICIPATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Event"
               ]
             },
             {
-              "other": "Kinslaying At Alqualondé",
-              "relationship": "PARTICIPATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Kinslaying At Alqualondé",
+              "rel": "PARTICIPATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Event"
               ]
             },
             {
-              "other": "Crossing Of The Helcaraxé",
-              "relationship": "PARTICIPATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Crossing Of The Helcaraxé",
+              "rel": "PARTICIPATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Event"
               ]
             },
             {
-              "other": "Mereth Aderthad",
-              "relationship": "PARTICIPATED_IN",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Mereth Aderthad",
+              "rel": "PARTICIPATED_IN",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Event"
               ]
             },
             {
-              "other": "Féanor",
-              "relationship": "ENEMY_OF",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Féanor",
+              "rel": "ENEMY_OF",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Elf",
                 "House"
               ]
             },
             {
-              "other": "Morgoth",
-              "relationship": "ENEMY_OF",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Morgoth",
+              "rel": "ENEMY_OF",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Vala",
                 "Maia",
@@ -1117,29 +1225,29 @@
               ]
             },
             {
-              "other": "Maedhros",
-              "relationship": "ENEMY_OF",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Maedhros",
+              "rel": "ENEMY_OF",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Féanor",
-              "relationship": "ENEMY_OF",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Féanor",
+              "rel": "ENEMY_OF",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf",
                 "House"
               ]
             },
             {
-              "other": "Morgoth",
-              "relationship": "ENEMY_OF",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Morgoth",
+              "rel": "ENEMY_OF",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Vala",
                 "Maia",
@@ -1147,166 +1255,166 @@
               ]
             },
             {
-              "other": "House Of Féanor",
-              "relationship": "ENEMY_OF",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "House Of Féanor",
+              "rel": "ENEMY_OF",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "House"
               ]
             },
             {
-              "other": "Turgon",
-              "relationship": "PARENT_OF",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Turgon",
+              "rel": "PARENT_OF",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Indis Of The Vanyar",
-              "relationship": "PARENT_OF",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Indis Of The Vanyar",
+              "rel": "PARENT_OF",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Indis",
-              "relationship": "PARENT_OF",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Indis",
+              "rel": "PARENT_OF",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Finwé",
-              "relationship": "PARENT_OF",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Finwé",
+              "rel": "PARENT_OF",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Elf",
                 "House"
               ]
             },
             {
-              "other": "Turgon",
-              "relationship": "PARENT_OF",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Turgon",
+              "rel": "PARENT_OF",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Aredhel Ar-Feiniel",
-              "relationship": "PARENT_OF",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Aredhel Ar-Feiniel",
+              "rel": "PARENT_OF",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Fingon",
-              "relationship": "PARENT_OF",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Fingon",
+              "rel": "PARENT_OF",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Féanor",
-              "relationship": "ALLIED_WITH",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Féanor",
+              "rel": "ALLIED_WITH",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Elf",
                 "House"
               ]
             },
             {
-              "other": "Hador The Golden-Haired",
-              "relationship": "ALLIED_WITH",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Hador The Golden-Haired",
+              "rel": "ALLIED_WITH",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Man"
               ]
             },
             {
-              "other": "Thingol",
-              "relationship": "ALLIED_WITH",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Thingol",
+              "rel": "ALLIED_WITH",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Maedhros",
-              "relationship": "ALLIED_WITH",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Maedhros",
+              "rel": "ALLIED_WITH",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Elf"
               ]
             },
             {
-              "other": "Ringil",
-              "relationship": "CREATED",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Ringil",
+              "rel": "CREATED",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Object"
               ]
             },
             {
-              "other": "Rochallor",
-              "relationship": "CREATED",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Rochallor",
+              "rel": "CREATED",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Object"
               ]
             },
             {
-              "other": "Noldor",
-              "relationship": "RULED",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Noldor",
+              "rel": "RULED",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Elf",
                 "House"
               ]
             },
             {
-              "other": "Dor-Lómin",
-              "relationship": "RULED",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Dor-Lómin",
+              "rel": "RULED",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Hithlum",
-              "relationship": "RULED",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Hithlum",
+              "rel": "RULED",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Place"
               ]
             },
             {
-              "other": "Morgoth",
-              "relationship": "FOUGHT",
-              "direction": "incoming",
-              "otherLabels": [
+              "node": "Morgoth",
+              "rel": "FOUGHT",
+              "direction": "in",
+              "labels": [
                 "__Entity__",
                 "Vala",
                 "Maia",
@@ -1314,10 +1422,10 @@
               ]
             },
             {
-              "other": "Orcs",
-              "relationship": "FOUGHT",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Orcs",
+              "rel": "FOUGHT",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Man",
                 "Elf",
@@ -1325,19 +1433,19 @@
               ]
             },
             {
-              "other": "Ringil",
-              "relationship": "FOUGHT",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Ringil",
+              "rel": "FOUGHT",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Object"
               ]
             },
             {
-              "other": "Morgoth",
-              "relationship": "FOUGHT",
-              "direction": "outgoing",
-              "otherLabels": [
+              "node": "Morgoth",
+              "rel": "FOUGHT",
+              "direction": "out",
+              "labels": [
                 "__Entity__",
                 "Vala",
                 "Maia",
@@ -1356,10 +1464,11 @@
     "question": "How do Beren and Turin differ in how their tales end?",
     "expected_route": "both",
     "actual_route": "both",
-    "answer": "Based on this context, I can only speak to Túrin's ending in detail — Beren's death is not covered in the passages provided, so I can't draw a direct comparison from this text.\n\nWhat the context shows for Túrin (from \"Of Túrin Turambar\"): his tale ends in despair and self-destruction. After learning from Mablung that Nienor (Níniel) fled and was lost in the waters of Teiglin, and realizing he had unjustly slain Brandir, Túrin says, \"This is a bitter jest indeed,\" and later at Cabed-en-Aras he demands his sword Gurthang slay him, saying, \"Wilt thou therefore take Turin Turambar, wilt thou slay me swiftly?\" The sword answers it will slay him gladly, and Túrin \"cast himself upon the point of Gurthang, and the black blade took his life.\" His death is one of doom fulfilled, madness, and suicide, framed as the tragic completion of Morgoth's curse on the house of Húrin. He is buried under a mound with Gurthang's shards beside him, and the epitaph names him \"Dagnir Glaurunga\" (slayer of Glaurung), but Nienor's body is never found.\n\nThe provided context does not include any narrative of Beren's death or the ending of his tale, so I cannot state how it differs — that comparison isn't covered in this text.",
+    "answer": "Based on the text provided, here's how their tales differ in ending:\n\n**Túrin's ending** (\"Of Túrin Turambar\") is one of despair and self-destruction. After learning from Mablung that Nienor (his wife Níniel) was his own sister, and realizing he had slain Brandir unjustly, Túrin fled to Cabed-en-Aras. There he addressed his sword Gurthang, asking it to slay him, and it answered that it would do so gladly. He then cast himself upon the point of the blade, and \"the black blade took his life.\" He was buried in a mound with the shards of his broken sword beside him, marked with runes reading TURIN TURAMBAR DAGNIR GLAURUNGA, with Nienor's name added beneath — though her body was never found. His story ends in doom fulfilled, suicide, and grief, closing with Mablung's bitter words: \"I also have been meshed in the doom of the Children of Hurin, and thus with my tidings have slain one that I loved.\"\n\n**Beren's ending** is not narrated in the context provided. The Knowledge graph shows Beren associated with Tol Galen and Ossiriand (suggesting a life after his quest, in the land where he apparently settled), and with epithets like Erchamion (\"One-Hand\") and Camlost, along with objects like the Silmaril and Angrist — reflecting his famous quest to win a Silmaril from Morgoth's crown. However, the actual narrative text of how his tale concludes is not included in the passages given here, so I cannot quote or characterize its ending directly from this material.\n\n**In short:** based solely on what's provided, Túrin's tale explicitly ends in tragic suicide, fulfilling a doom of curses and incest-driven grief. The text here does not contain Beren's concluding narrative, only place/name associations suggesting he ended up dwelling in Ossiriand/Tol Galen — so a direct textual comparison of \"how they end\" cannot be fully completed from this context alone.",
     "sources": [
       "Quenta Silmarillion #21: Of Túrin Turambar",
-      "Quenta Silmarillion #22: Of the Ruin of Doriath"
+      "Quenta Silmarillion #22: Of the Ruin of Doriath",
+      "knowledge graph"
     ],
     "vector_context": [
       {
@@ -1384,8 +1493,233 @@
       }
     ],
     "graph_context": {
-      "cypher": "",
-      "records": []
+      "cypher": "MATCH (m:Man)-[r]->(o)\nWHERE apoc.text.clean(m.id) IN [apoc.text.clean(\"Beren\"), apoc.text.clean(\"Turin\")]\nAND type(r) <> 'MENTIONS'\nRETURN m.id AS Character, type(r) AS Relationship, labels(o) AS OtherLabels, o.id AS Other\nORDER BY Character\n",
+      "records": [
+        {
+          "Character": "Beren",
+          "Relationship": "ALSO_KNOWN_AS",
+          "OtherLabels": [
+            "__Entity__",
+            "Object"
+          ],
+          "Other": "Silmaril"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "ALSO_KNOWN_AS",
+          "OtherLabels": [
+            "__Entity__",
+            "Man"
+          ],
+          "Other": "Beren Camlost"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "ALSO_KNOWN_AS",
+          "OtherLabels": [
+            "__Entity__",
+            "Man"
+          ],
+          "Other": "Beren Erchamion"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "ALSO_KNOWN_AS",
+          "OtherLabels": [
+            "__Entity__",
+            "Man"
+          ],
+          "Other": "Camlost"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "ALSO_KNOWN_AS",
+          "OtherLabels": [
+            "__Entity__",
+            "Man"
+          ],
+          "Other": "Erchamion"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "ALSO_KNOWN_AS",
+          "OtherLabels": [
+            "__Entity__",
+            "Object"
+          ],
+          "Other": "Angrist"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "ALSO_KNOWN_AS",
+          "OtherLabels": [
+            "__Entity__",
+            "Object"
+          ],
+          "Other": "Seven Stars"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "ALSO_KNOWN_AS",
+          "OtherLabels": [
+            "__Entity__"
+          ],
+          "Other": "One-Hand"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "LOCATED_IN",
+          "OtherLabels": [
+            "__Entity__",
+            "Place"
+          ],
+          "Other": "Tol Galen"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "LOCATED_IN",
+          "OtherLabels": [
+            "__Entity__",
+            "Place"
+          ],
+          "Other": "Ascar"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "LOCATED_IN",
+          "OtherLabels": [
+            "__Entity__",
+            "Place"
+          ],
+          "Other": "Ossiriand"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "LOCATED_IN",
+          "OtherLabels": [
+            "__Entity__",
+            "Place"
+          ],
+          "Other": "Western Sea"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "LOCATED_IN",
+          "OtherLabels": [
+            "__Entity__",
+            "Place"
+          ],
+          "Other": "Gate"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "LOCATED_IN",
+          "OtherLabels": [
+            "__Entity__",
+            "Place"
+          ],
+          "Other": "Angband"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "LOCATED_IN",
+          "OtherLabels": [
+            "__Entity__",
+            "Place"
+          ],
+          "Other": "Anfauglith"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "LOCATED_IN",
+          "OtherLabels": [
+            "__Entity__",
+            "Place"
+          ],
+          "Other": "Pass Of Sirion"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "LOCATED_IN",
+          "OtherLabels": [
+            "__Entity__",
+            "Place"
+          ],
+          "Other": "Taur-Nu-Fuin"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "LOCATED_IN",
+          "OtherLabels": [
+            "__Entity__",
+            "Place"
+          ],
+          "Other": "Forest Of Brethil"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "LOCATED_IN",
+          "OtherLabels": [
+            "__Entity__",
+            "Place"
+          ],
+          "Other": "Tol-In-Gaurhoth"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "LOCATED_IN",
+          "OtherLabels": [
+            "__Entity__",
+            "Place"
+          ],
+          "Other": "Dorthonion"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "LOCATED_IN",
+          "OtherLabels": [
+            "__Entity__",
+            "Place"
+          ],
+          "Other": "Doriath"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "LOCATED_IN",
+          "OtherLabels": [
+            "__Entity__",
+            "Place"
+          ],
+          "Other": "Rivil'S Well"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "LOCATED_IN",
+          "OtherLabels": [
+            "__Entity__",
+            "Object"
+          ],
+          "Other": "Ring Of Felagund"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "LOCATED_IN",
+          "OtherLabels": [
+            "__Entity__",
+            "Place"
+          ],
+          "Other": "Tarn Aeluin"
+        },
+        {
+          "Character": "Beren",
+          "Relationship": "LOCATED_IN",
+          "OtherLabels": [
+            "__Entity__",
+            "Place"
+          ],
+          "Other": "Gorgoroth"
+        }
+      ]
     },
     "error": null
   },
@@ -1395,7 +1729,7 @@
     "question": "What happened at the Battle of Nirnaeth Arnoediad?",
     "expected_route": "semantic",
     "actual_route": "semantic",
-    "answer": "Based on the \"Of the Fifth Battle: Nirnaeth Arnoediad\" chapter:\n\nThe battle began when Gwindor of Nargothrond, enraged at the slaying of heralds, charged the main host, drawing all the Noldor into premature battle. Fingon donned his white helm, sounded his trumpets, and led the host of Hithlum in a sudden onslaught that swept away Morgoth's western army and drove the banners of Fingon to the very walls of Angband. Gwindor and the Elves of Nargothrond even burst through the Gate and fought on the stairs of Angband itself, making Morgoth \"tremble upon his deep throne,\" but they were trapped there — all slain save Gwindor, taken alive — since Fingon could not reach them in time.\n\nMorgoth then unleashed his main host, hidden in reserve, through secret doors in Thangorodrim, and Fingon was beaten back with great loss. On the plain of Anfauglith, on the fourth day, the battle proper — Nirnaeth Arnoediad, \"Unnumbered Tears\" — began. Fingon's host retreated over the sands; Haldir, lord of the Haladin, fell in the rearguard along with most of the Men of Brethil. On the fifth day, as night fell, the Orcs surrounded the host of Hithlum.\n\nTurgon fought his way south and escaped down Sirion, vanishing into hiding, covered by the guard of Húrin and Huor. The brothers and the remnant of the House of Hador withdrew fighting until pinned behind the Fen of Serech with the stream of Rivil before them. There they made their last stand: the Orcs bridged the stream with their own dead and encircled the remnant \"as a gathering tide about a rock.\" On the sixth day, Huor was slain by a venomed arrow through the eye, and all the Men of Hador died around him, their heads hewn off and piled \"as a mound of gold in the sunset.\"\n\nHúrin alone stood at the last, fighting with a two-handed axe (said to have \"smoked in the black blood of the troll-guard of Gothmog until it withered\"), crying \"Auré entuluva! Day shall come again!\" seventy times, until he was overwhelmed and taken alive by Morgoth's command, then bound and dragged to Angband by Gothmog with mockery.\n\nThe chapter concludes that this was Morgoth's great triumph: \"Men took the lives of Men, and betrayed the Eldar, and fear and hatred were aroused among those that should have been united against him,\" estranging the hearts of Elves from Men — save the Three Houses of the Edain.",
+    "answer": "At Nirnaeth Arnoediad (the \"Unnumbered Tears\"), the Fifth Battle, the tide turned against the Elves and Edain despite an initial fierce Noldorin onslaught:\n\n- Gwindor of Nargothrond, enraged after his brother Gelmir's heralds were slain, led a reckless charge deep into Morgoth's host, prompting Fingon to sound his trumpets and launch a full attack. The Noldor swept the western army away and even drove the enemy back to the gates of Angband, with Gwindor's Elves briefly breaking through and slaying guards on the very stairs — but they were trapped, and all were killed save Gwindor, taken alive.\n\n- Morgoth then released his hidden main host through secret doors in Thangorodrim, and Fingon was beaten back with great loss. The battle proper began on the plain of Anfauglith on the fourth day, and \"no song or tale can contain all its grief.\" Fingon's host retreated; Haldir, lord of the Haladin, fell in the rearguard along with most of the Men of Brethil.\n\n- On the fifth day, the Orcs surrounded the host of Hithlum near Ered Wethrin. Turgon fought his way south, aided by the guard of Húrin and Huor, and escaped with his people, later vanishing into the mountains (Gondolin), hidden from Morgoth.\n\n- Húrin and Huor held the rearguard behind the Fen of Serech with the remnant of the House of Hador. They were encircled, bridging the stream of Rivil with their own dead. Huor was killed by a venomed arrow through the eye, and the Men of Hador were slain in a heap around him, their heads piled by the Orcs \"as a mound of gold in the sunset.\"\n\n- Húrin fought on alone, wielding an axe two-handed, crying \"Auré entuluva! Day shall come again!\" seventy times, until he was overwhelmed and taken alive by Morgoth's command, then bound and dragged to Angband by Gothmog.\n\n- The chapter concludes: \"Great was the triumph of Morgoth,\" for his design succeeded in setting Men against Men and sowing betrayal and distrust between Men and Elves — \"From that day the hearts of the Elves were estranged from Men, save only those of the Three Houses of the Edain.\"\n\n(Source: Quenta Silmarillion, ch. 20, \"Of the Fifth Battle: Nirnaeth Arnoediad.\")",
     "sources": [
       "Quenta Silmarillion #10: Of the Sindar",
       "Quenta Silmarillion #13: Of the Return of the Noldor",
@@ -1432,7 +1766,7 @@
     "question": "What happened when Beren and Luthien confronted Morgoth in Angband?",
     "expected_route": "semantic",
     "actual_route": "semantic",
-    "answer": "In Angband, Beren and Lúthien came to Morgoth's \"seat\" in his \"nethermost hall.\" Beren hid in wolf's form beneath the throne, while Lúthien was stripped of her disguise by Morgoth's will. She named herself and offered to sing for him \"after the manner of a minstrel.\" Morgoth, lusting after her beauty, let her move freely, watching her with secret pleasure — but she eluded his sight and began a song \"of such surpassing loveliness, and of such blinding power\" that blindness came upon him as he searched for her.\n\nHis whole court fell into slumber and the fires were quenched, but the Silmarils in his crown blazed forth, their weight bowing his head \"as though the world were set upon it.\" Lúthien then sprang into the air, her voice falling \"like rain into pools,\" and cast her cloak before his eyes, setting a dream upon him \"dark as the Outer Void.\" Morgoth fell \"as a hill sliding in avalanche,\" crashing from his throne, and his iron crown rolled from his head. \"All things were still.\"\n\nLúthien roused Beren, who cast aside his wolf-disguise, drew the knife Angrist, and cut a Silmaril from the crown's iron claws — the jewel not hurting his hand, though it \"welled through his living flesh\" with radiance. Tempted to take all three Silmarils against his vow, Beren pressed further, but \"such was not the doom of the Silmarils\": Angrist snapped, and a flying shard struck Morgoth's cheek, causing him to groan and stir, so that \"all the host of Angband moved in sleep.\"\n\nTerrified, Beren and Lúthien fled \"heedless and without disguise.\" They were not pursued, but found the Gate held against them by Carcharoth, the great wolf, who had awakened and stood in wrath upon the threshold, springing upon them as they ran — leading into the confrontation in which Beren lost his hand to the wolf's jaws along with the Silmaril.",
+    "answer": "Beren and Lúthien penetrated to Morgoth's nethermost hall together, having passed the sleeping Carcharoth at the Gate (\"Of Beren and Lúthien\" #19). Beren crept beneath Morgoth's throne in wolf's form, but Lúthien was stripped of her disguise by Morgoth's will, and he \"bent his gaze upon her.\" She named herself and offered to sing before him as a minstrel; Morgoth, conceiving \"an evil lust\" and a dark design, let her move freely while he watched. She then eluded his sight and began a song \"of such surpassing loveliness, and of such blinding power\" that a blindness came upon him as his eyes searched for her.\n\nAll his court fell into slumber and the fires were quenched, but the Silmarils in his crown blazed forth, their weight bowing his head \"as though the world were set upon it.\" Lúthien sprang into the air, cast her cloak before his eyes, and set upon him a dream \"dark as the Outer Void.\" Morgoth fell like \"a hill sliding in avalanche\" and lay prone on the floor, his iron crown rolling from his head, and \"all things were still.\"\n\nLúthien then roused Beren, who cast aside his wolf-disguise, drew the knife Angrist, and cut a Silmaril from the crown's iron claws — the jewel not harming him though it made his hand \"as a shining lamp.\" Tempted to take all three Silmarils, he pressed further, but \"such was not the doom of the Silmarils\": Angrist snapped, and a flying shard struck Morgoth's cheek, causing him to groan and stir, so that \"all the host of Angband moved in sleep.\" Terrified, Beren and Lúthien fled — only to be confronted at the Gate by the now-awakened Carcharoth, who sprang upon them as they ran.",
     "sources": [
       "Quenta Silmarillion #19: Of Beren and Lúthien"
     ],
@@ -1467,34 +1801,39 @@
     "question": "Did the Noldor return to Middle-earth before or after the Silmarils were made?",
     "expected_route": "relational",
     "actual_route": "relational",
-    "answer": "Based on the graph data provided, this can’t be fully answered as asked — the results conflate two different events. The \"SilmarilsMadeEra\" in this data is actually tied to the **Quest of the Silmaril** (Era 3), which refers to the later quest to recover a Silmaril (the Beren and Lúthien storyline), not to the original *making* of the Silmarils by Fëanor.\n\nWhat the graph does show:\n- **Exile of the Noldor** — Era 2\n- **Doom of the Noldor** — Era 2\n- **Crossing of the Helcaraxë** — Era 3\n- **Quest of the Silmaril** — Era 3\n\nSo according to this data, the Exile and Doom of the Noldor (their departure from Valinor) occurred *before* the Quest of the Silmaril, while the Crossing of the Helcaraxë (their actual arrival in Middle-earth) falls in the same era as that quest.\n\nHowever, the text of *The Silmarillion* itself places the making of the Silmarils by Fëanor (described in \"Of the Silmarils and the Unrest of the Noldor\") well before the Exile of the Noldor and their return to Middle-earth — the Silmarils were crafted while the Noldor still dwelt in Valinor, prior to Melkor's assault on the Two Trees and the theft of the jewels. The graph data supplied here doesn't actually contain that specific event (\"the making of the Silmarils\"), so I can't confirm era sequencing for it from this context alone — only note that the underlying narrative order (per the text) has the Silmarils made *before* the Noldor's return to Middle-earth.",
+    "answer": "Based on the sequencing in this text, the Silmarils were made before the Noldor's exile and return to Middle-earth.\n\nThe knowledge graph places the **Exile of the Noldor** and **Doom of the Noldor** in the \"Years of the Trees\" era, followed by the **Crossing of the Helcaraxé** in the \"Years of the Sun.\" The creation of the Silmarils by Fëanor is narrated earlier in *The Silmarillion* (in \"Of the Silmarils and the Unrest of the Noldor\"), prior to their theft by Melkor and the subsequent oath and exile of the Noldor described in \"Of the Flight of the Noldor.\"\n\nSo the order is: Silmarils made → stolen by Melkor → Fëanor's Oath and the Exile/Doom of the Noldor → Crossing of the Helcaraxé (return to Middle-earth) → later, the Quest of the Silmaril (Beren and Lúthien's story) in the Years of the Sun.",
     "sources": [
       "knowledge graph"
     ],
     "vector_context": [],
     "graph_context": {
-      "cypher": "MATCH (e1:Event)-[:HAPPENED_DURING]->(era1:Era)\nWHERE apoc.text.clean(e1.id) CONTAINS 'exile' OR apoc.text.clean(e1.id) CONTAINS 'noldor' OR apoc.text.clean(e1.id) CONTAINS 'helcarax'\nMATCH (e2:Event)-[:HAPPENED_DURING]->(era2:Era)\nWHERE apoc.text.clean(e2.id) CONTAINS 'silmaril'\nRETURN e1.id AS NoldorReturnEvent, era1.sequence AS NoldorReturnEra,\n       e2.id AS SilmarilsMadeEvent, era2.sequence AS SilmarilsMadeEra,\n       CASE WHEN era1.sequence < era2.sequence THEN 'Before'\n            WHEN era1.sequence > era2.sequence THEN 'After'\n            ELSE 'Same Era' END AS Order\n",
+      "cypher": "\nMATCH (e1:Event)-[:HAPPENED_DURING]->(era1:Era)\nWHERE apoc.text.clean(e1.id) CONTAINS 'exile' OR apoc.text.clean(e1.id) CONTAINS 'noldor' OR apoc.text.clean(e1.id) CONTAINS 'helcarax'\nWITH collect({event: e1.id, sequence: era1.sequence, era: era1.id}) AS noldorEvents\nMATCH (e2:Event)-[:HAPPENED_DURING]->(era2:Era)\nWHERE apoc.text.clean(e2.id) CONTAINS 'silmaril'\nWITH noldorEvents, collect({event: e2.id, sequence: era2.sequence, era: era2.id}) AS silmarilEvents\nRETURN noldorEvents, silmarilEvents\n",
       "records": [
         {
-          "NoldorReturnEvent": "Crossing Of The Helcaraxé",
-          "NoldorReturnEra": 3,
-          "SilmarilsMadeEvent": "Quest Of The Silmaril",
-          "SilmarilsMadeEra": 3,
-          "Order": "Same Era"
-        },
-        {
-          "NoldorReturnEvent": "Exile Of The Noldor",
-          "NoldorReturnEra": 2,
-          "SilmarilsMadeEvent": "Quest Of The Silmaril",
-          "SilmarilsMadeEra": 3,
-          "Order": "Before"
-        },
-        {
-          "NoldorReturnEvent": "Doom Of The Noldor",
-          "NoldorReturnEra": 2,
-          "SilmarilsMadeEvent": "Quest Of The Silmaril",
-          "SilmarilsMadeEra": 3,
-          "Order": "Before"
+          "noldorEvents": [
+            {
+              "sequence": 3,
+              "era": "Years Of The Sun",
+              "event": "Crossing Of The Helcaraxé"
+            },
+            {
+              "sequence": 2,
+              "era": "Years Of The Trees",
+              "event": "Exile Of The Noldor"
+            },
+            {
+              "sequence": 2,
+              "era": "Years Of The Trees",
+              "event": "Doom Of The Noldor"
+            }
+          ],
+          "silmarilEvents": [
+            {
+              "sequence": 3,
+              "era": "Years Of The Sun",
+              "event": "Quest Of The Silmaril"
+            }
+          ]
         }
       ]
     },
@@ -1506,7 +1845,7 @@
     "question": "What events happened during the Years of the Trees?",
     "expected_route": "relational",
     "actual_route": "semantic",
-    "answer": "Based on this context, the Years of the Trees are only touched on indirectly — the text doesn't give a full chronological account of events during that era, but two passages bear on it:\n\n- **The Two Trees came into being in Valinor.** In \"Of the Beginning of Days,\" after Valinor was built and Yavanna hallowed the mound of Ezellohar, she \"sang a song of power, in which was set all her thought of things that grow in the earth,\" while Nienna \"watered the mould with tears.\" From this, the Two Trees, Telperion and Laurelin, sprang up and grew to flower, and \"thus began also the Count of Time\" — this marks the beginning of the Years of the Trees.\n\n- **The Valar's daily reckoning of time was established** by the waxing and waning of the Trees' light (each waxing to full and waning in seven hours), giving Valinor its \"Days of the Bliss of Valinor.\"\n\n- Later, in \"Of Men,\" it is only noted retrospectively that the Years of the Sun (after the Trees' destruction and the rising of the Sun and Moon) were \"swifter and briefer... than the long Years of the Trees in Valinor\" — implying the Years of the Trees were a long, slow-paced age, but no further specific events of that age are described in this excerpt.\n\nThe provided text does not narrate further specific happenings (such as the awakening of the Elves or Melkor's imprisonment) that occurred during the Years of the Trees — those events simply aren't covered in the passages given here.",
+    "answer": "Based on the context provided, the Years of the Trees refer to the long ages in Valinor measured by the Two Trees, before the Years of the Sun began. The key events noted in this text include:\n\n- **The growth of the Two Trees themselves**: Yavanna sang her song of power upon Ezellohar (the green mound before Valmar), while Nienna watered the mould with tears, and the Valar watched in silence from the Ring of Doom (Máhanaxar). From this, the two Trees — Telperion and Laurelin — grew, flowered, and gave light to Valinor (*Of the Beginning of Days*).\n\n- **The establishment of the Count of Time**: With Telperion's first blooming (the \"Opening Hour\"), the Valar began reckoning the ages of their reign in Valinor. This marked the true beginning of the Days of the Bliss of Valinor and \"the Count of Time\" (*Of the Beginning of Days*).\n\n- **The daily rhythm of light**: Each Tree waxed and waned in a cycle of seven hours, with the two \"mingling\" twice daily — a gentler, mixed light of silver and gold. Varda collected the dew of Telperion and the rain of Laurelin in great vats, which became \"wells of water and of light\" for Valinor.\n\nThe text explicitly contrasts this era with what follows: \"From this time forth were reckoned the Years of the Sun. Swifter and briefer are they than the long Years of the Trees in Valinor\" (*Of Men*). Beyond the growth, blooming, and light-cycle of the Trees, and the founding of Valinor's timekeeping, the provided context does not describe further specific events occurring during the Years of the Trees themselves.",
     "sources": [
       "Of the Rings of Power and the Third Age",
       "Quenta Silmarillion #12: Of Men",
@@ -1543,12 +1882,13 @@
     "question": "What events happened between the Kinslaying at Alqualonde and the Battle of Nirnaeth Arnoediad?",
     "expected_route": "both",
     "actual_route": "both",
-    "answer": "The provided context does not contain a continuous account of events between the Kinslaying at Alqualondë (Quenta Silmarillion #9, \"Of the Flight of the Noldor\") and the Nirnaeth Arnoediad (#20, \"Of the Fifth Battle\"). The excerpts jump from the Kinslaying directly to material from chapter #10 (\"Of the Sindar,\" which actually describes events *before* the Kinslaying — Melkor and Ungoliant's destruction of the Trees and the founding of Angband) and then to the aftermath of the Nirnaeth itself and later events in \"Of the Ruin of Doriath\" (#22).\n\nSince chapters #11 through #19 — which would cover the intervening history (the march of the Noldor to Beleriand, the founding of the Noldorin realms, the Dagor-nuin-Giliath, the Battle of Sudden Flame, and the lead-up to the Nirnaeth) — are not included in this context, I cannot answer what specifically happened between these two events based solely on the text given here.",
+    "answer": "Based on the knowledge graph (which orders events by Era rather than precise sequence) and the narrative excerpts, the events occurring in the interval between the Kinslaying at Alqualondë and the Nirnaeth Arnoediad include:\n\n**Still in the Years of the Trees (shortly after the Kinslaying):**\n- The **Doom/Curse of Mandos** — pronounced as a consequence of the Kinslaying and the Oath of Fëanor\n- The **Burning of the Ships at Losgar**\n- The continuing **Exile of the Noldor**\n\n**In the Years of the Sun (leading up to and including the war era of Nirnaeth):**\n- The **Wars of Beleriand**, including the **Dagor-type battles** referred to collectively as the **War of the Jewels**\n- The **Orc-raid on the Haladin**\n- Later events such as the **Assault on the Havens of Sirion** and the **Sons of Fëanor's assault on Doriath** — though per the narrative (Of the Ruin of Doriath, #22), these actually occur *after* Nirnaeth Arnoediad, not before it, so the graph's era-based grouping is not strictly chronological here.\n\n**Caveat:** The knowledge-graph query grouped events only by *Era* (Years of the Trees / Years of the Sun), not by precise in-story chronology, so some listed events (like the Ruin of Doriath-related assaults, or the War of Wrath/Great Battle) actually fall **after** Nirnaeth Arnoediad rather than between it and Alqualondë. The narrative text itself directly confirms only the **Doom of Mandos** and the **Burning of the Ships** as clearly intervening events immediately after the Kinslaying (from \"Of the Flight of the Noldor\"), with the wider **Wars of Beleriand** occupying the long span up to the Fifth Battle described in \"Of the Fifth Battle: Nirnaeth Arnoediad.\"\n\nIf you need a strictly verified chronological list, the provided excerpts don't give a complete blow-by-by-blow between these two events — only these connecting threads are directly evidenced in this text.",
     "sources": [
       "Quenta Silmarillion #10: Of the Sindar",
       "Quenta Silmarillion #20: Of the Fifth Battle: Nirnaeth Arnoediad",
       "Quenta Silmarillion #22: Of the Ruin of Doriath",
-      "Quenta Silmarillion #9: Of the Flight of the Noldor"
+      "Quenta Silmarillion #9: Of the Flight of the Noldor",
+      "knowledge graph"
     ],
     "vector_context": [
       {
@@ -1573,8 +1913,134 @@
       }
     ],
     "graph_context": {
-      "cypher": "MATCH (e1:Event)\nWHERE apoc.text.clean(e1.id) CONTAINS apoc.text.clean('Kinslaying at Alqualonde')\nMATCH (e2:Event)\nWHERE apoc.text.clean(e2.id) CONTAINS apoc.text.clean('Battle of Nirnaeth Arnoediad')\nWITH e1, e2,\n     CASE WHEN e1.sequence <= e2.sequence THEN e1.sequence ELSE e2.sequence END AS lowSeq,\n     CASE WHEN e1.sequence <= e2.sequence THEN e2.sequence ELSE e1.sequence END AS highSeq\nMATCH (e:Event)\nWHERE e.sequence >= lowSeq AND e.sequence <= highSeq\nRETURN DISTINCT e.id, e.sequence\nORDER BY e.sequence\n",
-      "records": []
+      "cypher": "\nMATCH (e1)-[:HAPPENED_DURING]->(era1:Era)\nWHERE apoc.text.clean(e1.id) CONTAINS 'kinslaying' AND apoc.text.clean(e1.id) CONTAINS 'alqualonde'\nMATCH (e2)-[:HAPPENED_DURING]->(era2:Era)\nWHERE apoc.text.clean(e2.id) CONTAINS 'nirnaeth' AND apoc.text.clean(e2.id) CONTAINS 'arnoediad'\nMATCH (event:Event)-[:HAPPENED_DURING]->(era:Era)\nWHERE era.sequence >= era1.sequence AND era.sequence <= era2.sequence\n  AND event <> e1 AND event <> e2\nRETURN DISTINCT event.id AS Event, era.id AS Era, era.sequence AS EraSequence\nORDER BY EraSequence\n",
+      "records": [
+        {
+          "Event": "Prophecy Of The North",
+          "Era": "Years Of The Trees",
+          "EraSequence": 2
+        },
+        {
+          "Event": "Exile Of The Noldor",
+          "Era": "Years Of The Trees",
+          "EraSequence": 2
+        },
+        {
+          "Event": "Burning Of The Ships At Losgar",
+          "Era": "Years Of The Trees",
+          "EraSequence": 2
+        },
+        {
+          "Event": "Burning Of The Ships",
+          "Era": "Years Of The Trees",
+          "EraSequence": 2
+        },
+        {
+          "Event": "Curse Of Mandos",
+          "Era": "Years Of The Trees",
+          "EraSequence": 2
+        },
+        {
+          "Event": "Doom Of Mandos",
+          "Era": "Years Of The Trees",
+          "EraSequence": 2
+        },
+        {
+          "Event": "Doom Of The Noldor",
+          "Era": "Years Of The Trees",
+          "EraSequence": 2
+        },
+        {
+          "Event": "Kinslaying",
+          "Era": "Years Of The Trees",
+          "EraSequence": 2
+        },
+        {
+          "Event": "Oath Of Fëanor",
+          "Era": "Years Of The Trees",
+          "EraSequence": 2
+        },
+        {
+          "Event": "Nurtale Valinoreva",
+          "Era": "Years Of The Trees",
+          "EraSequence": 2
+        },
+        {
+          "Event": "Darkening Of Valinor",
+          "Era": "Years Of The Trees",
+          "EraSequence": 2
+        },
+        {
+          "Event": "Days Of The Bliss Of Valinor",
+          "Era": "Years Of The Trees",
+          "EraSequence": 2
+        },
+        {
+          "Event": "Days Of Bliss",
+          "Era": "Years Of The Trees",
+          "EraSequence": 2
+        },
+        {
+          "Event": "Third Battle",
+          "Era": "Years Of The Sun",
+          "EraSequence": 3
+        },
+        {
+          "Event": "Last Battle",
+          "Era": "Years Of The Sun",
+          "EraSequence": 3
+        },
+        {
+          "Event": "That Last Battle",
+          "Era": "Years Of The Sun",
+          "EraSequence": 3
+        },
+        {
+          "Event": "Great Battle",
+          "Era": "Years Of The Sun",
+          "EraSequence": 3
+        },
+        {
+          "Event": "Change Of The World",
+          "Era": "Years Of The Sun",
+          "EraSequence": 3
+        },
+        {
+          "Event": "War Of The Jewels",
+          "Era": "Years Of The Sun",
+          "EraSequence": 3
+        },
+        {
+          "Event": "War Of Wrath",
+          "Era": "Years Of The Sun",
+          "EraSequence": 3
+        },
+        {
+          "Event": "Wars Of Beleriand",
+          "Era": "Years Of The Sun",
+          "EraSequence": 3
+        },
+        {
+          "Event": "Orc-Raid On The Haladin",
+          "Era": "Years Of The Sun",
+          "EraSequence": 3
+        },
+        {
+          "Event": "Assault On The Havens Of Sirion",
+          "Era": "Years Of The Sun",
+          "EraSequence": 3
+        },
+        {
+          "Event": "Sons Of Féanor'S Assault On Doriath",
+          "Era": "Years Of The Sun",
+          "EraSequence": 3
+        },
+        {
+          "Event": "Midsummer",
+          "Era": "Years Of The Sun",
+          "EraSequence": 3
+        }
+      ]
     },
     "error": null
   },
@@ -1584,7 +2050,7 @@
     "question": "What happened between Beren's oath of vengeance and his meeting with Luthien?",
     "expected_route": "both",
     "actual_route": "both",
-    "answer": "Based on the provided context, there is no explicit \"oath of vengeance\" by Beren described here — the text does not mention Beren swearing such an oath at all.\n\nWhat the context does show between Beren's flight from Dorthonion and his meeting with Lúthien is this sequence (from \"Of Beren and Lúthien\"):\n\n- Beren, having lost his father Barahir and companions, wandered alone in Dorthonion for four years as an outlaw, befriending birds and beasts and refusing to eat flesh or kill anything not in Morgoth's service.\n- His deeds became so renowned that Morgoth placed a price on his head equal to that on Fingon, High King of the Noldor, and sent Sauron with werewolves to hunt him.\n- Pressed too hard to remain, Beren fled Dorthonion in winter, climbed into the Mountains of Terror (Gorgoroth), and from there saw the land of Doriath in the distance.\n- \"There it was put into his heart that he would go down into the Hidden Kingdom, where no mortal foot had yet trodden\" — this leads directly to his entry into Doriath, where he eventually meets Lúthien.\n\nThe knowledge graph reference to a \"Leap of Beren\" event during the Years of the Sun is noted, but the supplied narrative text does not describe or explain this event in detail, nor does it connect it explicitly to an \"oath of vengeance.\" I cannot elaborate on that specific event beyond what is listed, as it isn't covered in the narrative excerpts given.",
+    "answer": "Based on the text provided, no explicit \"oath of vengeance\" scene is quoted directly, but the narrative context surrounding Beren's history shows what filled the interval before he met Lúthien:\n\n- **Gorlim's betrayal**: Beren's father Barahir and his band of outlaws were hiding at Tarn Aeluin in Dorthonion. One of the companions, Gorlim son of Angrim, secretly visited the ruins of his home hoping his lost wife Eilinel might still be alive — and this weakness became known to Morgoth's servants (Chapter 19, *Of Beren and Lúthien*).\n\n- **Beren's long exile**: \"Thereafter for four years more Beren wandered still upon Dorthonion, a solitary outlaw; but he became the friend of birds and beasts, and they aided him, and did not betray him, and from that time forth he ate no flesh nor slew any living thing that was not in the service of Morgoth.\" He lived by daring and stealth, fearing captivity more than death, and his fame spread through Beleriand until \"Morgoth set a price upon his head no less than the price upon the head of Fingon, High King of the Noldor.\"\n\n- **Sauron's hunt**: Because Orcs alone would not seek him out, \"an army was sent against him under the command of Sauron; and Sauron brought were-wolves, fell beasts inhabited by dreadful spirits that he had imprisoned in their bodies.\" Dorthonion grew filled with evil, forcing Beren to flee.\n\n- **Flight to Doriath**: \"In time of winter and snow he forsook the land and grave of his father, and climbing into the high regions of Gorgoroth, the Mountains of Terror, he descried afar the land of Doriath. There it was put into his heart that he would go down into the Hidden Kingdom, where no mortal foot had yet trodden.\"\n\nIt was only after this journey into Doriath that Beren first beheld and later met Lúthien.\n\nThe knowledge-graph entries (*Oath of Fëanor*, *Leap of Beren*) don't provide further narrative detail beyond confirming sequence/era placement — the text itself doesn't elaborate on an explicit \"oath of vengeance\" by Beren specifically.",
     "sources": [
       "Quenta Silmarillion #19: Of Beren and Lúthien",
       "knowledge graph"
@@ -1612,17 +2078,17 @@
       }
     ],
     "graph_context": {
-      "cypher": "\nMATCH (e:Event)-[:HAPPENED_DURING]->(era:Era)\nWHERE apoc.text.clean(e.id) CONTAINS 'beren' \n   OR apoc.text.clean(e.id) CONTAINS 'oath'\n   OR apoc.text.clean(e.id) CONTAINS 'vengeance'\n   OR apoc.text.clean(e.id) CONTAINS 'luthien'\nRETURN e.id AS event, era.id AS era, era.sequence AS sequence\nORDER BY sequence\n",
+      "cypher": "\nMATCH (e:Event)-[:HAPPENED_DURING]->(era:Era)\nWHERE apoc.text.clean(e.id) CONTAINS 'beren' \n   OR apoc.text.clean(e.id) CONTAINS 'oath'\n   OR apoc.text.clean(e.id) CONTAINS 'vengeance'\n   OR apoc.text.clean(e.id) CONTAINS 'luthien'\n   OR apoc.text.clean(e.id) CONTAINS 'meeting'\nRETURN e.id AS Event, era.id AS Era, era.sequence AS Sequence\nORDER BY Sequence\n",
       "records": [
         {
-          "event": "Oath Of Fëanor",
-          "era": "Years Of The Trees",
-          "sequence": 2
+          "Event": "Oath Of Fëanor",
+          "Era": "Years Of The Trees",
+          "Sequence": 2
         },
         {
-          "event": "Leap Of Beren",
-          "era": "Years Of The Sun",
-          "sequence": 3
+          "Event": "Leap Of Beren",
+          "Era": "Years Of The Sun",
+          "Sequence": 3
         }
       ]
     },
@@ -1634,7 +2100,7 @@
     "question": "Describe Gondolin.",
     "expected_route": "semantic",
     "actual_route": "semantic",
-    "answer": "Gondolin was built by Turgon on the hill of Amon Gwareth in the hidden vale of Tumladen, after \"two and fifty years of secret toil\" (*Of the Noldor in Beleriand*). Its Quenya name, Ondolindé, meant \"the Rock of the Music of Water\" (for fountains played there), rendered in Sindarin as Gondolin, \"the Hidden Rock.\"\n\nThe city was ringed by tall, sheer mountains that no living thing could cross save the eagles of Thorondor, and it was protected by Ulmo's power flowing in the waters of Sirion, so that none could find the hidden entrance against Turgon's will. Ulmo foretold it would be \"longest of all the realms of the Eldalié\" to stand against Melkor.\n\nWithin, Gondolin was \"fair indeed and fit to compare even with Elven Tirion beyond the sea\": high and white were its walls, smooth its stairs, and tall and strong the Tower of the King. Shining fountains played there, and in Turgon's courts stood golden and silver images of the Two Trees, Glingal and Belthil, which Turgon himself had wrought. The city is called \"fair\" beyond even these wonders because of Idril Celebrindal, Turgon's daughter.\n\nIt was approached through the ravine of Orfalch Echor, barred by seven gates, leading up to the great gate kept by Ecthelion of the Fountain — and from there one looked down upon \"the fair vale of Tumladen, set as a green jewel amid the encircling hills,\" with the city itself, \"flushed with the rose of dawn upon the plain\" (*Of Tuor and the Fall of Gondolin*). It is named there \"Gondolin the great, city of seven names, whose fame and glory is mightiest in song of all dwellings of the Elves in the Hither Lands.\"",
+    "answer": "Based on this text, Gondolin was the hidden city built by Turgon on the hill of Amon Gwareth in the vale of Tumladen, encircled by a ring of tall, sheer mountains where \"no living thing came... save the eagles of Thorondor\" (Of the Noldor in Beleriand, #15). Turgon named it *Ondolindé* (\"the Rock of the Music of Water\") in the Elven-tongue of Valinor, for fountains played upon the hill, though in Sindarin it became *Gondolin*, \"the Hidden Rock.\"\n\nIt took **fifty-two years** of secret toil to complete, and Ulmo prophesied it would stand \"longest of all the realms of the Eldalié\" against Melkor. Its architecture was described as splendid: \"High and white were its walls, and smooth its stairs, and tall and strong was the Tower of the King.\" Shining fountains played there, and in Turgon's courts stood two great images of the Trees of Valinor that he himself crafted with elven-craft — the golden tree **Glingal** and the silver-flowered tree **Belthil**.\n\nThe city was fit to \"compare even with Elven Tirion beyond the sea,\" and yet \"fairer than all the wonders of Gondolin was Idril, Turgon's daughter... Celebrindal, the Silver-foot.\"\n\nAccess was guarded fiercely: a hidden tunnel led to an inner gate, and beyond it the great ravine of **Orfalch Echor**, barred by seven gates, climbed up to the warden Ecthelion of the Fountain at the great gate (Of Tuor and the Fall of Gondolin, #23). From there one could look down upon \"the fair vale of Tumladen, set as a green jewel amid the encircling hills,\" with Gondolin itself called \"the city of seven names, whose fame and glory is mightiest in song of all dwellings of the Elves in the Hither Lands.\"\n\nIdril later had a secret escape passage built beneath the plain, unknown even to Maeglin, out of foreboding for the city's future safety.",
     "sources": [
       "Quenta Silmarillion #15: Of the Noldor in Beleriand",
       "Quenta Silmarillion #23: Of Tuor and the Fall of Gondolin"
@@ -1670,7 +2136,7 @@
     "question": "Describe Doriath.",
     "expected_route": "semantic",
     "actual_route": "semantic",
-    "answer": "Based on the provided text, Doriath is described as the guarded realm of Thingol the Hidden King, \"into whose realm none passed save by his will\" (Of Beleriand and its Realms, #14).\n\n**Geography:** Its northern and lesser part was the Forest of Neldoreth, bounded east and south by the dark river Esgalduin, which bent westward through the land. Between the rivers Aros and Esgalduin lay the denser, greater woods of Region. Where Esgalduin turned westward toward Sirion stood the Caves of Menegroth. All of Doriath lay east of Sirion, save for a narrow woodland strip called Nivrim (the West March), between the meeting of Teiglin and Sirion and the Meres of Twilight, where great oak-trees grew. In the south-west, where the Aros flowed into Sirion, lay the marshy pools of Aelin-uial, the Twilight Meres, wrapped in mist and enchantment.\n\n**The Girdle of Melian:** Doriath's defining feature was the unseen wall of shadow and bewilderment set by Melian around Neldoreth and Region — the Girdle of Melian — so that \"none thereafter could pass against her will or the will of King Thingol, unless one should come with a power greater than that of Melian the Maia\" (Of the Sindar, #10). This inner land was originally called Eglador, later renamed Doriath, \"the guarded kingdom, Land of the Girdle.\"\n\n**Menegroth:** At Thingol's request, the Dwarves of Belegost built his dwelling of Menegroth, the Thousand Caves, upon a rocky hill where the Esgalduin divided Neldoreth from Region — vast halls and chambers hewn deep in living stone, entered only by a stone bridge across the river.\n\n**Its fall:** Doriath's protection depended on Melian's power, which in turn was bound to her union with Thingol. After Thingol's death, \"her power was withdrawn... from the forests of Neldoreth and Region, and Esgalduin the enchanted river spoke with a different voice, and Doriath lay open to its enemies\" (Of the Ruin of Doriath, #22), leading to the kingdom's downfall.",
+    "answer": "Based on the text, Doriath is described across several passages as follows:\n\n**Geography and Structure**\nDoriath was the guarded realm of Thingol the Hidden King, into which \"none passed save by his will\" (Of Beleriand and its Realms). It comprised the Forest of Neldoreth in the north (its \"lesser part\"), bounded east and south by the dark river Esgalduin, and the greater, denser woods of Region lying between the rivers Aros and Esgalduin. Most of Doriath lay east of the River Sirion, save for a narrow woodland strip called Nivrim (the West March), which contained great oak-trees and was also enclosed within Melian's protective enchantment. In the south-west, where the Aros flowed into Sirion, lay the marshy Aelin-uial (the Twilight Meres), wrapped in mist and likewise under Doriath's enchantment.\n\nAt the heart of the forest, where Esgalduin divided Neldoreth from Region, rose a rocky hill on which Thingol's underground stronghold, Menegroth (the Thousand Caves), was built with the help of the Dwarves of Belegost—reached only by a stone bridge over the river (Of the Sindar).\n\n**The Girdle of Melian**\nOriginally called Eglador, the land was renamed Doriath (\"the guarded kingdom, Land of the Girdle\") after Melian wove the Girdle of Melian around it—an \"unseen wall of shadow and bewilderment\" that none could pass against the will of Melian or Thingol, \"unless one should come with a power greater than that of Melian the Maia\" (Of the Sindar). This let Doriath remain a place of \"watchful peace\" while peril and fear reigned outside it.\n\n**Its Ending**\nThe Girdle's protection lasted only through Melian's power, sustained by her union with Thingol. Upon Thingol's death (Of the Ruin of Doriath), \"her power was withdrawn... from the forests of Neldoreth and Region,\" Esgalduin \"spoke with a different voice,\" and \"Doriath lay open to its enemies\"—after which Melian departed Middle-earth entirely, ending the realm's long-guarded isolation.",
     "sources": [
       "Quenta Silmarillion #10: Of the Sindar",
       "Quenta Silmarillion #14: Of Beleriand and its Realms",
@@ -1707,53 +2173,73 @@
     "question": "What was Beren's journey from Dorthonion to Doriath?",
     "expected_route": "relational",
     "actual_route": "relational",
-    "answer": "Based on this text, I can confirm that Beren was connected to both Dorthonion and Doriath, and that he participated in several events during the Years of the Sun era: the **Leap of Beren**, the **Quest of the Silmaril** (also listed as \"Quest\"), the **Hunting of the Wolf**, and the **Battle of Sarn Athrad**.\n\nHowever, the knowledge graph data provided here does not give the narrative details of his actual journey — the path he took, what happened along the way, or how these events connect chronologically. It only shows that these associations exist, not the story itself.\n\nIf you'd like, I can discuss what's covered in The Silmarillion's actual chapters (such as \"Of Beren and Lúthien\") regarding this journey, but that would require the narrative text itself rather than this structured data, which isn't included in the context given.",
+    "answer": "Based on this context, the knowledge graph confirms that Beren is associated with both Dorthonion and Doriath as locations, and that he participated in events including the \"Quest of the Silmaril,\" \"Hunting of the Wolf,\" \"Leap of Beren,\" and \"Battle of Sarn Athrad.\" However, the graph data here does not provide narrative detail — such as a description of the journey itself, its route, hardships, or motivations — connecting these two places.\n\nThis specific question about the nature of his journey from Dorthonion to Doriath isn't covered in this text as given. The context only establishes relational facts (that Beren is linked to these places and events), not the actual textual account of the journey found in chapters like \"Of Beren and Lúthien\" in The Silmarillion. To answer accurately, the underlying narrative text of that chapter would need to be provided.",
     "sources": [
       "knowledge graph"
     ],
     "vector_context": [],
     "graph_context": {
-      "cypher": "MATCH (b:Man)\nWHERE apoc.text.clean(b.id) = apoc.text.clean(\"Beren\")\nOPTIONAL MATCH (b)-[r1:LOCATED_IN|PARTICIPATED_IN]->(p1:Place)\nWHERE apoc.text.clean(p1.id) CONTAINS \"dorthonion\"\nOPTIONAL MATCH (b)-[r2:LOCATED_IN|PARTICIPATED_IN]->(p2:Place)\nWHERE apoc.text.clean(p2.id) CONTAINS \"doriath\"\nOPTIONAL MATCH (b)-[r3:PARTICIPATED_IN]->(e:Event)\nOPTIONAL MATCH (e)-[:HAPPENED_DURING]->(era:Era)\nRETURN b.id AS Beren, p1.id AS Dorthonion, p2.id AS Doriath, e.id AS Event, era.id AS Era, era.sequence AS EraSequence\nORDER BY EraSequence",
+      "cypher": "MATCH (beren)\nWHERE apoc.text.clean(beren.id) = apoc.text.clean(\"Beren\")\nOPTIONAL MATCH (beren)-[:PARTICIPATED_IN]->(e:Event)\nOPTIONAL MATCH (e)-[:LOCATED_IN]->(p:Place)\nWHERE apoc.text.clean(p.id) CONTAINS apoc.text.clean(\"Dorthonion\") OR apoc.text.clean(p.id) CONTAINS apoc.text.clean(\"Doriath\")\nOPTIONAL MATCH (beren)-[:LOCATED_IN]->(loc:Place)\nWHERE apoc.text.clean(loc.id) CONTAINS apoc.text.clean(\"Dorthonion\") OR apoc.text.clean(loc.id) CONTAINS apoc.text.clean(\"Doriath\")\nRETURN beren.id AS Beren, e.id AS Event, p.id AS EventPlace, loc.id AS BerenLocation",
       "records": [
         {
           "Beren": "Beren",
-          "Dorthonion": "Dorthonion",
-          "Doriath": "Doriath",
           "Event": "Battle Of Sarn Athrad",
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "EventPlace": null,
+          "BerenLocation": "Dorthonion"
         },
         {
           "Beren": "Beren",
-          "Dorthonion": "Dorthonion",
-          "Doriath": "Doriath",
           "Event": "Quest Of The Silmaril",
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "EventPlace": null,
+          "BerenLocation": "Dorthonion"
         },
         {
           "Beren": "Beren",
-          "Dorthonion": "Dorthonion",
-          "Doriath": "Doriath",
           "Event": "Hunting Of The Wolf",
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "EventPlace": null,
+          "BerenLocation": "Dorthonion"
         },
         {
           "Beren": "Beren",
-          "Dorthonion": "Dorthonion",
-          "Doriath": "Doriath",
           "Event": "Quest",
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "EventPlace": null,
+          "BerenLocation": "Dorthonion"
         },
         {
           "Beren": "Beren",
-          "Dorthonion": "Dorthonion",
-          "Doriath": "Doriath",
           "Event": "Leap Of Beren",
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "EventPlace": null,
+          "BerenLocation": "Dorthonion"
+        },
+        {
+          "Beren": "Beren",
+          "Event": "Battle Of Sarn Athrad",
+          "EventPlace": null,
+          "BerenLocation": "Doriath"
+        },
+        {
+          "Beren": "Beren",
+          "Event": "Quest Of The Silmaril",
+          "EventPlace": null,
+          "BerenLocation": "Doriath"
+        },
+        {
+          "Beren": "Beren",
+          "Event": "Hunting Of The Wolf",
+          "EventPlace": null,
+          "BerenLocation": "Doriath"
+        },
+        {
+          "Beren": "Beren",
+          "Event": "Quest",
+          "EventPlace": null,
+          "BerenLocation": "Doriath"
+        },
+        {
+          "Beren": "Beren",
+          "Event": "Leap Of Beren",
+          "EventPlace": null,
+          "BerenLocation": "Doriath"
         }
       ]
     },
@@ -1765,263 +2251,242 @@
     "question": "How did Tuor travel from Dor-lomin to Gondolin?",
     "expected_route": "relational",
     "actual_route": "relational",
-    "answer": "Based on the locations associated with Tuor in this text, his journey to Gondolin passed through the following places, in this general order:\n\n- **Dor-Lómin** and **Mithrim** – his early years in this region of Hithlum\n- **Androth** – a cave-dwelling associated with Tuor\n- **Annon-in-Gelydh** – the \"Gate of the Noldor\"\n- **Cirith Ninniach** – the \"Rainbow Cleft,\" a chasm leading to the sea\n- **Nevrast** and **Vinyamar** – the abandoned realm and hall where Tuor found Turgon's arms and message\n- **Vale of Sirion** and **Nan-Tathren** (the \"Land of Willows\")\n- **Mountains of Shadow** and **Cirith Thoronath** (\"Eagles' Cleft\") – the mountain passes near Gondolin\n- **Gondolin** itself, his final destination\n\nThis sequence is drawn purely from the LOCATED_IN relationships tied to the events \"The Fall of Gondolin\" / \"Sack of Gondolin\" in the graph. The context does not include the narrative details of *how* (e.g., any guide, the role of Ulmo, or specific events at each stop) — only the list of places Tuor is connected to. For the fuller story of his journey (such as his guidance by Voronwë or Ulmo's message), that level of detail isn't covered in this text/context.",
+    "answer": "Based on the graph data, Tuor's journey passed through several locations, in this general sequence drawn from *The Silmarillion* (particularly the chapter \"Of Tuor and His Coming to Gondolin\"):\n\n- **Dor-lómin/Hithlum** – Tuor's homeland, where he lived among the Grey-elves at **Androth** in the Mountains of Mithrim area, in enmity with **Lorgan**, the Easterling who enslaved his people.\n- **Annon-in-Gelydh** – he passed through this hidden gate of the Noldor.\n- **Cirith Ninniach** (\"Rainbow Cleft\") – the ravine/river-path he followed toward the coast.\n- **Nevrast** and **Vinyamar** – the ancient abandoned halls of Turgon by the sea, where **Ulmo** appeared to Tuor and commanded him to seek Gondolin, and where Tuor took up the arms and shield left there for him. This is also where he built/used the vessel **Eärrámé** (\"Sea-Wing\").\n- **Vale of Sirion** and **Nan-tathren** (the \"Land of Willows\") – he traveled down along the River Sirion.\n- Guided finally by the Elf **Voronwë**, he crossed the **Mountains of Shadow** and the pass of **Cirith Thoronath** to reach the hidden city of **Gondolin**, where he was received by King **Turgon**.\n\nThis matches the graph's LOCATED_IN entries for Tuor (Androth, Annon-in-Gelydh, Cirith Ninniach, Nevrast, Vinyamar, Vale of Sirion, Nan-tathren, Mountains of Shadow, Cirith Thoronath, Gondolin) and his ALLIED_WITH relationships to Ulmo and Voronwë, who were central to guiding him on this path.",
     "sources": [
       "knowledge graph"
     ],
     "vector_context": [],
     "graph_context": {
-      "cypher": "MATCH (t)\nWHERE apoc.text.clean(t.id) = apoc.text.clean(\"Tuor\")\nOPTIONAL MATCH (t)-[r1:LOCATED_IN|PARTICIPATED_IN]->(p:Place)\nOPTIONAL MATCH (t)-[r2:PARTICIPATED_IN]->(e:Event)\nOPTIONAL MATCH (e)-[:HAPPENED_DURING]->(era:Era)\nRETURN t.id AS Tuor, type(r1) AS RelToPlace, p.id AS Place, type(r2) AS RelToEvent, e.id AS Event, e.sequence AS EventSequence, era.id AS Era, era.sequence AS EraSequence\nORDER BY EraSequence, EventSequence",
+      "cypher": "MATCH (tuor:Man)\nWHERE apoc.text.clean(tuor.id) = apoc.text.clean(\"Tuor\")\nOPTIONAL MATCH (tuor)-[r]-(connected)\nWHERE type(r) IN ['PARTICIPATED_IN','LOCATED_IN','ALLIED_WITH','ENEMY_OF','FOUGHT','CREATED','RULED']\nRETURN tuor.id AS Tuor, type(r) AS Relationship, labels(connected) AS ConnectedType, connected.id AS ConnectedEntity\n",
       "records": [
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Dor-Lómin",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "Sack Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "LOCATED_IN",
+          "ConnectedType": [
+            "__Entity__",
+            "Place"
+          ],
+          "ConnectedEntity": "Dor-Lómin"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Vale Of Sirion",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "Sack Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "CREATED",
+          "ConnectedType": [
+            "__Entity__",
+            "Object"
+          ],
+          "ConnectedEntity": "Eárrámé"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Nan-Tathren",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "Sack Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "LOCATED_IN",
+          "ConnectedType": [
+            "__Entity__",
+            "Place"
+          ],
+          "ConnectedEntity": "Vale Of Sirion"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Cirith Thoronath",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "Sack Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "LOCATED_IN",
+          "ConnectedType": [
+            "__Entity__",
+            "Place"
+          ],
+          "ConnectedEntity": "Nan-Tathren"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Vinyamar",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "Sack Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "PARTICIPATED_IN",
+          "ConnectedType": [
+            "__Entity__",
+            "Event"
+          ],
+          "ConnectedEntity": "Sack Of Gondolin"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Mountains Of Shadow",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "Sack Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "LOCATED_IN",
+          "ConnectedType": [
+            "__Entity__",
+            "Place"
+          ],
+          "ConnectedEntity": "Cirith Thoronath"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Nevrast",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "Sack Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "ALLIED_WITH",
+          "ConnectedType": [
+            "__Entity__",
+            "Maia",
+            "Object",
+            "Elf"
+          ],
+          "ConnectedEntity": "Thorondor"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Gondolin",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "Sack Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "FOUGHT",
+          "ConnectedType": [
+            "__Entity__",
+            "Elf"
+          ],
+          "ConnectedEntity": "Maeglin"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Hithlum",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "Sack Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "PARTICIPATED_IN",
+          "ConnectedType": [
+            "__Entity__",
+            "Event"
+          ],
+          "ConnectedEntity": "The Fall Of Gondolin"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Cirith Ninniach",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "Sack Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "ENEMY_OF",
+          "ConnectedType": [
+            "__Entity__",
+            "Elf"
+          ],
+          "ConnectedEntity": "Maeglin"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Annon-In-Gelydh",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "Sack Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "ALLIED_WITH",
+          "ConnectedType": [
+            "__Entity__",
+            "Elf"
+          ],
+          "ConnectedEntity": "Turgon"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Androth",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "Sack Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "ALLIED_WITH",
+          "ConnectedType": [
+            "__Entity__",
+            "Elf"
+          ],
+          "ConnectedEntity": "Ecthelion Of The Fountain"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Mithrim",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "Sack Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "ALLIED_WITH",
+          "ConnectedType": [
+            "__Entity__",
+            "Vala",
+            "Maia"
+          ],
+          "ConnectedEntity": "Ulmo"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Dor-Lómin",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "The Fall Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "PARTICIPATED_IN",
+          "ConnectedType": [
+            "__Entity__",
+            "Event"
+          ],
+          "ConnectedEntity": "Fell Winter"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Vale Of Sirion",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "The Fall Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "LOCATED_IN",
+          "ConnectedType": [
+            "__Entity__",
+            "Place"
+          ],
+          "ConnectedEntity": "Vinyamar"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Nan-Tathren",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "The Fall Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "LOCATED_IN",
+          "ConnectedType": [
+            "__Entity__",
+            "Place"
+          ],
+          "ConnectedEntity": "Mountains Of Shadow"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Cirith Thoronath",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "The Fall Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "LOCATED_IN",
+          "ConnectedType": [
+            "__Entity__",
+            "Place"
+          ],
+          "ConnectedEntity": "Nevrast"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Vinyamar",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "The Fall Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "ALLIED_WITH",
+          "ConnectedType": [
+            "__Entity__",
+            "Elf"
+          ],
+          "ConnectedEntity": "Voronwe"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Mountains Of Shadow",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "The Fall Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "LOCATED_IN",
+          "ConnectedType": [
+            "__Entity__",
+            "Place"
+          ],
+          "ConnectedEntity": "Gondolin"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Nevrast",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "The Fall Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "LOCATED_IN",
+          "ConnectedType": [
+            "__Entity__",
+            "Place"
+          ],
+          "ConnectedEntity": "Hithlum"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Gondolin",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "The Fall Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "ALLIED_WITH",
+          "ConnectedType": [
+            "__Entity__",
+            "Vala",
+            "Maia"
+          ],
+          "ConnectedEntity": "Ulmo"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Hithlum",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "The Fall Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "ENEMY_OF",
+          "ConnectedType": [
+            "__Entity__",
+            "Man"
+          ],
+          "ConnectedEntity": "Lorgan"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Cirith Ninniach",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "The Fall Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "LOCATED_IN",
+          "ConnectedType": [
+            "__Entity__",
+            "Place"
+          ],
+          "ConnectedEntity": "Cirith Ninniach"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Annon-In-Gelydh",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "The Fall Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "LOCATED_IN",
+          "ConnectedType": [
+            "__Entity__",
+            "Place"
+          ],
+          "ConnectedEntity": "Annon-In-Gelydh"
         },
         {
           "Tuor": "Tuor",
-          "RelToPlace": "LOCATED_IN",
-          "Place": "Androth",
-          "RelToEvent": "PARTICIPATED_IN",
-          "Event": "The Fall Of Gondolin",
-          "EventSequence": null,
-          "Era": "Years Of The Sun",
-          "EraSequence": 3
+          "Relationship": "LOCATED_IN",
+          "ConnectedType": [
+            "__Entity__",
+            "Place"
+          ],
+          "ConnectedEntity": "Androth"
         }
       ]
     },
@@ -2033,7 +2498,7 @@
     "question": "What did Luthien say when she pleaded for Beren before Thingol?",
     "expected_route": "semantic",
     "actual_route": "semantic",
-    "answer": "Based on the provided text, Lúthien did not plead for Beren before Thingol with any recorded speech. When Thingol demanded to know who Beren was, it was Lúthien who spoke on his behalf, saying: \"He is Beren son of Barahir, lord of Men, mighty foe of Morgoth, the tale of whose deeds is become a song even among the Elves.\"\n\nAfter that, the text notes that \"Lüthien was silent\" once Thingol pronounced his doom sending Beren after the Silmaril — the text explicitly states she made no plea at that point: \"But Lüthien was silent, and from that hour she sang not again in Doriath.\"\n\nNo other words of pleading from Lúthien to Thingol on Beren's behalf appear in this context.",
+    "answer": "Based on this context, Lúthien did not plead for Beren with argued words before Thingol's throne. Instead, when Thingol demanded to know who Beren was, she spoke to identify and vouch for him: \"He is Beren son of Barahir, lord of Men, mighty foe of Morgoth, the tale of whose deeds is become a song even among the Elves.\"\n\nBeyond this introduction, the text notes that when Thingol first confronted her about the secret meetings, \"she would reveal nothing, until he swore an oath to her that he would neither slay Beren nor imprison him\" — but no specific plea in her own words is quoted at that point. The context does not provide any further quoted speech of pleading from Lúthien on Beren's behalf.",
     "sources": [
       "Quenta Silmarillion #19: Of Beren and Lúthien"
     ],
@@ -2068,7 +2533,7 @@
     "question": "What did Ulmo tell Turgon in his warning?",
     "expected_route": "semantic",
     "actual_route": "semantic",
-    "answer": "Ulmo's warning to Turgon (Quenta Silmarillion #15, \"Of the Noldor in Beleriand\") had several parts:\n\n- He would depart to Gondolin, and Ulmo would maintain his power in the Vale of Sirion \"so that none shall mark thy going, nor shall any find there the hidden entrance against thy will.\" Ulmo also foretold that Gondolin would stand \"Longest of all the realms of the Eldalié\" against Melkor.\n\n- Ulmo cautioned him: \"But love not too well the work of thy hands and the devices of thy heart; and remember that the true hope of the Noldor lieth in the West and cometh from the Sea.\"\n\n- Ulmo warned that Turgon still lay under the Doom of Mandos, which Ulmo had no power to remove, saying: \"Thus it may come to pass... that the curse of the Noldor shall find thee too ere the end, and treason awake within thy walls. Then they shall be in peril of fire.\"\n\n- But Ulmo promised that if that peril drew near, \"even from Nevrast one shall come to warn thee, and from him beyond ruin and fire hope shall be born for Elves and Men.\" He instructed Turgon to leave arms and a sword in his house at Nevrast, so that this messenger would be recognized and \"not be deceived,\" and Ulmo described the exact kind and stature of the helm, mail, and sword to be left behind.\n\nThis warning is later recalled in Quenta Silmarillion #23 (\"Of Tuor and the Fall of Gondolin\"), where Turgon remembers the counsel but ultimately, swayed by pride and by Maeglin's words, rejects Ulmo's bidding.",
+    "answer": "Ulmo's warning to Turgon (delivered at Vinyamar) had several parts, as recounted in \"Of the Noldor in Beleriand\":\n\n- Turgon must go at last to Gondolin, and Ulmo would maintain his power in the Vale of Sirion \"so that none shall mark thy going, nor shall any find there the hidden entrance against thy will.\"\n- \"Longest of all the realms of the Eldalié shall Gondolin stand against Melkor.\"\n- A caution: \"But love not too well the work of thy hands and the devices of thy heart; and remember that the true hope of the Noldor lieth in the West and cometh from the Sea.\"\n- A warning that Turgon too lay under the Doom of Mandos, which Ulmo could not remove: \"Thus it may come to pass... that the curse of the Noldor shall find thee too ere the end, and treason awake within thy walls. Then they shall be in peril of fire.\"\n- Yet he promised that if this peril drew near, \"even from Nevrast one shall come to warn thee, and from him beyond ruin and fire hope shall be born for Elves and Men.\" Ulmo therefore instructed Turgon to leave arms and a sword in his house at Vinyamar, describing their kind and stature, so that this messenger might later be recognized and not be mistaken.\n\nThis warning is recalled again in \"Of Tuor and the Fall of Gondolin,\" when Turgon remembers the words \"Love not too well the work of thy hands and the devices of thy heart; and remember that the true hope of the Noldor lieth in the West, and cometh from the Sea,\" though by then, grown proud, he ultimately rejects Ulmo's further counsel (brought by Tuor) and blocks the hidden entrance to Gondolin.",
     "sources": [
       "Quenta Silmarillion #15: Of the Noldor in Beleriand",
       "Quenta Silmarillion #18: Of the Ruin of Beleriand and the Fall of Fingolfin",
@@ -2105,7 +2570,7 @@
     "question": "What is related to the Silmarils?",
     "expected_route": "both",
     "actual_route": "both",
-    "answer": "Based on the text and the knowledge graph, the following are related to the Silmarils:\n\n**Creation:**\n- **Féanor** — creator; he \"began a long and secret labour\" and \"at the end of all he made the Silmarils\" (*Of the Silmarils and the Unrest of the Noldor*)\n- **Noldor** — credited generally with \"the making of gems,\" of which \"the fairest of all gems were the Silmarils\" (*Of the Beginning of Days*)\n- **Varda** — she \"hallowed the Silmarils, so that thereafter no mortal flesh, nor hands unclean, nor anything of evil will might touch them\"\n\n**Places:**\n- **Tirion** and **Formenos** — associated locations (Tirion as the city of the Noldor; Formenos as Féanor's stronghold, per graph data, though not detailed in the excerpted narrative text)\n\n**Events:**\n- **Years of the Trees** — the era in which they were made\n- **Oath of Fëanor** — the Silmarils are bound up with this oath, sworn by Féanor's sons\n\n**Characters entangled in their fate:**\n- **Maedhros** and **Maglor** — sons of Féanor, bound by the oath\n- **Beren** — who won a Silmaril from Morgoth's crown, later brought to Dior (*Of the Ruin of Doriath*)\n- **Morgoth/Morgoth Bauglir** — enemy who stole the Silmarils and set them in his crown; ultimately their destroyer according to the graph\n- **Eönwé** — herald of Manwë, linked in the graph (not detailed in the provided narrative excerpts)\n- **Yavanna** — involved in later events concerning the Silmarils (not detailed in the provided excerpts)\n\n**Nature of the Silmarils** (from *Of the Silmarils and the Unrest of the Noldor*): they contained \"the blended light of the Trees of Valinor,\" were harder than adamant, and \"of their own radiance shone like the stars of Varda.\"",
+    "answer": "Based on the text and knowledge graph, the following are related to the Silmarils:\n\n**Creation:**\n- **Féanor** — crafted the Silmarils himself, pouring his skill and power into them (*Of the Silmarils and the Unrest of the Noldor*)\n- **Varda** — hallowed the Silmarils so that \"no mortal flesh, nor hands unclean, nor anything of evil will might touch them, but it was scorched and withered\" (same chapter)\n- **Noldor** — credited generally as the people who \"first achieved the making of gems; and the fairest of all gems were the Silmarils\" (*Of the Beginning of Days*)\n\n**Substance/Nature:**\n- Made from **the blended light of the Trees of Valinor** (Telperion and Laurelin), which \"lives in them yet, though the Trees have long withered\"\n\n**Prophecy/Fate:**\n- **Mandos** foretold that \"the fates of Arda, earth, sea, and air, lay locked within them\"\n\n**Key events and figures tied to their history (from the graph):**\n- **Oath of Fëanor** — sworn to recover the Silmarils\n- **Maedhros and Maglor** — sons of Féanor bound by that oath, involved in pursuit of the jewels\n- **Beren** — retrieved a Silmaril from Morgoth's crown (as referenced in *Of the Ruin of Doriath*, where Dior receives the Silmaril after Beren and Lúthien's deaths)\n- **Morgoth** — stole the Silmarils and set them in his crown; also associated with their eventual fate/destruction\n- **Eönwé** — connected to their recovery in later events\n- **Formenos and Tirion** — locations associated with the Silmarils (Tirion as the city of their creation's context; Formenos where Féanor kept them)\n\nThe provided narrative excerpts focus mainly on their creation (by Féanor, hallowed by Varda) and their tragic role in Doriath's ruin, where the Silmaril worn by Dior in the Nauglamír reawakens the Oath of Féanor's sons.",
     "sources": [
       "Quenta Silmarillion #16: Of Maeglin",
       "Quenta Silmarillion #1: Of the Beginning of Days",
@@ -2137,170 +2602,170 @@
       }
     ],
     "graph_context": {
-      "cypher": "MATCH (n)-[r]-(m)\nWHERE apoc.text.clean(n.id) = apoc.text.clean(\"Silmarils\")\nRETURN n.id AS Silmarils, type(r) AS Relationship, m.id AS RelatedEntity, labels(m) AS EntityType\n",
+      "cypher": "MATCH (n)-[r]-(m)\nWHERE apoc.text.clean(n.id) = apoc.text.clean(\"Silmarils\")\n  AND NOT type(r) IN [\"MENTIONS\"]\n  AND NOT m:Document\nRETURN n.id AS Silmarils, type(r) AS Relationship, labels(m) AS Type, m.id AS Related\n",
       "records": [
         {
           "Silmarils": "Silmarils",
           "Relationship": "HAPPENED_DURING",
-          "RelatedEntity": "Years Of The Trees",
-          "EntityType": [
+          "Type": [
             "__Entity__",
             "Event",
             "Era"
-          ]
+          ],
+          "Related": "Years Of The Trees"
         },
         {
           "Silmarils": "Silmarils",
           "Relationship": "PARTICIPATED_IN",
-          "RelatedEntity": "Oath Of Fëanor",
-          "EntityType": [
+          "Type": [
             "__Entity__",
             "Event"
-          ]
+          ],
+          "Related": "Oath Of Fëanor"
         },
         {
           "Silmarils": "Silmarils",
           "Relationship": "CREATED",
-          "RelatedEntity": "Féanor",
-          "EntityType": [
+          "Type": [
             "__Entity__",
             "Elf",
             "House"
-          ]
+          ],
+          "Related": "Féanor"
         },
         {
           "Silmarils": "Silmarils",
           "Relationship": "CREATED",
-          "RelatedEntity": "Eónwé",
-          "EntityType": [
+          "Type": [
             "__Entity__",
             "Maia"
-          ]
+          ],
+          "Related": "Eónwé"
         },
         {
           "Silmarils": "Silmarils",
           "Relationship": "PARTICIPATED_IN",
-          "RelatedEntity": "Maedhros",
-          "EntityType": [
+          "Type": [
             "__Entity__",
             "Elf"
-          ]
+          ],
+          "Related": "Maedhros"
         },
         {
           "Silmarils": "Silmarils",
           "Relationship": "PARTICIPATED_IN",
-          "RelatedEntity": "Maglor",
-          "EntityType": [
+          "Type": [
             "__Entity__",
             "Elf"
-          ]
+          ],
+          "Related": "Maglor"
         },
         {
           "Silmarils": "Silmarils",
           "Relationship": "DESTROYED",
-          "RelatedEntity": "Morgoth",
-          "EntityType": [
+          "Type": [
             "__Entity__",
             "Vala",
             "Maia",
             "Elf"
-          ]
+          ],
+          "Related": "Morgoth"
         },
         {
           "Silmarils": "Silmarils",
           "Relationship": "ALSO_KNOWN_AS",
-          "RelatedEntity": "Sons Of Féanor",
-          "EntityType": [
+          "Type": [
             "__Entity__",
             "Elf",
             "House"
-          ]
+          ],
+          "Related": "Sons Of Féanor"
         },
         {
           "Silmarils": "Silmarils",
           "Relationship": "ENEMY_OF",
-          "RelatedEntity": "Morgoth Bauglir",
-          "EntityType": [
+          "Type": [
             "__Entity__",
             "Vala"
-          ]
+          ],
+          "Related": "Morgoth Bauglir"
         },
         {
           "Silmarils": "Silmarils",
           "Relationship": "PARTICIPATED_IN",
-          "RelatedEntity": "Beren",
-          "EntityType": [
+          "Type": [
             "__Entity__",
             "Man"
-          ]
+          ],
+          "Related": "Beren"
         },
         {
           "Silmarils": "Silmarils",
           "Relationship": "CREATED",
-          "RelatedEntity": "Morgoth",
-          "EntityType": [
+          "Type": [
             "__Entity__",
             "Vala",
             "Maia",
             "Elf"
-          ]
+          ],
+          "Related": "Morgoth"
         },
         {
           "Silmarils": "Silmarils",
           "Relationship": "ALSO_KNOWN_AS",
-          "RelatedEntity": "Morgoth",
-          "EntityType": [
+          "Type": [
             "__Entity__",
             "Vala",
             "Maia",
             "Elf"
-          ]
+          ],
+          "Related": "Morgoth"
         },
         {
           "Silmarils": "Silmarils",
           "Relationship": "PARTICIPATED_IN",
-          "RelatedEntity": "Yavanna",
-          "EntityType": [
+          "Type": [
             "__Entity__",
             "Vala"
-          ]
+          ],
+          "Related": "Yavanna"
         },
         {
           "Silmarils": "Silmarils",
           "Relationship": "LOCATED_IN",
-          "RelatedEntity": "Formenos",
-          "EntityType": [
+          "Type": [
             "__Entity__",
             "Place"
-          ]
+          ],
+          "Related": "Formenos"
         },
         {
           "Silmarils": "Silmarils",
           "Relationship": "LOCATED_IN",
-          "RelatedEntity": "Tirion",
-          "EntityType": [
+          "Type": [
             "__Entity__",
             "Place"
-          ]
+          ],
+          "Related": "Tirion"
         },
         {
           "Silmarils": "Silmarils",
           "Relationship": "CREATED",
-          "RelatedEntity": "Varda",
-          "EntityType": [
+          "Type": [
             "__Entity__",
             "Vala"
-          ]
+          ],
+          "Related": "Varda"
         },
         {
           "Silmarils": "Silmarils",
           "Relationship": "CREATED",
-          "RelatedEntity": "Noldor",
-          "EntityType": [
+          "Type": [
             "__Entity__",
             "Elf",
             "House"
-          ]
+          ],
+          "Related": "Noldor"
         }
       ]
     },
@@ -2312,7 +2777,7 @@
     "question": "What topics connect to the theme of oaths in the story?",
     "expected_route": "both",
     "actual_route": "both",
-    "answer": "Based on the knowledge graph results, topics connecting to **\"Oath Of Fëanor\"** include:\n\n- **Time period:** Years Of The Trees (when the oath happened)\n- **Related event:** Assault On The Havens Of Sirion (another event the oath is linked to)\n- **Object at stake:** Silmarils\n- **Participants (the oath-takers):** Fëanor and his seven sons — Maedhros, Maglor, Celegorm, Curufin, Caranthir, Amrod, and Amras\n\nThis aligns with the narrative in *Of the Flight of the Noldor*, where Fëanor and his seven sons swear the terrible oath \"by the name even of Ilúvatar,\" vowing vengeance on anyone who holds a Silmaril. The oath's later consequences are shown in *Of the Voyage of Eärendil and the War of Wrath*, where Maedhros and Maglor debate whether the oath still binds them after Eönwë demands the Silmarils back, and reference is made to the \"many and merciless deeds\" the oath drove them to, including \"the slaying of Dior and the assault upon the Havens\" — matching the graph's link to the Havens of Sirion.",
+    "answer": "Based on the context provided, the theme of oaths connects to several key topics in *The Silmarillion*:\n\n**The Oath of Fëanor itself** (from \"Of the Flight of the Noldor\"): Sworn by Fëanor and his seven sons — Maedhros, Maglor, Celegorm, Curufin, Caranthir, Amrod, and Amras — calling upon Manwë, Varda, and Taniquetil as witnesses, and invoking \"the Everlasting Dark\" upon themselves if they broke it. The knowledge graph confirms all seven sons as participants, and links the oath to the **Silmarils** as its object.\n\n**Kinslaying and the Doom of Mandos**: The oath's consequences are tied directly to violence — the graph links the Oath of Fëanor to the **Assault on the Havens of Sirion**, and the narrative (\"Of the Noldor in Beleriand\") shows Angrod citing \"the blood at Alqualondé, and the Doom of Mandos, and the burning of the ships at Losgar\" as direct fallout from the oath-sworn House of Fëanor.\n\n**The burden of unbreakable vows**: In \"Of the Voyage of Eärendil and the War of Wrath,\" Maedhros and Maglor debate whether the oath can be set aside — Maglor hopes \"that in Valinor all shall be forgiven and forgot,\" while Maedhros warns that \"their oath would still remain, but its fulfilment be beyond all hope.\" This ties oaths to themes of doom, despair, and inescapability — echoed in the earlier line that \"an oath may not be broken, and it shall pursue oathkeeper and oathbreaker to the world's end.\"\n\n**Loyalty versus oath**, as a contrasting theme: In the *Akallabêth*, Amandil's words — \"there is but one loyalty from which no man can be absolved in heart for any cause\" — present a different, unsworn but absolute loyalty (to the Valar/Manwë), distinct from Fëanor's binding oath, showing Tolkien contrasting freely-held loyalty with the destructive rigidity of a sworn oath.\n\n**Judgement and mercy**: Eönwë's refusal to yield the Silmarils \"because of their many and merciless deeds... most of all because of their slaying of Dior and the assault upon the Havens\" ties the oath's consequences to themes of justice being weighed against blind vow-keeping.",
     "sources": [
       "Akallabêth",
       "Quenta Silmarillion #15: Of the Noldor in Beleriand",
@@ -2343,62 +2808,108 @@
       }
     ],
     "graph_context": {
-      "cypher": "\nMATCH (n)\nWHERE apoc.text.clean(n.id) CONTAINS 'oath'\nOPTIONAL MATCH (n)-[r]-(m)\nWHERE NOT type(r) IN ['MENTIONS']\nRETURN n.id AS Topic, type(r) AS Relationship, m.id AS ConnectedTopic\n",
+      "cypher": "\nMATCH (n)\nWHERE apoc.text.clean(n.id) CONTAINS 'oath'\nMATCH (n)-[r]-(m)\nWHERE NOT type(r) IN ['MENTIONS']\nRETURN DISTINCT n.id AS OathRelatedEntity, type(r) AS Relationship, m.id AS ConnectedEntity, labels(m) AS ConnectedType\nLIMIT 50\n",
       "records": [
         {
-          "Topic": "Oath Of Fëanor",
+          "OathRelatedEntity": "Oath Of Fëanor",
           "Relationship": "HAPPENED_DURING",
-          "ConnectedTopic": "Years Of The Trees"
+          "ConnectedEntity": "Years Of The Trees",
+          "ConnectedType": [
+            "__Entity__",
+            "Event",
+            "Era"
+          ]
         },
         {
-          "Topic": "Oath Of Fëanor",
+          "OathRelatedEntity": "Oath Of Fëanor",
           "Relationship": "PARTICIPATED_IN",
-          "ConnectedTopic": "Féanor"
+          "ConnectedEntity": "Féanor",
+          "ConnectedType": [
+            "__Entity__",
+            "Elf",
+            "House"
+          ]
         },
         {
-          "Topic": "Oath Of Fëanor",
+          "OathRelatedEntity": "Oath Of Fëanor",
           "Relationship": "PARTICIPATED_IN",
-          "ConnectedTopic": "Silmarils"
+          "ConnectedEntity": "Silmarils",
+          "ConnectedType": [
+            "__Entity__",
+            "Object"
+          ]
         },
         {
-          "Topic": "Oath Of Fëanor",
+          "OathRelatedEntity": "Oath Of Fëanor",
           "Relationship": "PARTICIPATED_IN",
-          "ConnectedTopic": "Celegorm"
+          "ConnectedEntity": "Celegorm",
+          "ConnectedType": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Topic": "Oath Of Fëanor",
+          "OathRelatedEntity": "Oath Of Fëanor",
           "Relationship": "PARTICIPATED_IN",
-          "ConnectedTopic": "Curufin"
+          "ConnectedEntity": "Curufin",
+          "ConnectedType": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Topic": "Oath Of Fëanor",
+          "OathRelatedEntity": "Oath Of Fëanor",
           "Relationship": "HAPPENED_DURING",
-          "ConnectedTopic": "Assault On The Havens Of Sirion"
+          "ConnectedEntity": "Assault On The Havens Of Sirion",
+          "ConnectedType": [
+            "__Entity__",
+            "Event"
+          ]
         },
         {
-          "Topic": "Oath Of Fëanor",
+          "OathRelatedEntity": "Oath Of Fëanor",
           "Relationship": "PARTICIPATED_IN",
-          "ConnectedTopic": "Caranthir"
+          "ConnectedEntity": "Caranthir",
+          "ConnectedType": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Topic": "Oath Of Fëanor",
+          "OathRelatedEntity": "Oath Of Fëanor",
           "Relationship": "PARTICIPATED_IN",
-          "ConnectedTopic": "Maedhros"
+          "ConnectedEntity": "Maedhros",
+          "ConnectedType": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Topic": "Oath Of Fëanor",
+          "OathRelatedEntity": "Oath Of Fëanor",
           "Relationship": "PARTICIPATED_IN",
-          "ConnectedTopic": "Maglor"
+          "ConnectedEntity": "Maglor",
+          "ConnectedType": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Topic": "Oath Of Fëanor",
+          "OathRelatedEntity": "Oath Of Fëanor",
           "Relationship": "PARTICIPATED_IN",
-          "ConnectedTopic": "Amras"
+          "ConnectedEntity": "Amras",
+          "ConnectedType": [
+            "__Entity__",
+            "Elf"
+          ]
         },
         {
-          "Topic": "Oath Of Fëanor",
+          "OathRelatedEntity": "Oath Of Fëanor",
           "Relationship": "PARTICIPATED_IN",
-          "ConnectedTopic": "Amrod"
+          "ConnectedEntity": "Amrod",
+          "ConnectedType": [
+            "__Entity__",
+            "Elf"
+          ]
         }
       ]
     },
@@ -2410,18 +2921,18 @@
     "question": "How is Luthien related to Thingol?",
     "expected_route": "relational",
     "actual_route": "relational",
-    "answer": "Based on the provided context, the knowledge graph indicates a \"PARENT_OF\" relationship from Lúthien to Thingol.\n\nHowever, this appears to be an error in the graph data — in The Silmarillion, Thingol is actually Lúthien's father, not the other way around. Lúthien is the daughter of King Thingol and Melian, as recounted in the chapter \"Of Thingol and Melian\" and throughout \"Of Beren and Lúthien.\"\n\nI'm flagging this discrepancy rather than presenting the graph's directional label as accurate, since the underlying text does not support Lúthien being Thingol's parent.",
+    "answer": "Based on the provided context, the knowledge graph result states a \"PARENT_OF\" relationship between Lúthien and Thingol (Source: Lúthien, Target: Thingol).\n\nHowever, this appears to conflict with the actual narrative of *The Silmarillion*: in the text, Thingol is Lúthien's father, not her child — she is the daughter of King Thingol and Melian (see \"Of Thingol and Melian\" and \"Of Beren and Lúthien\"). The context provided does not include narrative prose confirming the direction of this relationship, only the raw graph edge, which may reflect an error in how the relationship was encoded.\n\nI can only report what the graph data states, but I'm not able to confirm from actual quoted text in this context which direction (parent/child) is accurate. If you'd like, provide narrative excerpts and I can ground the answer more precisely.",
     "sources": [
       "knowledge graph"
     ],
     "vector_context": [],
     "graph_context": {
-      "cypher": "MATCH (a)-[r]-(b)\nWHERE apoc.text.clean(a.id) = apoc.text.clean(\"Luthien\")\n  AND apoc.text.clean(b.id) = apoc.text.clean(\"Thingol\")\nRETURN a.id AS From, type(r) AS Relationship, b.id AS To\n",
+      "cypher": "\nMATCH (n)-[r]-(m)\nWHERE apoc.text.clean(n.id) = apoc.text.clean(\"Luthien\")\nAND apoc.text.clean(m.id) = apoc.text.clean(\"Thingol\")\nAND type(r) <> \"MENTIONS\"\nRETURN n.id AS Source, type(r) AS Relationship, m.id AS Target\n",
       "records": [
         {
-          "From": "Luthien",
+          "Source": "Luthien",
           "Relationship": "PARENT_OF",
-          "To": "Thingol"
+          "Target": "Thingol"
         }
       ]
     },
@@ -2433,7 +2944,7 @@
     "question": "What is the relationship between Hurin and Turin?",
     "expected_route": "relational",
     "actual_route": "relational",
-    "answer": "Based on the context provided, Húrin is the parent of Túrin (PARENT_OF relationship).\n\nThe text does not provide further narrative details beyond this familial relationship in the given context.",
+    "answer": "Based on the text, **Húrin is the parent of Túrin** — that is, Túrin's father.",
     "sources": [
       "knowledge graph"
     ],
@@ -2456,13 +2967,13 @@
     "question": "Who are the allies of Morgoth?",
     "expected_route": "relational",
     "actual_route": "relational",
-    "answer": "Based on the provided data, Morgoth's allies include:\n\n- **Orcs** (and specifically the \"Orcs of Morgoth\")\n- **Sauron**\n- **Easterlings**\n- **Glaurung** (the dragon)\n\nThe dataset also lists \"Silmaril\" as connected via an ALLIED_WITH relationship, but this appears to be a data artifact — a Silmaril is an object, not an ally in the narrative sense, so this entry isn't meaningful in terms of the actual story from The Silmarillion.",
+    "answer": "Based on the text, Morgoth's allies include:\n\n- **Sauron** — his chief lieutenant\n- **Orcs** (and the \"Orcs of Morgoth\" specifically) — his primary armies\n- **Glaurung** — the great dragon in his service\n- **Easterlings** — Men who allied with him, notably during and after the *Nirnaeth Arnoediad* (Battle of Unnumbered Tears) in the *Quenta Silmarillion*\n\nThe entry listing \"Silmaril\" as an ally appears to be a graph artifact rather than a meaningful alliance — the Silmarils were objects Morgoth stole and guarded, not allies.",
     "sources": [
       "knowledge graph"
     ],
     "vector_context": [],
     "graph_context": {
-      "cypher": "MATCH (m {id: \"Morgoth\"})-[:ALLIED_WITH]->(ally)\nWHERE apoc.text.clean(m.id) = apoc.text.clean(\"Morgoth\")\nRETURN ally.id AS AllyName, labels(ally) AS AllyType\n",
+      "cypher": "\nMATCH (m)-[:ALLIED_WITH]->(ally)\nWHERE apoc.text.clean(m.id) = apoc.text.clean(\"Morgoth\")\nRETURN ally.id AS AllyName, labels(ally) AS AllyType\n",
       "records": [
         {
           "AllyName": "Orcs",
@@ -2521,23 +3032,23 @@
     "question": "Who are the enemies of the House of Feanor?",
     "expected_route": "relational",
     "actual_route": "relational",
-    "answer": "Based on the provided context, the House of Fëanor's listed enemy is the Valar.\n\nThat's the only relationship returned in this text — no further detail (e.g., specific narrative context or chapter reference) is included in the context to elaborate on this enmity.",
+    "answer": "Based on the provided context, the only recorded enemy of the House of Fëanor is the **Valar**.\n\nThis isn't covered in more detail within the given text — no additional context or chapter references are provided to explain the nature of this enmity (which in the broader narrative relates to the Oath of Fëanor and the Kinslaying, but I cannot elaborate further without that being present in the supplied material).",
     "sources": [
       "knowledge graph"
     ],
     "vector_context": [],
     "graph_context": {
-      "cypher": "MATCH (h:House)-[:ENEMY_OF]->(enemy)\nWHERE apoc.text.clean(h.id) = apoc.text.clean(\"House of Feanor\")\nRETURN h.id AS House, labels(enemy) AS EnemyType, enemy.id AS Enemy",
+      "cypher": "MATCH (h:House)-[:ENEMY_OF]->(e)\nWHERE apoc.text.clean(h.id) = apoc.text.clean(\"House of Feanor\")\nRETURN h.id AS House, e.id AS Enemy, labels(e) AS EnemyType\n",
       "records": [
         {
           "House": "House Of Féanor",
+          "Enemy": "Valar",
           "EnemyType": [
             "__Entity__",
             "Vala",
             "Maia",
             "House"
-          ],
-          "Enemy": "Valar"
+          ]
         }
       ]
     },
@@ -2549,7 +3060,7 @@
     "question": "What color was Bilbo Baggins' waistcoat?",
     "expected_route": "semantic",
     "actual_route": "semantic",
-    "answer": "This isn't covered in this text. The provided context is from *The Silmarillion* and does not mention Bilbo Baggins or any details about his clothing.",
+    "answer": "This isn't covered in this text — Bilbo Baggins doesn't appear in the provided context from *The Silmarillion*, which does not feature him at all.",
     "sources": [
       "Of the Rings of Power and the Third Age",
       "Quenta Silmarillion #10: Of the Sindar",
@@ -2587,20 +3098,19 @@
     "question": "What was Aragorn's date of birth?",
     "expected_route": "semantic",
     "actual_route": "relational",
-    "answer": "The provided context contains no information about Aragorn's date of birth — it only confirms that \"Aragorn\" exists as an entity labeled \"Man.\" This detail isn't covered in this text (and indeed, Aragorn is barely mentioned in The Silmarillion itself, which focuses on the earlier Ages of Middle-earth).",
+    "answer": "The provided context doesn't contain any information about Aragorn's date of birth — it only confirms that a character named \"Aragorn\" exists as a node in the data, with no accompanying birth details. This information isn't covered in this text.\n\nNote also that Aragorn is a figure from *The Lord of the Rings*, not a character developed within *The Silmarillion* itself, so detailed biographical data like birth dates wouldn't be expected in this source.",
     "sources": [
       "knowledge graph"
     ],
     "vector_context": [],
     "graph_context": {
-      "cypher": "\nMATCH (n)\nWHERE apoc.text.clean(n.id) = apoc.text.clean(\"Aragorn\")\nRETURN n.id AS name, labels(n) AS type\n",
+      "cypher": "MATCH (n:Man)\nWHERE apoc.text.clean(n.id) = apoc.text.clean(\"Aragorn\")\nRETURN n.id AS name, n AS properties",
       "records": [
         {
           "name": "Aragorn",
-          "type": [
-            "__Entity__",
-            "Man"
-          ]
+          "properties": {
+            "id": "Aragorn"
+          }
         }
       ]
     },
