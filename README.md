@@ -18,20 +18,23 @@ alliances, aliases) via a Neo4j knowledge graph.
 `main.py` is the single "ask a question, get a cited answer" entrypoint (see
 below). The vector store and graph can also still be queried independently.
 
-Current eval results: **89% routing accuracy** (25/28), **4.39/5 avg answer
+Current eval results: **93% routing accuracy** (26/28), **4.39/5 avg answer
 quality** (LLM-as-judge). See
 [data/eval/scored_results.json](data/eval/scored_results.json) for full
-details. Adding few-shot examples to the router prompt (`src/agent/nodes.py`)
-took routing from 79%→89%, fixing `journey_path` and `character_explainer`
-misclassification entirely. One known open issue: `quote_01` intermittently
-misattributes a quote — the synthesize node's grounding fixes handle "answer
-from outside knowledge" but not "correctly-cited but wrong dialogue
-attribution" when the exact passage isn't in the retrieved context. Earlier
-fixes remain in place — see `src/graph/query.py`/`extract.py` for a related bug
-found while re-testing (untyped Cypher wildcards could return raw source-
-chunk text via `MENTIONS` edges, which have since been stripped from the
-graph entirely). Remaining route "misses" are mostly reasonable ambiguity
-(e.g. `journey_path` questions the router treats as narrative), not errors.
+details. Two changes drove routing from 79%→93%: few-shot examples in the
+router prompt (79%→89%), then `graph_query()` in `src/graph/query.py` was
+rewritten to call only the Cypher-generation step directly instead of the
+full `GraphCypherQAChain` — the chain's own built-in QA-synthesis call was
+being discarded unused (our `synthesize_node` redoes that work from the
+records), so this also roughly halves the LLM calls per graph question with
+no quality change (89%→93% was likely just run-to-run router variance, not
+a routing effect from this change). Only two failures remain, both
+defensible: `timeline_02` (real gap — `HAPPENED_DURING` is sparsely
+populated) and `edge_02` (route "miss" but the answer is still correct —
+it's an out-of-scope question, and either route path arrives at the right
+"not covered" answer). `quote_01`'s intermittent quote misattribution
+(open issue, LLM non-determinism on a genuinely hard case) is currently
+not reproducing but isn't considered fixed.
 
 ## Architecture
 

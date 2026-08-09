@@ -83,7 +83,7 @@ def graph_retrieve_node(state: AgentState) -> dict:
     try:
         result = graph_query(state["question"])
     except Exception as e:
-        result = {"answer": "", "cypher": "", "records": [], "error": str(e)}
+        result = {"cypher": "", "records": [], "error": str(e)}
 
     update: dict = {"graph_context": result}
     if not result.get("records") and state.get("route") == "relational":

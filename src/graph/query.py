@@ -6,7 +6,7 @@ from pathlib import Path
 from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import PromptTemplate
 from langchain_neo4j import GraphCypherQAChain, Neo4jGraph
-from langchain_neo4j.chains.graph_qa.cypher import CYPHER_GENERATION_PROMPT
+from langchain_neo4j.chains.graph_qa.cypher import CYPHER_GENERATION_PROMPT, extract_cypher
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from src.config import CHAT_MODEL, NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME
@@ -72,13 +72,25 @@ def _contains_document_node(value) -> bool:
 
 
 def graph_query(question: str) -> dict:
-    """Returns {"answer": str, "cypher": str, "records": list}."""
-    result = _get_chain().invoke({"query": question})
-    steps = result.get("intermediate_steps", [])
-    cypher = steps[0].get("query", "") if steps else ""
-    records = steps[1].get("context", []) if len(steps) > 1 else []
+    """Generate Cypher, run it, and return records — skips GraphCypherQAChain's
+    own QA-synthesis call, since our agent's synthesize_node redoes that work
+    from the records anyway and never reads the chain's own answer. Roughly
+    halves the LLM calls per graph query.
+
+    Returns {"cypher": str, "records": list}.
+    """
+    chain = _get_chain()
+
+    generated_cypher = chain.cypher_generation_chain.invoke(
+        {"question": question, "examples": None, "schema": chain.graph_schema}
+    )
+    generated_cypher = extract_cypher(generated_cypher)
+    if chain.cypher_query_corrector:
+        generated_cypher = chain.cypher_query_corrector(generated_cypher)
+
+    records = chain.graph.query(generated_cypher)[: chain.top_k] if generated_cypher else []
     records = [row for row in records if not _contains_document_node(row)]
-    return {"answer": result["result"], "cypher": cypher, "records": records}
+    return {"cypher": generated_cypher, "records": records}
 
 
 if __name__ == "__main__":
@@ -86,4 +98,3 @@ if __name__ == "__main__":
     result = graph_query(question)
     print(f"\nCypher: {result['cypher']}")
     print(f"Records: {result['records']}")
-    print(f"\nAnswer: {result['answer']}")

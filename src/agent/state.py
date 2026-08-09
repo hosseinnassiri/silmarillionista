@@ -6,7 +6,6 @@ from langchain_core.documents import Document
 
 
 class GraphContext(TypedDict):
-    answer: str
     cypher: str
     records: list
 
