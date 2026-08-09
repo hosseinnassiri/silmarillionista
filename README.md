@@ -14,10 +14,17 @@ breakdown: [silmarillion_rag_agent_plan.md](silmarillion_rag_agent_plan.md).
 | 3 | Extract entities/relationships into Neo4j | ✅ done |
 | 4 | Cypher query layer over the graph | ✅ done |
 | 5 | LangGraph agent (routes + synthesizes an answer) | ✅ done |
-| 6 | Eval set + scoring | ⬜ not started |
+| 6 | Eval set + scoring | ✅ done |
 
 `main.py` is the single "ask a question, get a cited answer" entrypoint (see
 below). The vector store and graph can also still be queried independently.
+
+Current eval results: **82% routing accuracy** (23/28), **4.46/5 avg answer
+quality** (LLM-as-judge). See [data/eval/scored_results.json](data/eval/scored_results.json)
+for full details, or `eval/score.py`'s printed summary for the breakdown by
+category and the specific failures worth reviewing (two real ones: the
+synthesize node occasionally answers from outside knowledge instead of
+saying "not covered," and once misattributed a quote).
 
 ## Architecture
 
@@ -158,6 +165,20 @@ Routes the question to the vector store, the graph, or both, then synthesizes
 a cited answer — or says plainly that the text doesn't cover it, rather than
 guessing.
 
+### 5. Eval (routing accuracy + answer quality)
+
+```bash
+# runs data/eval/questions.json through the agent -> data/eval/results.json
+uv run python eval/run_eval.py
+
+# routing accuracy + LLM-as-judge quality pass -> data/eval/scored_results.json
+uv run python eval/score.py
+```
+
+28 questions across the 13 categories from the plan, plus 2 deliberately
+out-of-scope questions that check the agent declines rather than guesses.
+Current: 82% routing accuracy, 4.46/5 avg quality.
+
 ## Backups
 
 `data/processed/` (Chroma + Neo4j data) is gitignored — it's regenerable, but
@@ -194,4 +215,7 @@ src/
     ├── state.py             # LangGraph state schema
     ├── nodes.py             # router / vector_retrieve / graph_retrieve / synthesize
     └── graph_app.py         # graph assembly + compile, ask(question) -> dict
+eval/
+├── run_eval.py             # questions.json -> results.json (route, answer, context)
+└── score.py                # routing accuracy + LLM-as-judge quality -> scored_results.json
 ```
