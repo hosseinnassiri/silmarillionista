@@ -2,8 +2,7 @@
 
 A RAG + knowledge-graph system over the text of *The Silmarillion*: semantic
 search via a vector store, and structured relationship queries (genealogy,
-alliances, aliases) via a Neo4j knowledge graph. Full plan and phase
-breakdown: [silmarillion_rag_agent_plan.md](silmarillion_rag_agent_plan.md).
+alliances, aliases) via a Neo4j knowledge graph.
 
 ## Status
 
