@@ -18,12 +18,17 @@ alliances, aliases) via a Neo4j knowledge graph.
 `main.py` is the single "ask a question, get a cited answer" entrypoint (see
 below). The vector store and graph can also still be queried independently.
 
-Current eval results: **82% routing accuracy** (23/28), **4.46/5 avg answer
-quality** (LLM-as-judge). See [data/eval/scored_results.json](data/eval/scored_results.json)
-for full details, or `eval/score.py`'s printed summary for the breakdown by
-category and the specific failures worth reviewing (two real ones: the
-synthesize node occasionally answers from outside knowledge instead of
-saying "not covered," and once misattributed a quote).
+Current eval results: **79% routing accuracy** (22/28), **4.50/5 avg answer
+quality** (LLM-as-judge), **zero quality≤2 failures**. See
+[data/eval/scored_results.json](data/eval/scored_results.json) for full
+details. The two real quality failures from the first eval run (synthesize
+node answering from outside knowledge instead of saying "not covered," and
+a misattributed quote) are now fixed — see `src/agent/nodes.py` for the
+grounding fixes and `src/graph/query.py`/`extract.py` for a related bug
+found while re-testing (untyped Cypher wildcards could return raw source-
+chunk text via `MENTIONS` edges, which have since been stripped from the
+graph entirely). Remaining route "misses" are mostly reasonable ambiguity
+(e.g. `journey_path` questions the router treats as narrative), not errors.
 
 ## Architecture
 
