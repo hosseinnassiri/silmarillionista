@@ -29,7 +29,18 @@ CYPHER_PROMPT = PromptTemplate(
         "those are internal provenance links from source text chunks to entities, "
         "not part of the domain schema, and their text content is irrelevant to "
         "the question. Only use the domain relationship types listed in the schema "
-        "below (PARENT_OF, SPOUSE_OF, RULED, ALLIED_WITH, ENEMY_OF, etc.).\n",
+        "below (PARENT_OF, SPOUSE_OF, RULED, ALLIED_WITH, ENEMY_OF, etc.).\n"
+        "For timeline/ordering questions (before/after/during/between), do not "
+        "search for an event literally named after the question's wording — "
+        "instead find the :Event node(s) that actually correspond to what's "
+        "being asked (e.g. \"the Noldor returning to Middle-earth\" maps to "
+        "an event like 'Exile Of The Noldor' or 'Crossing Of The Helcaraxe'), "
+        "traverse (event)-[:HAPPENED_DURING]->(era:Era) to reach their era, "
+        "and compare era.sequence (lower sequence = earlier). Known eras in "
+        "chronological order: 'Years of the Lamps'(1) < 'Years of the Trees'"
+        "(2) < 'Years of the Sun'(3, roughly the First Age) < 'Second Age'"
+        "(4) < 'Third Age'(5). If unsure which specific event node matches, "
+        "use a CONTAINS match on plausible keywords rather than giving up.\n",
     ),
 )
 

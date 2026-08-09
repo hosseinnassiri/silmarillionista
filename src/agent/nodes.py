@@ -156,4 +156,7 @@ def synthesize_node(state: AgentState) -> dict:
         ]
     )
 
-    return {"answer": response.content, "sources": sorted(set(sources))}
+    # response.content can be a list of content blocks (e.g. thinking + text)
+    # rather than a plain string, depending on the model's response shape.
+    # .text extracts only the text blocks, joined into a plain str.
+    return {"answer": response.text, "sources": sorted(set(sources))}

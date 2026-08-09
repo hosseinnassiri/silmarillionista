@@ -18,23 +18,28 @@ alliances, aliases) via a Neo4j knowledge graph.
 `main.py` is the single "ask a question, get a cited answer" entrypoint (see
 below). The vector store and graph can also still be queried independently.
 
-Current eval results: **93% routing accuracy** (26/28), **4.39/5 avg answer
+Current eval results: **93% routing accuracy** (26/28), **4.43/5 avg answer
 quality** (LLM-as-judge). See
 [data/eval/scored_results.json](data/eval/scored_results.json) for full
-details. Two changes drove routing from 79%→93%: few-shot examples in the
-router prompt (79%→89%), then `graph_query()` in `src/graph/query.py` was
-rewritten to call only the Cypher-generation step directly instead of the
-full `GraphCypherQAChain` — the chain's own built-in QA-synthesis call was
-being discarded unused (our `synthesize_node` redoes that work from the
-records), so this also roughly halves the LLM calls per graph question with
-no quality change (89%→93% was likely just run-to-run router variance, not
-a routing effect from this change). Only two failures remain, both
-defensible: `timeline_02` (real gap — `HAPPENED_DURING` is sparsely
-populated) and `edge_02` (route "miss" but the answer is still correct —
-it's an out-of-scope question, and either route path arrives at the right
-"not covered" answer). `quote_01`'s intermittent quote misattribution
-(open issue, LLM non-determinism on a genuinely hard case) is currently
-not reproducing but isn't considered fixed.
+details. Three changes drove routing from 79%→93% and fixed real gaps:
+few-shot examples in the router prompt (79%→89%); `graph_query()` in
+`src/graph/query.py` rewritten to call only the Cypher-generation step
+directly instead of the full `GraphCypherQAChain`, since its own built-in
+QA-synthesis call was discarded unused (our `synthesize_node` redoes that
+work from the records) — roughly halves LLM calls per graph question with
+no quality change; and `src/graph/timeline.py`, a hand-curated era timeline
+(`HAPPENED_DURING` extraction was too sparse for ordering questions —
+`timeline_01` went from empty graph results to a correct, cited answer).
+Also fixed along the way: `synthesize_node` was storing `response.content`
+directly, which can be a list of content blocks (thinking + text) rather
+than a plain string — now uses `response.text`, which extracts just the
+text portion. Two failures remain, both defensible: `timeline_02` (context
+retrieved for that specific question is genuinely sparse) and `edge_02`
+(route "miss" but the answer is still correct — out-of-scope questions
+reach the right "not covered" answer via either route). `quote_01`'s
+intermittent quote misattribution remains an open issue — LLM
+non-determinism on a genuinely hard case where the exact passage isn't
+in the retrieved context.
 
 ## Architecture
 
@@ -138,6 +143,10 @@ uv run python -m src.graph.extract
 # clean up duplicate entities from inconsistent LLM spelling (run after extraction)
 uv run python -m src.graph.dedupe
 
+# link known events to a hand-curated era timeline (fills HAPPENED_DURING
+# gaps LLM extraction can't reliably infer from implicit prose chronology)
+uv run python -m src.graph.timeline
+
 # ask a question in natural language — generates and runs Cypher
 uv run python -m src.graph.query "Who are the children of Feanor?"
 uv run python -m src.graph.query "Who are the allies of Turin's enemies?"
@@ -187,7 +196,7 @@ uv run python eval/score.py
 
 28 questions across the 13 categories from the plan, plus 2 deliberately
 out-of-scope questions that check the agent declines rather than guesses.
-Current: 82% routing accuracy, 4.46/5 avg quality.
+Current: 93% routing accuracy, 4.43/5 avg quality.
 
 ## Backups
 
@@ -220,7 +229,8 @@ src/
 │   ├── schema.py            # allowed node labels / relationship types
 │   ├── extract.py           # chunks.json -> Neo4j (LLMGraphTransformer)
 │   ├── dedupe.py             # merge duplicate entity nodes
-│   └── query.py             # graph_query(question) -> answer + cypher + records
+│   ├── timeline.py           # curated era timeline -> HAPPENED_DURING edges
+│   └── query.py             # graph_query(question) -> cypher + records
 └── agent/
     ├── state.py             # LangGraph state schema
     ├── nodes.py             # router / vector_retrieve / graph_retrieve / synthesize
