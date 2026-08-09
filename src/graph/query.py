@@ -25,7 +25,12 @@ CYPHER_PROMPT = PromptTemplate(
         "which actually exists). Never match node names with exact equality "
         "(n.id = \"...\"). Always match using "
         "apoc.text.clean(n.id) = apoc.text.clean(\"Name From Question\"), which "
-        "lowercases and strips accents/punctuation from both sides.\n",
+        "lowercases and strips accents/punctuation from both sides.\n"
+        "Never traverse or return MENTIONS relationships or :Document nodes — "
+        "those are internal provenance links from source text chunks to entities, "
+        "not part of the domain schema, and their text content is irrelevant to "
+        "the question. Only use the domain relationship types listed in the schema "
+        "below (PARENT_OF, SPOUSE_OF, RULED, ALLIED_WITH, ENEMY_OF, etc.).\n",
     ),
 )
 
@@ -39,6 +44,7 @@ def _get_chain() -> GraphCypherQAChain:
             llm=llm,
             graph=graph,
             cypher_prompt=CYPHER_PROMPT,
+            exclude_types=["MENTIONS", "Document"],
             verbose=True,
             validate_cypher=True,
             return_intermediate_steps=True,
