@@ -19,6 +19,7 @@ from langchain_neo4j import LLMGraphTransformer, Neo4jGraph
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from src.config import CHAT_MODEL, CHUNKS_PATH, NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME
+from src.graph.dedupe import run_dedupe
 from src.graph.schema import ALLOWED_NODES, ALLOWED_RELATIONSHIPS
 
 BATCH_SIZE = 20
@@ -116,6 +117,11 @@ async def main_async() -> None:
     # text — strip them so the graph stays clean for querying.
     deleted = graph.query("MATCH (:Document)-[r:MENTIONS]-() DELETE r RETURN count(r) AS n")
     print(f"Stripped {deleted[0]['n']} MENTIONS edges (kept Document nodes for resumability).")
+
+    # Entities with inconsistent LLM spelling (e.g. "Feanor"/"Fëanor") show up
+    # as separate nodes unless merged — run automatically so this can't be
+    # forgotten as a manual follow-up step after extraction.
+    run_dedupe(graph)
 
 
 if __name__ == "__main__":

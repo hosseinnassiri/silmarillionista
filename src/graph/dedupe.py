@@ -24,9 +24,16 @@ def normalize(name: str) -> str:
     return " ".join(stripped.lower().split())
 
 
-def main() -> None:
-    graph = Neo4jGraph(url=NEO4J_URI, username=NEO4J_USERNAME, password=NEO4J_PASSWORD)
+def _diacritic_score(name: str) -> int:
+    """Count of non-ASCII characters, used as a proxy for "closer to the book's
+    own Tolkien orthography" (e.g. "Fëanor" over "Feanor") when picking which
+    duplicate node's spelling survives the merge.
+    """
+    return sum(1 for c in name if ord(c) > 127)
 
+
+def run_dedupe(graph: Neo4jGraph) -> int:
+    """Merge duplicate entity nodes in-place. Returns the number of groups merged."""
     rows = graph.query("MATCH (n:__Entity__) RETURN elementId(n) AS eid, n.id AS id")
     groups: dict[str, list[str]] = defaultdict(list)
     for r in rows:
@@ -40,14 +47,17 @@ def main() -> None:
     )
 
     for key, eids in sorted(dup_groups.items()):
-        degrees = graph.query(
+        candidates = graph.query(
             "UNWIND $eids AS eid MATCH (n) WHERE elementId(n) = eid "
-            "RETURN eid, n.id AS id, COUNT { (n)--() } AS degree ORDER BY degree DESC",
+            "RETURN eid, n.id AS id, COUNT { (n)--() } AS degree",
             params={"eids": eids},
         )
-        ordered_ids = [d["eid"] for d in degrees]
-        canonical = degrees[0]["id"]
-        print(f"  {key!r}: {[d['id'] for d in degrees]} -> keeping {canonical!r}")
+        # Prefer the spelling closest to the book's own orthography (more
+        # diacritics), tie-broken by whichever node has the most connections.
+        candidates.sort(key=lambda c: (_diacritic_score(c["id"]), c["degree"]), reverse=True)
+        ordered_ids = [c["eid"] for c in candidates]
+        canonical = candidates[0]["id"]
+        print(f"  {key!r}: {[c['id'] for c in candidates]} -> keeping {canonical!r}")
 
         graph.query(
             "MATCH (n) WHERE elementId(n) IN $eids "
@@ -58,6 +68,12 @@ def main() -> None:
         )
 
     print(f"Merged {len(dup_groups)} duplicate groups.")
+    return len(dup_groups)
+
+
+def main() -> None:
+    graph = Neo4jGraph(url=NEO4J_URI, username=NEO4J_USERNAME, password=NEO4J_PASSWORD)
+    run_dedupe(graph)
 
 
 if __name__ == "__main__":

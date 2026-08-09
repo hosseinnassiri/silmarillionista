@@ -37,13 +37,20 @@ Cypher returns nothing — a robustness net for cases outside the current
 Also fixed along the way: `synthesize_node` was storing `response.content`
 directly, which can be a list of content blocks (thinking + text) rather
 than a plain string — now uses `response.text`, which extracts just the
-text portion. Two failures remain, both defensible: `timeline_02` (context
-retrieved for that specific question is genuinely sparse) and `edge_02`
-(route "miss" but the answer is still correct — out-of-scope questions
-reach the right "not covered" answer via either route). `quote_01`'s
-intermittent quote misattribution remains an open issue — LLM
-non-determinism on a genuinely hard case where the exact passage isn't
-in the retrieved context.
+text portion. `extract.py` now runs `dedupe.py` automatically at the end
+of every extraction, so it can't be forgotten as a manual follow-up step,
+and the canonical-spelling heuristic when merging duplicates now prefers
+whichever variant has more diacritics (closer to the book's own Tolkien
+orthography, e.g. "Fëanor" over "Feanor") instead of picking by graph
+degree alone. Two failures remain reliably defensible: `timeline_02`
+(context retrieved for that specific question is genuinely sparse) and
+`edge_02` (route "miss" but the answer is still correct — out-of-scope
+questions reach the right "not covered" answer via either route).
+Two open issues under continued observation, both LLM non-determinism
+on genuinely hard cases rather than fixed bugs: `quote_01`'s intermittent
+quote misattribution when the exact passage isn't in the retrieved
+context, and `between_01` has been seen getting era ordering backward in
+at least one run despite the curated timeline data being correct.
 
 ## Architecture
 
@@ -141,11 +148,10 @@ below for that).
 ### 3. Knowledge graph
 
 ```bash
-# (re)run extraction — resumable, only processes chunks not yet in Neo4j
+# (re)run extraction — resumable, only processes chunks not yet in Neo4j.
+# Automatically runs dedupe.py at the end (merges duplicate entities from
+# inconsistent LLM spelling); no separate step needed.
 uv run python -m src.graph.extract
-
-# clean up duplicate entities from inconsistent LLM spelling (run after extraction)
-uv run python -m src.graph.dedupe
 
 # link known events to a hand-curated era timeline (fills HAPPENED_DURING
 # gaps LLM extraction can't reliably infer from implicit prose chronology)
