@@ -69,17 +69,39 @@ def graph_retrieve_node(state: AgentState) -> dict:
         result = graph_query(state["question"])
     except Exception as e:
         result = {"answer": "", "cypher": "", "records": [], "error": str(e)}
-    return {"graph_context": result}
+
+    update: dict = {"graph_context": result}
+    if not result.get("records") and state.get("route") == "relational":
+        # The graph had nothing (e.g. entity-id mismatch, or the relation just
+        # isn't in the schema) — fall back to vector search rather than leaving
+        # the synthesize node with empty context, which invited hallucination.
+        # Only safe when graph_retrieve is running alone: on route "both",
+        # vector_retrieve runs in the same step and would conflict writing the
+        # same state key.
+        update["vector_context"] = vector_search(state["question"], k=5)
+    return update
 
 
 SYNTHESIZE_SYSTEM = """\
 You are answering questions about J.R.R. Tolkien's The Silmarillion using ONLY \
-the context provided below — do not use outside knowledge. Cite chapter/part \
-names when drawing on narrative context. If the context doesn't actually answer \
-the question (e.g. it asks about events/characters outside The Silmarillion's \
-text, such as Aragorn's later life, or the retrieved context is empty/irrelevant), \
-say plainly that it isn't covered in this text rather than guessing. Be concise.
+the context provided below. This is a strict textual-grounding exercise, not a \
+test of your general Tolkien knowledge — even if you're confident you know the \
+real answer from training data, you MUST NOT use it unless it is actually \
+present in the context below. This applies especially to direct quotations: \
+never reconstruct or paraphrase a quote as if verbatim — only present text \
+as a quote if it appears word-for-word in the context.
+
+Cite chapter/part names when drawing on narrative context. If the context \
+doesn't actually answer the question — it's empty, irrelevant, or the question \
+is about events/characters outside The Silmarillion's text (e.g. Aragorn's \
+later life) — say plainly that it isn't covered in this text rather than \
+guessing or filling the gap from outside knowledge. Be concise.
 """
+
+NOT_COVERED_ANSWER = (
+    "This isn't covered in the retrieved text — no relevant passages or graph "
+    "relationships were found for this question."
+)
 
 
 def synthesize_node(state: AgentState) -> dict:
@@ -102,7 +124,14 @@ def synthesize_node(state: AgentState) -> dict:
         )
         sources.append("knowledge graph")
 
-    context = "\n\n".join(context_parts) if context_parts else "(no context retrieved)"
+    if not context_parts:
+        # Nothing was retrieved from either source (including the graph's own
+        # vector fallback) — don't even ask the LLM, since that's exactly the
+        # situation where a capable model is tempted to answer from outside
+        # knowledge instead of admitting it has nothing.
+        return {"answer": NOT_COVERED_ANSWER, "sources": []}
+
+    context = "\n\n".join(context_parts)
 
     llm = ChatAnthropic(model=CHAT_MODEL)
     response = llm.invoke(

@@ -53,12 +53,31 @@ def _get_chain() -> GraphCypherQAChain:
     return _chain
 
 
+def _contains_document_node(value) -> bool:
+    """True if a value contains a :Document-shaped node anywhere within it.
+
+    exclude_types only hides MENTIONS/Document from the schema description
+    shown to the Cypher-generation LLM — it does NOT stop Neo4j from actually
+    matching them when the generated query uses an untyped wildcard pattern
+    like (n)-[r]-(m). This is a deterministic backstop that works regardless
+    of what shape the generated Cypher happens to take.
+    """
+    if isinstance(value, dict):
+        if "chunk_index" in value:
+            return True
+        return any(_contains_document_node(v) for v in value.values())
+    if isinstance(value, (list, tuple)):
+        return any(_contains_document_node(v) for v in value)
+    return False
+
+
 def graph_query(question: str) -> dict:
     """Returns {"answer": str, "cypher": str, "records": list}."""
     result = _get_chain().invoke({"query": question})
     steps = result.get("intermediate_steps", [])
     cypher = steps[0].get("query", "") if steps else ""
     records = steps[1].get("context", []) if len(steps) > 1 else []
+    records = [row for row in records if not _contains_document_node(row)]
     return {"answer": result["result"], "cypher": cypher, "records": records}
 
 

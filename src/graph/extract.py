@@ -110,6 +110,13 @@ async def main_async() -> None:
 
     print(f"Done. {total_nodes} nodes, {total_rels} relationships written to Neo4j this run.")
 
+    # Document nodes are kept (already_processed_keys relies on them for
+    # resumability), but MENTIONS edges to entities serve no purpose here and
+    # pollute any wildcard Cypher traversal like (n)-[r]-(m) with raw chunk
+    # text — strip them so the graph stays clean for querying.
+    deleted = graph.query("MATCH (:Document)-[r:MENTIONS]-() DELETE r RETURN count(r) AS n")
+    print(f"Stripped {deleted[0]['n']} MENTIONS edges (kept Document nodes for resumability).")
+
 
 if __name__ == "__main__":
     asyncio.run(main_async())
