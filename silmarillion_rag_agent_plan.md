@@ -34,7 +34,7 @@ silmarillion-agent/
 
 ## 2. Dependencies
 
-```
+```text
 langchain
 langchain-openai
 langchain-anthropic
@@ -52,6 +52,7 @@ Plus a running Neo4j instance — easiest for dev is Neo4j Desktop or the offici
 ## 3. Phase-by-phase tasks
 
 ### Phase 1 — Ingestion & chunking
+
 - [ ] Write regex-based chapter splitter (Silmarillion has clean chapter headers — split on those first).
 - [ ] Paragraph-level chunking within each chapter using `RecursiveCharacterTextSplitter` (~500 tokens, ~50 overlap).
 - [ ] Attach metadata per chunk: `chapter`, `chapter_number`, `part` (Ainulindalë / Valaquenta / Quenta Silmarillion / Akallabêth / Of the Rings of Power).
@@ -59,12 +60,14 @@ Plus a running Neo4j instance — easiest for dev is Neo4j Desktop or the offici
 - **Done when**: chunk count and a handful of spot-checked chunks look clean (no broken sentences, correct chapter tags).
 
 ### Phase 2 — Vector store
+
 - [ ] Embed all chunks (`text-embedding-3-large` or equivalent).
 - [ ] Write to Chroma with metadata attached, persisted to disk (`data/processed/chroma_db/`).
 - [ ] Build a `retriever.py` wrapper: `vector_search(query, k=5, filters=None) -> List[Document]`.
 - **Done when**: a handful of manual test queries (e.g. "the creation of the Silmarils") return relevant chunks.
 
 ### Phase 3 — Graph schema & extraction
+
 - [ ] Define allowed node labels: `Vala, Maia, Elf, Man, Dwarf, Place, Object, Event, House`.
 - [ ] Define allowed relationship types: `PARENT_OF, SPOUSE_OF, RULED, CREATED, DESTROYED, FOUGHT, ALLIED_WITH, ENEMY_OF, LOCATED_IN, PARTICIPATED_IN, ALSO_KNOWN_AS, HAPPENED_DURING`.
   - `ALSO_KNOWN_AS` matters specifically for alias/epithet questions (Beren = Erchamion, Túrin = Turambar).
@@ -76,11 +79,13 @@ Plus a running Neo4j instance — easiest for dev is Neo4j Desktop or the offici
 - **Done when**: spot-checked triples are accurate and key entities (Fëanor, Beren, Lúthien, Túrin, Morgoth) have reasonably complete neighborhoods in Neo4j Browser.
 
 ### Phase 4 — Graph query layer
+
 - [ ] Wrap `GraphCypherQAChain` (or a custom Cypher-generation prompt if you want more control over multi-hop queries) as `graph_query(question) -> str/records`.
 - [ ] Test directly against Neo4j Browser with a few manual Cypher queries first, to confirm the schema supports genealogy, timeline, and journey-path questions before trusting the LLM to generate them.
 - **Done when**: a genealogy question and a multi-hop "allies of X's enemies" style question both return correct results.
 
 ### Phase 5 — LangGraph agent
+
 - [ ] Define state schema (`question`, `route`, `vector_context`, `graph_context`, `answer`, `sources`).
 - [ ] **Router node**: LLM classifies into `semantic` / `relational` / `both`, using the category list from Step 5 test design as few-shot guidance.
 - [ ] **Vector retrieve node**.
@@ -91,6 +96,7 @@ Plus a running Neo4j instance — easiest for dev is Neo4j Desktop or the offici
 - **Done when**: you can run a question end-to-end from CLI and get a cited answer.
 
 ### Phase 6 — Eval set & scoring
+
 - [ ] Build `data/eval/questions.json` using the schema below.
 - [ ] Write `run_eval.py`: runs each question through the agent, logs `route`, `answer`, `graph_context`, `vector_context`.
 - [ ] Write `score.py`: checks `route` against `expected_route`, and does a manual or LLM-assisted pass on answer quality.
@@ -120,10 +126,12 @@ Categories to include (from prior discussion): `alias_resolution, character_expl
 5. **M5** — Full eval set run, routing accuracy measured, iterate on router prompt and graph schema based on failures (Phase 6).
 
 ## 6. Known risk areas to watch for
+
 - **Alias collisions**: characters with multiple names/epithets can create duplicate nodes unless `ALSO_KNOWN_AS` is enforced and a resolution/merge step is added.
 - **Temporal reasoning**: the Silmarillion's ages/years aren't always explicit in-text; timeline questions may need a manually curated age/event lookup rather than pure extraction.
 - **Multi-hop Cypher generation**: LLM-generated Cypher can struggle with deep traversals (e.g. 3+ generation genealogies) — test these specifically and consider hand-written Cypher templates for known question patterns as a fallback.
 - **Router misclassification**: "compare" and "related topics" questions often need both sources — make sure few-shot examples in the router prompt cover these ambiguous cases.
 
 ## 7. Next concrete step
+
 Start with Phase 1 (ingestion/chunking script) — everything downstream depends on chunk quality and consistent metadata tagging.

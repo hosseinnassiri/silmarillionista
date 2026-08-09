@@ -141,7 +141,17 @@ MATCH (n {id: "Feanor"})-[r]-(m) RETURN n, r, m LIMIT 50
 ```bash
 uv run python main.py "Who is Beren?"
 uv run python main.py "Who are the children of Feanor, and who are they allied with?"
-uv run python main.py "What color was Bilbo Baggins' waistcoat?"  # tests the "not covered" path
+
+uv run python main.py "Explain character Fingolfin"
+
+uv run python main.py "Describe location Gondolin"
+
+uv run python main.py "Describe timeline of First Age"
+
+uv run python main.py "Explain Dagor Bragollach event"
+
+# tests the "not covered" path
+uv run python main.py "What color was Bilbo Baggins' waistcoat?"
 ```
 
 Routes the question to the vector store, the graph, or both, then synthesizes
