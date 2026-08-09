@@ -4,10 +4,9 @@ import sys
 from pathlib import Path
 
 from langchain_anthropic import ChatAnthropic
-from langchain_community.chains.graph_qa.cypher import GraphCypherQAChain
-from langchain_community.chains.graph_qa.prompts import CYPHER_GENERATION_PROMPT
-from langchain_community.graphs import Neo4jGraph
 from langchain_core.prompts import PromptTemplate
+from langchain_neo4j import GraphCypherQAChain, Neo4jGraph
+from langchain_neo4j.chains.graph_qa.cypher import CYPHER_GENERATION_PROMPT
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from src.config import CHAT_MODEL, NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME

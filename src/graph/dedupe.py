@@ -12,7 +12,7 @@ import unicodedata
 from collections import defaultdict
 from pathlib import Path
 
-from langchain_community.graphs import Neo4jGraph
+from langchain_neo4j import Neo4jGraph
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from src.config import NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME

@@ -14,9 +14,8 @@ import sys
 from pathlib import Path
 
 from langchain_anthropic import ChatAnthropic
-from langchain_community.graphs import Neo4jGraph
 from langchain_core.documents import Document
-from langchain_experimental.graph_transformers import LLMGraphTransformer
+from langchain_neo4j import LLMGraphTransformer, Neo4jGraph
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from src.config import CHAT_MODEL, CHUNKS_PATH, NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME
