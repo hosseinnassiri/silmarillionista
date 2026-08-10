@@ -18,39 +18,44 @@ alliances, aliases) via a Neo4j knowledge graph.
 `main.py` is the single "ask a question, get a cited answer" entrypoint (see
 below). The vector store and graph can also still be queried independently.
 
-Current eval results: **93% routing accuracy** (26/28), **~4.4/5 avg answer
-quality** (LLM-as-judge, fluctuates ±0.1 run-to-run). See
-[data/eval/scored_results.json](data/eval/scored_results.json) for full
-details. Changes that drove routing from 79%→93% and fixed real gaps:
-few-shot examples in the router prompt (79%→89%); `graph_query()` in
-`src/graph/query.py` rewritten to call only the Cypher-generation step
-directly instead of the full `GraphCypherQAChain`, since its own built-in
-QA-synthesis call was discarded unused (our `synthesize_node` redoes that
-work from the records) — roughly halves LLM calls per graph question with
-no quality change; `src/graph/timeline.py`, a hand-curated era timeline
-(`HAPPENED_DURING` extraction was too sparse for ordering questions —
-`timeline_01` went from empty graph results to a correct, cited answer);
-and `src/graph/templates.py`, hand-written Cypher for known question shapes
-(family tree, allies-of-enemies, aliases) as a fallback when LLM-generated
-Cypher returns nothing — a robustness net for cases outside the current
-28-question eval set, since none of those happened to need it this round.
-Also fixed along the way: `synthesize_node` was storing `response.content`
-directly, which can be a list of content blocks (thinking + text) rather
-than a plain string — now uses `response.text`, which extracts just the
-text portion. `extract.py` now runs `dedupe.py` automatically at the end
-of every extraction, so it can't be forgotten as a manual follow-up step,
-and the canonical-spelling heuristic when merging duplicates now prefers
-whichever variant has more diacritics (closer to the book's own Tolkien
-orthography, e.g. "Fëanor" over "Feanor") instead of picking by graph
-degree alone. Two failures remain reliably defensible: `timeline_02`
-(context retrieved for that specific question is genuinely sparse) and
-`edge_02` (route "miss" but the answer is still correct — out-of-scope
-questions reach the right "not covered" answer via either route).
-Two open issues under continued observation, both LLM non-determinism
-on genuinely hard cases rather than fixed bugs: `quote_01`'s intermittent
-quote misattribution when the exact passage isn't in the retrieved
-context, and `between_01` has been seen getting era ordering backward in
-at least one run despite the curated timeline data being correct.
+Current eval results (43 questions, 3 per category + 4 out-of-scope):
+**93% routing accuracy** (40/43), **4.49/5 avg answer quality**
+(LLM-as-judge; both fluctuate a few points run-to-run on router/judge
+non-determinism). `eval/score.py` ends with a **regression gate**
+(routing ≥75%, ≤3 low-quality answers) that exits non-zero on failure —
+currently **PASS**. Full detail:
+[data/eval/scored_results.json](data/eval/scored_results.json).
+
+Starting point was 82% routing / 4.46 quality on a smaller 28-question set.
+Changes made since, each verified by a full eval re-run:
+
+- **Few-shot router examples** (`src/agent/nodes.py`) — 79%→89% routing.
+- **`graph_query()` calls only the Cypher-generation step** directly
+  instead of the full `GraphCypherQAChain`, skipping its unused built-in
+  QA-synthesis call — halves LLM calls per graph question, no quality cost.
+- **`src/graph/timeline.py`**, a hand-curated era timeline, since
+  `HAPPENED_DURING` extraction was too sparse for ordering questions.
+- **`src/graph/templates.py`**, hand-written Cypher for known question
+  shapes (family tree, allies-of-enemies, aliases) as a fallback when
+  LLM-generated Cypher returns nothing.
+- **`extract.py` now runs dedupe automatically**, and the canonical-spelling
+  choice prefers whichever variant has more diacritics (closer to the
+  book's own orthography, e.g. "Fëanor" over "Feanor") instead of picking
+  by graph degree alone.
+- Bug fix: `synthesize_node` was storing `response.content` directly, which
+  can be a list of content blocks (thinking + text) rather than a plain
+  string — now uses `response.text`.
+
+Known open issues (real, not yet fixed — flagged rather than silently
+left):
+
+- `quote_01` intermittently misattributes a quote when the exact passage
+  isn't in retrieved context.
+- `rel_01` once surfaced a real bug: an undirected Cypher pattern
+  `(n)-[r]-(m)` loses relationship direction in the returned columns, so
+  synthesis can misread e.g. "Thingol PARENT_OF Lúthien" as the reverse.
+- `between_01` has been seen getting era ordering backward in one run
+  despite correct underlying timeline data.
 
 ## Architecture
 
@@ -200,13 +205,14 @@ guessing.
 # runs data/eval/questions.json through the agent -> data/eval/results.json
 uv run python eval/run_eval.py
 
-# routing accuracy + LLM-as-judge quality pass -> data/eval/scored_results.json
+# routing accuracy + LLM-as-judge quality pass -> data/eval/scored_results.json,
+# ends with a PASS/FAIL regression gate and a non-zero exit code on failure
 uv run python eval/score.py
 ```
 
-28 questions across the 13 categories from the plan, plus 2 deliberately
-out-of-scope questions that check the agent declines rather than guesses.
-Current: 93% routing accuracy, 4.43/5 avg quality.
+43 questions, 3 per category from the plan plus 4 deliberately out-of-scope
+questions that check the agent declines rather than guesses. Current:
+93% routing accuracy, 4.49/5 avg quality, gate PASS.
 
 ## Backups
 

@@ -20,6 +20,15 @@ from src.config import CHAT_MODEL, EVAL_DIR
 RESULTS_PATH = EVAL_DIR / "results.json"
 SCORED_PATH = EVAL_DIR / "scored_results.json"
 
+# Regression gate thresholds. Routing accuracy has fluctuated 79-93% across
+# recent runs on unrelated changes (router-LLM non-determinism), and 1-2
+# quality<=2 failures recur on genuinely hard cases (quote_01, between_01)
+# without being new regressions -- these thresholds are set to catch a real
+# break (e.g. the MENTIONS-pollution bug, which would fail this badly) while
+# tolerating that observed noise band.
+MIN_ROUTING_ACCURACY = 0.75
+MAX_LOW_QUALITY_COUNT = 3
+
 JUDGE_SYSTEM = """\
 You are grading an answer from a RAG+graph agent about J.R.R. Tolkien's The \
 Silmarillion. Rate the answer 1-5 given the question, category, and the \
@@ -119,6 +128,27 @@ def main() -> None:
             print(f"    reason: {r.get('quality_reason')}")
 
     print(f"\nFull results: {SCORED_PATH}")
+
+    routing_accuracy = route_correct / n
+    low_quality_count = sum(1 for r in scored if (r.get("quality_score") or 5) <= 2 or r.get("error"))
+
+    routing_ok = routing_accuracy >= MIN_ROUTING_ACCURACY
+    quality_ok = low_quality_count <= MAX_LOW_QUALITY_COUNT
+
+    print("\n=== Regression gate ===")
+    print(
+        f"  Routing accuracy:  {'PASS' if routing_ok else 'FAIL'} "
+        f"({100 * routing_accuracy:.0f}% >= {100 * MIN_ROUTING_ACCURACY:.0f}% required)"
+    )
+    print(
+        f"  Low-quality count: {'PASS' if quality_ok else 'FAIL'} "
+        f"({low_quality_count} <= {MAX_LOW_QUALITY_COUNT} allowed)"
+    )
+
+    if not (routing_ok and quality_ok):
+        print("\nGATE: FAIL")
+        sys.exit(1)
+    print("\nGATE: PASS")
 
 
 if __name__ == "__main__":

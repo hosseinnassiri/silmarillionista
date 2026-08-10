@@ -222,5 +222,125 @@
     "expected_route": "semantic",
     "expects_multi_hop": false,
     "notes": "Outside the text's detail level (unlike his War-of-the-Ring role, which the closing chapter does summarize)."
+  },
+  {
+    "id": "alias_03",
+    "category": "alias_resolution",
+    "question": "What is Finrod also known as?",
+    "expected_route": "relational",
+    "expects_multi_hop": false,
+    "notes": "Felagund. Distinct entity from alias_01/02 and from the router's few-shot examples."
+  },
+  {
+    "id": "char_03",
+    "category": "character_explainer",
+    "question": "Who is Cirdan?",
+    "expected_route": "semantic",
+    "expects_multi_hop": false,
+    "notes": null
+  },
+  {
+    "id": "family_03",
+    "category": "family_tree",
+    "question": "Who are the children of Elwing and Earendil?",
+    "expected_route": "relational",
+    "expects_multi_hop": false,
+    "notes": null
+  },
+  {
+    "id": "compare_03",
+    "category": "character_comparison",
+    "question": "Compare Luthien and Idril as Elf-women who wed mortal Men.",
+    "expected_route": "both",
+    "expects_multi_hop": false,
+    "notes": null
+  },
+  {
+    "id": "event_03",
+    "category": "event_explainer",
+    "question": "What happened during the Fall of Gondolin?",
+    "expected_route": "semantic",
+    "expects_multi_hop": false,
+    "notes": null
+  },
+  {
+    "id": "timeline_03",
+    "category": "timeline",
+    "question": "Did the Kinslaying at Alqualonde happen before or after the Darkening of Valinor?",
+    "expected_route": "relational",
+    "expects_multi_hop": false,
+    "notes": "Both events map to 'Years of the Trees' in the curated timeline -- tests same-era handling, not just cross-era."
+  },
+  {
+    "id": "between_03",
+    "category": "events_between",
+    "question": "What happened between the founding of Nargothrond and its fall?",
+    "expected_route": "both",
+    "expects_multi_hop": true,
+    "notes": null
+  },
+  {
+    "id": "loc_03",
+    "category": "location_description",
+    "question": "Describe the island of Balar.",
+    "expected_route": "semantic",
+    "expects_multi_hop": false,
+    "notes": null
+  },
+  {
+    "id": "journey_03",
+    "category": "journey_path",
+    "question": "How did Beren and Luthien travel from Doriath into Angband?",
+    "expected_route": "relational",
+    "expects_multi_hop": true,
+    "notes": null
+  },
+  {
+    "id": "quote_03",
+    "category": "quotes",
+    "question": "What did Manwe decree regarding the fate of Luthien and Beren?",
+    "expected_route": "semantic",
+    "expects_multi_hop": false,
+    "notes": null
+  },
+  {
+    "id": "related_03",
+    "category": "related_topics",
+    "question": "What topics are connected to the fall of Numenor?",
+    "expected_route": "both",
+    "expects_multi_hop": false,
+    "notes": null
+  },
+  {
+    "id": "rel_03",
+    "category": "relationships",
+    "question": "How is Elrond related to Earendil?",
+    "expected_route": "relational",
+    "expects_multi_hop": false,
+    "notes": null
+  },
+  {
+    "id": "allies_03",
+    "category": "allies_enemies",
+    "question": "Who are the enemies of Sauron?",
+    "expected_route": "relational",
+    "expects_multi_hop": false,
+    "notes": null
+  },
+  {
+    "id": "edge_03",
+    "category": "out_of_scope",
+    "question": "What is the plot of The Hobbit?",
+    "expected_route": "semantic",
+    "expects_multi_hop": false,
+    "notes": "Different Tolkien book entirely -- should be declined, not summarized from training data."
+  },
+  {
+    "id": "edge_04",
+    "category": "out_of_scope",
+    "question": "In what year did the Shire's founding occur?",
+    "expected_route": "semantic",
+    "expects_multi_hop": false,
+    "notes": "LOTR appendix material, not in The Silmarillion."
   }
 ]
