@@ -1,33 +1,24 @@
-// Resource-group-scope template for the Silmarillion Agent.
-// Deployed by .github/workflows/infra.yml via `az deployment group create`.
-// All parameter values are passed explicitly by that workflow (non-secret
-// defaults live in the workflow YAML, secrets come from GitHub Actions
-// repo secrets) rather than a committed .bicepparam file, to avoid mixing
-// bicepparam + CLI parameter overrides in the same deployment call.
-
 targetScope = 'resourceGroup'
 
-@description('Azure region for all resources. Confirm Azure OpenAI model/region availability before first apply — text-embedding-3-large availability in canadacentral specifically (vs. canadaeast) was unconfirmed as of planning.')
+@description('Azure region for all resources. Confirm Azure OpenAI model/region availability before first apply — GlobalStandard SKU support varies per model+version+region and can\'t be assumed from the model name alone.')
 param location string = 'canadacentral'
 
 // Naming follows the Azure Cloud Adoption Framework recommendations:
 // {resource-type-abbreviation}-{workload}-{environment}-{region}-{instance},
-// using the official abbreviations from
-// https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
-// (rg, log, cae, ca, oai) and the community-standard 'cac' region code for
-// Canada Central (CAF publishes no official region abbreviations). Container
-// Registry is the one exception — ACR names must be alphanumeric only, no
-// hyphens, so its 'cr' prefix is concatenated instead (see acrName below).
 @description('Workload name used across all resource names.')
+@minLength(1)
 param workloadName string = 'silmarillion'
 
 @description('Environment name used across all resource names.')
+@minLength(1)
 param environmentName string = 'prod'
 
 @description('Region abbreviation used across all resource names (community convention — CAF has no official region abbreviation list).')
+@minLength(1)
 param regionAbbreviation string = 'cac'
 
 @description('Instance suffix used across all resource names.')
+@minLength(1)
 param instanceNumber string = '001'
 
 @description('Container image the Container App starts with. deploy.yml owns this field after the first apply — infra.yml must never override it, so the running image is never rolled back to this placeholder.')
@@ -36,16 +27,16 @@ param containerAppImage string = 'mcr.microsoft.com/k8se/quickstart:latest'
 @description('Azure Container Registry name (globally unique, alphanumeric only, CAF cr prefix concatenated per ACR naming rules). Verify availability with `az acr check-name` before first apply.')
 param acrName string = 'cr${workloadName}${environmentName}${regionAbbreviation}${instanceNumber}'
 
-@description('Object ID of the GitHub Actions deploy service principal (silmarillion-agent-deploy), granted AcrPush so deploy.yml can push new images.')
+@description('Object ID of the GitHub Actions deploy service principal (silmarillion-agent-deploy). Granted AcrPush, Key Vault Secrets Officer (self-grant), via modules/rbac.bicep.')
 param deployServicePrincipalObjectId string
 
 @description('Azure OpenAI chat deployment name.')
 param chatDeploymentName string = 'gpt-5.5'
 
-@description('Azure OpenAI chat model name as it appears in the Azure model catalog. Plain gpt-5 (2025-08-07) has NO pay-as-you-go GlobalStandard SKU left anywhere — only GlobalProvisionedManaged (reserved capacity, min 15 units, billed hourly regardless of use). gpt-5.5 is the current GA flagship confirmed to have GlobalStandard in canadacentral as of the last apply.')
+@description('Azure OpenAI chat model name as it appears in the Azure model catalog. CONFIRM GlobalStandard SKU availability for the exact model+version+region combination against `az cognitiveservices model list --location <region>` before changing this — availability is not consistent across model versions even within the same model family.')
 param chatModelName string = 'gpt-5.5'
 
-@description('Azure OpenAI chat model version. CONFIRM against `az cognitiveservices model list --location <region>` before first apply if this changes — catalog availability, not just region, has to be checked per model+version, not assumed from the model name alone.')
+@description('Azure OpenAI chat model version.')
 param chatModelVersion string = '2026-04-24'
 
 @description('Chat deployment capacity in units of 1K tokens/minute. Kept low as the primary abuse/cost guardrail.')
@@ -69,13 +60,13 @@ param neo4jBoltPort int = 7687
 @description('Azure Files share quota for Neo4j data, in GB.')
 param neo4jFileShareQuotaGb int = 20
 
-@description('Minimum Container App replicas. 0 = scale to zero when idle.')
+@description('Minimum main-app Container App replicas. 0 = scale to zero when idle.')
 param minReplicas int = 0
 
-@description('Maximum Container App replicas — hard cap on worst-case concurrent cost.')
+@description('Maximum main-app Container App replicas — hard cap on worst-case concurrent cost.')
 param maxReplicas int = 2
 
-@description('Port the app listens on inside the container.')
+@description('Port the main app listens on inside its container.')
 param targetPort int = 8000
 
 @description('Monthly budget amount in USD.')
@@ -94,351 +85,137 @@ var containerAppName = 'ca-${workloadName}-app-${environmentName}-${regionAbbrev
 var neo4jContainerAppName = 'ca-${workloadName}-neo4j-${environmentName}-${regionAbbreviation}-${instanceNumber}'
 var openAiAccountName = 'oai-${nameSuffix}'
 var budgetName = 'budget-${workloadName}-${environmentName}-${instanceNumber}'
-// Storage account names are capped at 24 chars and alphanumeric-only —
-// same special rule as ACR. At the current name components this resolves
-// to exactly 24 ('stsilmarillionprodcac001'); lengthening workloadName,
-// environmentName or regionAbbreviation will overflow the limit.
 var storageAccountName = 'st${workloadName}${environmentName}${regionAbbreviation}${instanceNumber}'
+var keyVaultName = 'kv-${workloadName}-${regionAbbreviation}-${instanceNumber}'
 var neo4jFileShareName = 'neo4j-data'
 var neo4jEnvStorageName = 'neo4j-data'
-// Deterministic per resource group rather than a stored secret — Neo4j is
-// only reachable over Bolt with this password (see neo4jApp ingress below),
-// so there's no external account/GitHub secret needed for it anymore.
-var neo4jPassword = guid(resourceGroup().id, 'neo4j-admin-password')
 var neo4jUsername = 'neo4j'
 
-resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
-  name: logAnalyticsName
-  location: location
-  properties: {
-    sku: {
-      name: 'PerGB2018'
-    }
-    retentionInDays: 30
+module environment 'modules/environment.bicep' = {
+  name: 'environment'
+  params: {
+    location: location
+    logAnalyticsName: logAnalyticsName
+    containerAppEnvName: containerAppEnvName
   }
 }
 
-resource containerAppEnv 'Microsoft.App/managedEnvironments@2024-03-01' = {
-  name: containerAppEnvName
-  location: location
-  properties: {
-    appLogsConfiguration: {
-      destination: 'log-analytics'
-      logAnalyticsConfiguration: {
-        customerId: logAnalytics.properties.customerId
-        sharedKey: logAnalytics.listKeys().primarySharedKey
-      }
-    }
+module openAi 'modules/openAi.bicep' = {
+  name: 'openAi'
+  params: {
+    location: location
+    openAiAccountName: openAiAccountName
+    chatDeploymentName: chatDeploymentName
+    chatModelName: chatModelName
+    chatModelVersion: chatModelVersion
+    chatModelCapacity: chatModelCapacity
+    embeddingDeploymentName: embeddingDeploymentName
+    embeddingModelVersion: embeddingModelVersion
+    embeddingModelCapacity: embeddingModelCapacity
   }
 }
 
-resource storageAccount 'Microsoft.Storage/storageAccounts@2026-04-01' = {
-  name: storageAccountName
-  location: location
-  sku: {
-    name: 'Standard_LRS'
-  }
-  kind: 'StorageV2'
-  properties: {
-    minimumTlsVersion: 'TLS1_2'
-    allowBlobPublicAccess: false
+module registry 'modules/registry.bicep' = {
+  name: 'registry'
+  params: {
+    location: location
+    acrName: acrName
   }
 }
 
-resource fileService 'Microsoft.Storage/storageAccounts/fileServices@2026-04-01' = {
-  parent: storageAccount
-  name: 'default'
-}
-
-resource neo4jFileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2026-04-01' = {
-  parent: fileService
-  name: neo4jFileShareName
-  properties: {
-    shareQuota: neo4jFileShareQuotaGb
+module keyVault 'modules/keyVault.bicep' = {
+  name: 'keyVault'
+  params: {
+    location: location
+    keyVaultName: keyVaultName
+    tenantId: subscription().tenantId
+    openAiAccountName: openAi.outputs.accountName
+    neo4jUsername: neo4jUsername
   }
 }
 
-resource neo4jEnvStorage 'Microsoft.App/managedEnvironments/storages@2026-01-01' = {
-  parent: containerAppEnv
-  name: neo4jEnvStorageName
-  properties: {
-    azureFile: {
-      accountName: storageAccount.name
-      accountKey: storageAccount.listKeys().keys[0].value
-      shareName: neo4jFileShareName
-      accessMode: 'ReadWrite'
-    }
+module storage 'modules/storage.bicep' = {
+  name: 'storage'
+  params: {
+    location: location
+    storageAccountName: storageAccountName
+    fileShareName: neo4jFileShareName
+    fileShareQuotaGb: neo4jFileShareQuotaGb
+    containerAppEnvironmentName: environment.outputs.environmentName
+    envStorageName: neo4jEnvStorageName
   }
 }
 
-// Self-hosted Neo4j Community Edition (Aura Free's replacement)
-resource neo4jApp 'Microsoft.App/containerApps@2026-01-01' = {
-  name: neo4jContainerAppName
-  location: location
-  properties: {
-    managedEnvironmentId: containerAppEnv.id
-    configuration: {
-      activeRevisionsMode: 'Single'
-      ingress: {
-        external: true
-        transport: 'tcp'
-        targetPort: neo4jBoltPort
-        exposedPort: neo4jBoltPort
-      }
-      secrets: [
-        {
-          name: 'neo4j-auth'
-          value: '${neo4jUsername}/${neo4jPassword}'
-        }
-      ]
-    }
-    template: {
-      containers: [
-        {
-          name: 'neo4j'
-          image: 'neo4j:5'
-          env: [
-            { name: 'NEO4J_AUTH', secretRef: 'neo4j-auth' }
-            { name: 'NEO4J_PLUGINS', value: '["apoc"]' }
-            {
-              name: 'NEO4J_dbms_security_procedures_unrestricted'
-              value: 'apoc.text.clean,apoc.refactor.mergeNodes'
-            }
-            {
-              name: 'NEO4J_dbms_security_procedures_allowlist'
-              value: 'apoc.text.clean,apoc.refactor.mergeNodes'
-            }
-          ]
-          resources: {
-            cpu: json('1.0')
-            memory: '2Gi'
-          }
-          volumeMounts: [
-            {
-              volumeName: 'neo4j-data'
-              mountPath: '/data'
-            }
-          ]
-        }
-      ]
-      volumes: [
-        {
-          name: 'neo4j-data'
-          storageType: 'AzureFile'
-          storageName: neo4jEnvStorageName
-        }
-      ]
-      scale: {
-        minReplicas: 0
-        maxReplicas: 1
-        rules: [
-          {
-            name: 'bolt-tcp-scale'
-            tcp: {
-              metadata: {
-                concurrentConnections: '1'
-              }
-            }
-          }
-        ]
-      }
-    }
+module neo4j 'modules/neo4j.bicep' = {
+  name: 'neo4j'
+  params: {
+    location: location
+    containerAppEnvironmentId: environment.outputs.environmentId
+    containerAppName: neo4jContainerAppName
+    neo4jBoltPort: neo4jBoltPort
+    envStorageName: neo4jEnvStorageName
+    keyVaultUri: keyVault.outputs.vaultUri
   }
   dependsOn: [
-    neo4jEnvStorage
+    storage
   ]
 }
 
-resource openAiAccount 'Microsoft.CognitiveServices/accounts@2026-05-15-preview' = {
-  name: openAiAccountName
-  location: location
-  kind: 'OpenAI'
-  sku: {
-    name: 'S0'
-  }
-  properties: {
-    customSubDomainName: openAiAccountName
-    publicNetworkAccess: 'Enabled'
-  }
-}
-
-resource chatDeployment 'Microsoft.CognitiveServices/accounts/deployments@2026-05-15-preview' = {
-  parent: openAiAccount
-  name: chatDeploymentName
-  sku: {
-    name: 'GlobalStandard'
-    capacity: chatModelCapacity
-  }
-  properties: {
-    model: {
-      format: 'OpenAI'
-      name: chatModelName
-      version: chatModelVersion
-    }
+module app 'modules/app.bicep' = {
+  name: 'app'
+  params: {
+    location: location
+    containerAppEnvironmentId: environment.outputs.environmentId
+    containerAppName: containerAppName
+    containerAppImage: containerAppImage
+    acrLoginServer: registry.outputs.loginServer
+    targetPort: targetPort
+    minReplicas: minReplicas
+    maxReplicas: maxReplicas
+    azureOpenAiEndpoint: openAi.outputs.endpoint
+    azureOpenAiApiVersion: azureOpenAiApiVersion
+    chatDeploymentName: chatDeploymentName
+    embeddingDeploymentName: embeddingDeploymentName
+    neo4jUri: 'bolt://${neo4j.outputs.fqdn}:${neo4jBoltPort}'
+    neo4jUsername: neo4jUsername
+    keyVaultUri: keyVault.outputs.vaultUri
   }
 }
 
-resource embeddingDeployment 'Microsoft.CognitiveServices/accounts/deployments@2026-05-15-preview' = {
-  parent: openAiAccount
-  name: embeddingDeploymentName
-  sku: {
-    name: 'GlobalStandard'
-    capacity: embeddingModelCapacity
-  }
-  properties: {
-    model: {
-      format: 'OpenAI'
-      name: embeddingDeploymentName
-      version: embeddingModelVersion
-    }
-  }
-  dependsOn: [
-    chatDeployment
-  ]
-}
-
-resource acr 'Microsoft.ContainerRegistry/registries@2026-03-01-preview' = {
-  name: acrName
-  location: location
-  sku: {
-    name: 'Basic'
-  }
-  properties: {
-    adminUserEnabled: false
+module rbac 'modules/rbac.bicep' = {
+  name: 'rbac'
+  params: {
+    acrId: registry.outputs.id
+    keyVaultId: keyVault.outputs.id
+    appPrincipalId: app.outputs.principalId
+    neo4jPrincipalId: neo4j.outputs.principalId
+    deployServicePrincipalObjectId: deployServicePrincipalObjectId
   }
 }
 
-resource containerApp 'Microsoft.App/containerApps@2026-01-01' = {
-  name: containerAppName
-  location: location
-  identity: {
-    type: 'SystemAssigned'
-  }
-  properties: {
-    managedEnvironmentId: containerAppEnv.id
-    configuration: {
-      ingress: {
-        external: true
-        targetPort: targetPort
-        transport: 'auto'
-      }
-      registries: [
-        {
-          server: acr.properties.loginServer
-          identity: 'system'
-        }
-      ]
-      secrets: [
-        {
-          name: 'azure-openai-api-key'
-          value: openAiAccount.listKeys().key1
-        }
-        {
-          name: 'neo4j-password'
-          value: neo4jPassword
-        }
-      ]
-    }
-    template: {
-      containers: [
-        {
-          name: 'app'
-          image: containerAppImage
-          env: [
-            { name: 'AZURE_OPENAI_API_KEY', secretRef: 'azure-openai-api-key' }
-            { name: 'AZURE_OPENAI_ENDPOINT', value: openAiAccount.properties.endpoint }
-            { name: 'AZURE_OPENAI_API_VERSION', value: azureOpenAiApiVersion }
-            { name: 'AZURE_OPENAI_CHAT_DEPLOYMENT', value: chatDeploymentName }
-            { name: 'AZURE_OPENAI_EMBEDDING_DEPLOYMENT', value: embeddingDeploymentName }
-            { name: 'NEO4J_URI', value: 'bolt://${neo4jApp.properties.configuration.ingress.fqdn}:${neo4jBoltPort}' }
-            { name: 'NEO4J_USERNAME', value: neo4jUsername }
-            { name: 'NEO4J_PASSWORD', secretRef: 'neo4j-password' }
-          ]
-          resources: {
-            cpu: json('0.5')
-            memory: '1Gi'
-          }
-        }
-      ]
-      scale: {
-        minReplicas: minReplicas
-        maxReplicas: maxReplicas
-      }
-    }
+module budget 'modules/budget.bicep' = {
+  name: 'budget'
+  params: {
+    budgetName: budgetName
+    budgetAmount: budgetAmount
+    budgetContactEmail: budgetContactEmail
+    budgetStartDate: budgetStartDate
   }
 }
 
-var acrPullRoleId = '7f951dda-4ed3-4680-a7ca-43fe172d538d'
-var acrPushRoleId = '8311e382-0749-4cb8-b61a-304f252e45ec'
-
-// Lets the Container App's own managed identity pull from ACR at runtime —
-// no stored credential, unlike the GHCR PAT approach this replaced.
-resource acrPullForContainerApp 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(acr.id, containerApp.id, acrPullRoleId)
-  scope: acr
-  properties: {
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', acrPullRoleId)
-    principalId: containerApp.identity.principalId
-    principalType: 'ServicePrincipal'
-  }
-}
-
-// Lets deploy.yml's GitHub Actions service principal push new images.
-// Contributor (already granted at the resource-group scope) covers managing
-// the ACR resource itself, but push/pull are ACR data-plane actions and need
-// this explicit data-plane role.
-resource acrPushForDeployPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(acr.id, deployServicePrincipalObjectId, acrPushRoleId)
-  scope: acr
-  properties: {
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', acrPushRoleId)
-    principalId: deployServicePrincipalObjectId
-    principalType: 'ServicePrincipal'
-  }
-}
-
-resource budget 'Microsoft.Consumption/budgets@2024-08-01' = {
-  name: budgetName
-  properties: {
-    category: 'Cost'
-    amount: budgetAmount
-    timeGrain: 'Monthly'
-    timePeriod: {
-      startDate: budgetStartDate
-    }
-    notifications: {
-      threshold50: {
-        enabled: true
-        operator: 'GreaterThan'
-        threshold: 50
-        contactEmails: [budgetContactEmail]
-      }
-      threshold80: {
-        enabled: true
-        operator: 'GreaterThan'
-        threshold: 80
-        contactEmails: [budgetContactEmail]
-      }
-      threshold100: {
-        enabled: true
-        operator: 'GreaterThanOrEqualTo'
-        threshold: 100
-        contactEmails: [budgetContactEmail]
-      }
-    }
-  }
-}
-
-output containerAppFqdn string = containerApp.properties.configuration.ingress.fqdn
-output containerAppName string = containerApp.name
-output openAiEndpoint string = openAiAccount.properties.endpoint
-output logAnalyticsName string = logAnalytics.name
-output acrLoginServer string = acr.properties.loginServer
+output containerAppFqdn string = app.outputs.fqdn
+output containerAppName string = app.outputs.name
+output openAiEndpoint string = openAi.outputs.endpoint
+output logAnalyticsName string = environment.outputs.logAnalyticsName
+output acrLoginServer string = registry.outputs.loginServer
 
 // So local scripts (src/graph/extract.py, dedupe.py, timeline.py, query.py)
-// and .env can point at this instance the same way they pointed at Aura —
-// retrieve with `az deployment group show ... --query properties.outputs`.
-output neo4jUri string = 'bolt://${neo4jApp.properties.configuration.ingress.fqdn}:${neo4jBoltPort}'
+// and .env can point at this instance the same way they pointed at Aura.
+output neo4jUri string = 'bolt://${neo4j.outputs.fqdn}:${neo4jBoltPort}'
 output neo4jUsername string = neo4jUsername
-@secure()
-output neo4jPassword string = neo4jPassword
+
+// Passwords are no longer deployment outputs — retrieve them via Key
+// Vault's own audited access path instead of ARM deployment history:
+//   az keyvault secret show --vault-name <name> --name neo4j-password --query value -o tsv
+output keyVaultName string = keyVault.outputs.name
+output keyVaultUri string = keyVault.outputs.vaultUri

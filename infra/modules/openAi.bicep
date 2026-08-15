@@ -1,0 +1,64 @@
+// Azure OpenAI account + chat/embedding deployments. No dependencies —
+// keyVault.bicep looks this account up by name (existing + listKeys())
+// rather than this module ever outputting the key itself.
+
+param location string
+param openAiAccountName string
+param chatDeploymentName string
+param chatModelName string
+param chatModelVersion string
+param chatModelCapacity int
+param embeddingDeploymentName string
+param embeddingModelVersion string
+param embeddingModelCapacity int
+
+resource openAiAccount 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
+  name: openAiAccountName
+  location: location
+  kind: 'OpenAI'
+  sku: {
+    name: 'S0'
+  }
+  properties: {
+    customSubDomainName: openAiAccountName
+    publicNetworkAccess: 'Enabled'
+  }
+}
+
+resource chatDeployment 'Microsoft.CognitiveServices/accounts/deployments@2024-10-01' = {
+  parent: openAiAccount
+  name: chatDeploymentName
+  sku: {
+    name: 'GlobalStandard'
+    capacity: chatModelCapacity
+  }
+  properties: {
+    model: {
+      format: 'OpenAI'
+      name: chatModelName
+      version: chatModelVersion
+    }
+  }
+}
+
+resource embeddingDeployment 'Microsoft.CognitiveServices/accounts/deployments@2024-10-01' = {
+  parent: openAiAccount
+  name: embeddingDeploymentName
+  sku: {
+    name: 'GlobalStandard'
+    capacity: embeddingModelCapacity
+  }
+  properties: {
+    model: {
+      format: 'OpenAI'
+      name: embeddingDeploymentName
+      version: embeddingModelVersion
+    }
+  }
+  dependsOn: [
+    chatDeployment
+  ]
+}
+
+output endpoint string = openAiAccount.properties.endpoint
+output accountName string = openAiAccount.name
