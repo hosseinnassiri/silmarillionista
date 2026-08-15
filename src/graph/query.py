@@ -41,7 +41,19 @@ CYPHER_PROMPT = PromptTemplate(
         "chronological order: 'Years of the Lamps'(1) < 'Years of the Trees'"
         "(2) < 'Years of the Sun'(3, roughly the First Age) < 'Second Age'"
         "(4) < 'Third Age'(5). If unsure which specific event node matches, "
-        "use a CONTAINS match on plausible keywords rather than giving up.\n",
+        "use a CONTAINS match on plausible keywords rather than giving up.\n"
+        "Because node names must be matched with apoc.text.clean() rather than "
+        "exact equality, relationship patterns between two named entities must "
+        "be written undirected, e.g. (a)-[r]-(b) — but an undirected pattern "
+        "lets the query engine bind either named entity to either end of the "
+        "relationship, so returning the pattern's own aliases (a.id, type(r), "
+        "b.id) can silently report the relationship backwards (e.g. printing "
+        "'Luthien PARENT_OF Thingol' when the true edge is the reverse). To "
+        "avoid this, always return direction from the relationship itself, "
+        "never from the pattern aliases: RETURN startNode(r).id AS subject, "
+        "type(r) AS relationship, endNode(r).id AS object (adjust variable "
+        "names for multi-hop patterns, but the same startNode/endNode rule "
+        "applies to every relationship returned).\n",
     ),
 )
 

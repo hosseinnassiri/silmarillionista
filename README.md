@@ -254,11 +254,20 @@ left):
 
 - `quote_01` intermittently misattributes a quote when the exact passage
   isn't in retrieved context.
-- `rel_01` once surfaced a real bug: an undirected Cypher pattern
-  `(n)-[r]-(m)` loses relationship direction in the returned columns, so
-  synthesis can misread e.g. "Thingol PARENT_OF Lúthien" as the reverse.
 - `between_01` has been seen getting era ordering backward in one run
   despite correct underlying timeline data.
+
+Fixed since the last full eval run (spot-checked, not yet re-verified with a
+full 43-question pass):
+
+- `rel_01`'s undirected-Cypher direction bug — `(n)-[r]-(m)` patterns let
+  either named entity bind to either end of the edge, so returning the
+  pattern's own aliases could misread e.g. "Thingol PARENT_OF Lúthien" as
+  the reverse. `CYPHER_PROMPT` (`src/graph/query.py`) now requires
+  `RETURN startNode(r).id, type(r), endNode(r).id` instead, which is
+  direction-safe regardless of match order. Verified directly against
+  Neo4j: `rel_01` and a second relationships-category question both now
+  return/synthesize the correct direction.
 
 ## Backups
 
