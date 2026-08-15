@@ -13,7 +13,12 @@
       "Bash(awk 'NR>=2430 && NR<=2448' \"data/raw/The Silmarillion - J. R. R. Tolkien. Tolkien.txt\")",
       "Bash(awk 'NR>=2405 && NR<=2432' \"data/raw/The Silmarillion - J. R. R. Tolkien. Tolkien.txt\")",
       "Bash(awk 'NR>=1478 && NR<=1487' \"data/raw/The Silmarillion - J. R. R. Tolkien. Tolkien.txt\")",
-      "Bash(awk 'NR>=1440 && NR<=1479' \"data/raw/The Silmarillion - J. R. R. Tolkien. Tolkien.txt\")"
+      "Bash(awk 'NR>=1440 && NR<=1479' \"data/raw/The Silmarillion - J. R. R. Tolkien. Tolkien.txt\")",
+      "WebSearch",
+      "Bash(az bicep *)",
+      "Bash(uv run python -c ' *)",
+      "Bash(az cognitiveservices *)",
+      "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); seen=set\\(\\); [print\\(d\\) for d in data if \\(d['name'],d['version']\\) not in seen and not seen.add\\(\\(d['name'],d['version']\\)\\)]\")"
     ]
   }
 }

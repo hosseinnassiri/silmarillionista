@@ -132,7 +132,7 @@ resource containerAppEnv 'Microsoft.App/managedEnvironments@2024-03-01' = {
   }
 }
 
-resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2026-04-01' = {
   name: storageAccountName
   location: location
   sku: {
@@ -145,12 +145,12 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   }
 }
 
-resource fileService 'Microsoft.Storage/storageAccounts/fileServices@2023-01-01' = {
+resource fileService 'Microsoft.Storage/storageAccounts/fileServices@2026-04-01' = {
   parent: storageAccount
   name: 'default'
 }
 
-resource neo4jFileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2023-01-01' = {
+resource neo4jFileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2026-04-01' = {
   parent: fileService
   name: neo4jFileShareName
   properties: {
@@ -158,7 +158,7 @@ resource neo4jFileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2
   }
 }
 
-resource neo4jEnvStorage 'Microsoft.App/managedEnvironments/storages@2024-03-01' = {
+resource neo4jEnvStorage 'Microsoft.App/managedEnvironments/storages@2026-01-01' = {
   parent: containerAppEnv
   name: neo4jEnvStorageName
   properties: {
@@ -171,15 +171,8 @@ resource neo4jEnvStorage 'Microsoft.App/managedEnvironments/storages@2024-03-01'
   }
 }
 
-// Self-hosted Neo4j Community Edition (Aura Free's replacement) — same
-// Cypher/APOC surface the app code already targets, no code changes needed.
-// External TCP ingress (not internal-only) so the existing local scripts
-// (src/graph/extract.py, dedupe.py, timeline.py, query.py) can still reach
-// it directly, same as they did against the local Docker instance. Traffic
-// isn't TLS-wrapped at the Container Apps layer for raw TCP ingress — an
-// accepted tradeoff for a personal project, protected by the auto-generated
-// password above rather than transport encryption.
-resource neo4jApp 'Microsoft.App/containerApps@2024-03-01' = {
+// Self-hosted Neo4j Community Edition (Aura Free's replacement)
+resource neo4jApp 'Microsoft.App/containerApps@2026-01-01' = {
   name: neo4jContainerAppName
   location: location
   properties: {
@@ -256,7 +249,7 @@ resource neo4jApp 'Microsoft.App/containerApps@2024-03-01' = {
   ]
 }
 
-resource openAiAccount 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
+resource openAiAccount 'Microsoft.CognitiveServices/accounts@2026-05-15-preview' = {
   name: openAiAccountName
   location: location
   kind: 'OpenAI'
@@ -269,7 +262,7 @@ resource openAiAccount 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
   }
 }
 
-resource chatDeployment 'Microsoft.CognitiveServices/accounts/deployments@2024-10-01' = {
+resource chatDeployment 'Microsoft.CognitiveServices/accounts/deployments@2026-05-15-preview' = {
   parent: openAiAccount
   name: chatDeploymentName
   sku: {
@@ -285,7 +278,7 @@ resource chatDeployment 'Microsoft.CognitiveServices/accounts/deployments@2024-1
   }
 }
 
-resource embeddingDeployment 'Microsoft.CognitiveServices/accounts/deployments@2024-10-01' = {
+resource embeddingDeployment 'Microsoft.CognitiveServices/accounts/deployments@2026-05-15-preview' = {
   parent: openAiAccount
   name: embeddingDeploymentName
   sku: {
@@ -304,7 +297,7 @@ resource embeddingDeployment 'Microsoft.CognitiveServices/accounts/deployments@2
   ]
 }
 
-resource acr 'Microsoft.ContainerRegistry/registries@2023-11-01-preview' = {
+resource acr 'Microsoft.ContainerRegistry/registries@2026-03-01-preview' = {
   name: acrName
   location: location
   sku: {
@@ -315,7 +308,7 @@ resource acr 'Microsoft.ContainerRegistry/registries@2023-11-01-preview' = {
   }
 }
 
-resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
+resource containerApp 'Microsoft.App/containerApps@2026-01-01' = {
   name: containerAppName
   location: location
   identity: {
@@ -404,7 +397,7 @@ resource acrPushForDeployPrincipal 'Microsoft.Authorization/roleAssignments@2022
   }
 }
 
-resource budget 'Microsoft.Consumption/budgets@2023-05-01' = {
+resource budget 'Microsoft.Consumption/budgets@2024-08-01' = {
   name: budgetName
   properties: {
     category: 'Cost'

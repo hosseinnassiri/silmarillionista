@@ -284,6 +284,87 @@ docker start silmarillion-neo4j
 
 Chroma is just files on disk — zip `data/processed/chroma_db/` directly.
 
+## Azure deployment
+
+`infra/main.bicep` provisions everything the hosted version needs — Azure
+OpenAI (`gpt-5.5` chat + `text-embedding-3-large`), a self-hosted Neo4j
+Community Edition Container App (replacing local Docker for the deployed
+version — same Cypher/APOC surface, no code changes), Azure Container
+Registry with managed-identity pull/push (no stored registry credential),
+the main app's Container App, and a monthly budget alert. Two workflows
+apply it:
+
+- **`.github/workflows/infra.yml`** — `az deployment group create` against
+  `infra/main.bicep`. Runs on push to `main` touching `infra/**`, or manually
+  via `workflow_dispatch`.
+- **`.github/workflows/deploy.yml`** — builds the Docker image, pushes to
+  ACR, then `az containerapp update --image ...`. Runs on push to `main`
+  touching `src/**`/`Dockerfile`/`pyproject.toml`/`uv.lock`. Never touches
+  Bicep, so it can't roll the running image back to `infra.yml`'s
+  placeholder default.
+
+Both authenticate to Azure via **OIDC** (`azure/login@v2`, no stored Azure
+secret in GitHub) using a federated identity credential scoped to this repo.
+
+### One-time bootstrap (not managed by Bicep, done once via `az`/`gh` CLI)
+
+Bicep only manages resources inside the resource group — it can't create the
+Entra ID (Azure AD) objects that let GitHub Actions authenticate in the first
+place, and it can't touch GitHub itself. Both had to be set up manually,
+once, before either workflow could run:
+
+```bash
+# 1. Resource group — created up front (not left to infra.yml's first run)
+#    so the deploy service principal's role assignment below can be scoped
+#    to just this resource group, not the whole subscription.
+az group create --name rg-silmarillion-prod-cac-001 --location canadacentral
+
+# 2. App registration + service principal for GitHub Actions to authenticate as
+az ad app create --display-name silmarillion-agent-deploy
+az ad sp create --id <appId from step 2>
+
+# 3. Federated credential — trusts GitHub's OIDC token for this repo's main
+#    branch, so no client secret is ever stored anywhere.
+az ad app federated-credential create --id <appId> --parameters '{
+  "name": "github-main-branch",
+  "issuer": "https://token.actions.githubusercontent.com",
+  "subject": "repo:hosseinnassiri@18518616/silmarillionista@1327133776:ref:refs/heads/main",
+  "audiences": ["api://AzureADTokenExchange"]
+}'
+# NOTE: GitHub switched to this "immutable" owner-ID/repo-ID subject format
+# (repo:OWNER@OWNER-ID/REPO@REPO-ID:ref:refs/heads/BRANCH) for repos
+# created/touched after 2026-07-15, replacing the old plain
+# repo:OWNER/REPO:ref:... format. A mismatch here fails Azure login with
+# AADSTS700213. If this repo is ever renamed or transferred, or the
+# federated credential is ever recreated from scratch, re-derive the current
+# subject from the exact error message on a failed run rather than
+# reconstructing it from the repo/owner names.
+
+# 4. Least-privilege role assignment — Contributor scoped to just this
+#    resource group, not the subscription. (MSYS_NO_PATHCONV=1 needed on
+#    Git Bash for Windows — otherwise it mangles the leading / in --scope.)
+MSYS_NO_PATHCONV=1 az role assignment create \
+  --assignee-object-id <service principal object id from step 2> \
+  --assignee-principal-type ServicePrincipal \
+  --role Contributor \
+  --scope /subscriptions/<subscription-id>/resourceGroups/rg-silmarillion-prod-cac-001
+```
+
+Then, on the GitHub side, three repo secrets (Settings → Secrets and
+variables → Actions) — plain IDs, not credentials, since OIDC means there's
+no password/key to store:
+
+```text
+AZURE_CLIENT_ID       # the app registration's appId, from step 2
+AZURE_TENANT_ID       # az account show --query tenantId
+AZURE_SUBSCRIPTION_ID # az account show --query id
+```
+
+No `NEO4J_*` or registry-credential secrets are needed — Neo4j is
+self-hosted inside the same resource group with a password Bicep generates
+deterministically at deploy time, and ACR access uses the Container App's
+own managed identity rather than a stored PAT/credential.
+
 ## Project layout
 
 ```text

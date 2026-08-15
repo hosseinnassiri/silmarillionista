@@ -1,9 +1,10 @@
-name: Infra (Bicep)
+name: infra
 
-# Manual trigger only. Infra changes create/modify real billed Azure
-# resources, so requiring a person to click "Run workflow" IS the review
-# gate — see infra/main.bicep and the plan this was built from.
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'infra/**'
   workflow_dispatch: {}
 
 permissions:
@@ -62,17 +63,6 @@ jobs:
             echo "Preserving currently-running image: $IMAGE"
           fi
           echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
-
-      - name: What-if preview
-        run: |
-          az deployment group what-if \
-            --resource-group "$AZURE_RESOURCE_GROUP" \
-            --template-file infra/main.bicep \
-            --parameters \
-              location="$AZURE_LOCATION" \
-              containerAppImage="${{ steps.current.outputs.image }}" \
-              acrName="$ACR_NAME" \
-              deployServicePrincipalObjectId="$DEPLOY_PRINCIPAL_OBJECT_ID"
 
       - name: Apply
         id: apply
