@@ -10,12 +10,12 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Literal
 
-from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import BaseModel
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from src.config import CHAT_MODEL, EVAL_DIR
+from src.config import EVAL_DIR
+from src.llm import get_chat_llm
 
 RESULTS_PATH = EVAL_DIR / "results.json"
 SCORED_PATH = EVAL_DIR / "scored_results.json"
@@ -77,7 +77,7 @@ def main() -> None:
         raise FileNotFoundError(f"{RESULTS_PATH} not found — run eval/run_eval.py first.")
 
     results = json.loads(RESULTS_PATH.read_text(encoding="utf-8"))
-    judge_llm = ChatAnthropic(model=CHAT_MODEL).with_structured_output(Verdict)
+    judge_llm = get_chat_llm().with_structured_output(Verdict)
 
     scored = []
     route_correct = 0

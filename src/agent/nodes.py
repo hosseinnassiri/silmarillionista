@@ -4,14 +4,13 @@ import sys
 from pathlib import Path
 from typing import Literal
 
-from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import BaseModel
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from src.agent.state import AgentState
-from src.config import CHAT_MODEL
 from src.graph.query import graph_query
+from src.llm import get_chat_llm
 from src.vectorstore.retriever import vector_search
 
 ROUTER_SYSTEM = """\
@@ -55,7 +54,7 @@ _router_llm = None
 def _get_router_llm():
     global _router_llm
     if _router_llm is None:
-        _router_llm = ChatAnthropic(model=CHAT_MODEL).with_structured_output(RouteDecision)
+        _router_llm = get_chat_llm().with_structured_output(RouteDecision)
     return _router_llm
 
 
@@ -148,7 +147,7 @@ def synthesize_node(state: AgentState) -> dict:
 
     context = "\n\n".join(context_parts)
 
-    llm = ChatAnthropic(model=CHAT_MODEL)
+    llm = get_chat_llm()
     response = llm.invoke(
         [
             SystemMessage(content=SYNTHESIZE_SYSTEM),

@@ -13,14 +13,14 @@ import json
 import sys
 from pathlib import Path
 
-from langchain_anthropic import ChatAnthropic
 from langchain_core.documents import Document
 from langchain_neo4j import LLMGraphTransformer, Neo4jGraph
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
-from src.config import CHAT_MODEL, CHUNKS_PATH, NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME
+from src.config import CHUNKS_PATH, NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME
 from src.graph.dedupe import run_dedupe
 from src.graph.schema import ALLOWED_NODES, ALLOWED_RELATIONSHIPS
+from src.llm import get_chat_llm
 
 BATCH_SIZE = 20
 CONCURRENCY = 8
@@ -48,7 +48,7 @@ names, epithets, or titles (e.g. Beren -[ALSO_KNOWN_AS]-> Erchamion, Turin \
 
 
 def build_transformer() -> LLMGraphTransformer:
-    llm = ChatAnthropic(model=CHAT_MODEL)
+    llm = get_chat_llm()
     return LLMGraphTransformer(
         llm=llm,
         allowed_nodes=ALLOWED_NODES,

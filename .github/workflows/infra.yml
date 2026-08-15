@@ -1,0 +1,99 @@
+name: Infra (Bicep)
+
+# Manual trigger only. Infra changes create/modify real billed Azure
+# resources, so requiring a person to click "Run workflow" IS the review
+# gate — see infra/main.bicep and the plan this was built from.
+on:
+  workflow_dispatch: {}
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  # Names follow Azure CAF conventions: {type}-{workload}-{environment}-{region}-{instance}
+  # (rg/log/cae/ca/oai from the official CAF abbreviation table, 'cac' the
+  # community-standard Canada Central code, ACR concatenated with no hyphens
+  # per its own naming rules). See infra/main.bicep for the full rationale.
+  AZURE_RESOURCE_GROUP: rg-silmarillion-prod-cac-001
+  AZURE_LOCATION: canadacentral
+  ACR_NAME: crsilmarillionprodcac001
+  # Object ID (not the app/client ID) of the silmarillion-agent-deploy
+  # service principal — needed here to grant it AcrPush on the registry.
+  # Not secret, just an identifier; re-derive with
+  # `az ad sp show --id <AZURE_CLIENT_ID> --query id -o tsv` if it ever changes.
+  DEPLOY_PRINCIPAL_OBJECT_ID: 374de898-438b-489f-853b-4e12e1bc058d
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Ensure resource group exists
+        run: |
+          az group create \
+            --name "$AZURE_RESOURCE_GROUP" \
+            --location "$AZURE_LOCATION"
+
+      - name: Preserve currently-running image
+        id: current
+        run: |
+          # A Bicep re-deploy with no image override would reset the
+          # container to the template's placeholder default, clobbering
+          # whatever deploy.yml last shipped. Read back the live image (if
+          # the app exists yet) and re-pass it explicitly; on the very
+          # first run the app doesn't exist, so this falls back to the
+          # Bicep default placeholder instead.
+          IMAGE=$(az containerapp show \
+            --name ca-silmarillion-app-prod-cac-001 \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --query "properties.template.containers[0].image" -o tsv 2>/dev/null || true)
+          if [ -z "$IMAGE" ]; then
+            IMAGE="mcr.microsoft.com/k8se/quickstart:latest"
+            echo "No existing container app found — using placeholder image."
+          else
+            echo "Preserving currently-running image: $IMAGE"
+          fi
+          echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
+
+      - name: What-if preview
+        run: |
+          az deployment group what-if \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --template-file infra/main.bicep \
+            --parameters \
+              location="$AZURE_LOCATION" \
+              containerAppImage="${{ steps.current.outputs.image }}" \
+              acrName="$ACR_NAME" \
+              deployServicePrincipalObjectId="$DEPLOY_PRINCIPAL_OBJECT_ID"
+
+      - name: Apply
+        id: apply
+        run: |
+          az deployment group create \
+            --name infra-deploy \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --template-file infra/main.bicep \
+            --parameters \
+              location="$AZURE_LOCATION" \
+              containerAppImage="${{ steps.current.outputs.image }}" \
+              acrName="$ACR_NAME" \
+              deployServicePrincipalObjectId="$DEPLOY_PRINCIPAL_OBJECT_ID"
+
+      - name: Print Neo4j connection info
+        run: |
+          # Password deliberately left out of the log — retrieve it with:
+          #   az deployment group show --resource-group "$AZURE_RESOURCE_GROUP" \
+          #     --name infra-deploy --query properties.outputs.neo4jPassword.value -o tsv
+          az deployment group show \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --name infra-deploy \
+            --query "{neo4jUri: properties.outputs.neo4jUri.value, neo4jUsername: properties.outputs.neo4jUsername.value, containerAppFqdn: properties.outputs.containerAppFqdn.value}" \
+            -o json

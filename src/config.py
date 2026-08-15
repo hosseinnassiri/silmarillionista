@@ -14,15 +14,17 @@ EVAL_DIR = DATA_DIR / "eval"
 CHUNKS_PATH = PROCESSED_DIR / "chunks.json"
 CHROMA_DIR = PROCESSED_DIR / "chroma_db"
 
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
+AZURE_OPENAI_API_KEY = os.environ.get("AZURE_OPENAI_API_KEY")
+AZURE_OPENAI_ENDPOINT = os.environ.get("AZURE_OPENAI_ENDPOINT")
+AZURE_OPENAI_API_VERSION = os.environ.get("AZURE_OPENAI_API_VERSION", "2024-10-21")
+AZURE_OPENAI_CHAT_DEPLOYMENT = os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT", "gpt-5.5")
+AZURE_OPENAI_EMBEDDING_DEPLOYMENT = os.environ.get(
+    "AZURE_OPENAI_EMBEDDING_DEPLOYMENT", "text-embedding-3-large"
+)
 
 NEO4J_URI = os.environ.get("NEO4J_URI", "bolt://localhost:7687")
 NEO4J_USERNAME = os.environ.get("NEO4J_USERNAME", "neo4j")
 NEO4J_PASSWORD = os.environ.get("NEO4J_PASSWORD")
-
-EMBEDDING_MODEL = "text-embedding-3-large"
-CHAT_MODEL = "claude-sonnet-5"
 
 CHUNK_SIZE = 500
 CHUNK_OVERLAP = 50

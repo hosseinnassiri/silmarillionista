@@ -1,0 +1,14 @@
+.venv/
+.git/
+.github/
+.claude/
+**/__pycache__/
+*.py[oc]
+.env
+.env.example
+backups/
+data/raw/
+data/processed/neo4j_db/
+data/eval/
+eval/
+README.md

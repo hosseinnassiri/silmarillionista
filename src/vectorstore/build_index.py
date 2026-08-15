@@ -9,10 +9,10 @@ import sys
 from pathlib import Path
 
 from langchain_chroma import Chroma
-from langchain_openai import OpenAIEmbeddings
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
-from src.config import CHROMA_DIR, CHUNKS_PATH, EMBEDDING_MODEL
+from src.config import CHROMA_DIR, CHUNKS_PATH
+from src.llm import get_embeddings
 
 COLLECTION_NAME = "silmarillion"
 
@@ -26,7 +26,7 @@ def main() -> None:
     metadatas = [c["metadata"] for c in chunks]
     ids = [f"{m['part']}-{m['chapter_number']}-{m['chunk_index']}" for m in metadatas]
 
-    embeddings = OpenAIEmbeddings(model=EMBEDDING_MODEL)
+    embeddings = get_embeddings()
 
     CHROMA_DIR.mkdir(parents=True, exist_ok=True)
     Chroma.from_texts(

@@ -3,14 +3,14 @@
 import sys
 from pathlib import Path
 
-from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import PromptTemplate
 from langchain_neo4j import GraphCypherQAChain, Neo4jGraph
 from langchain_neo4j.chains.graph_qa.cypher import CYPHER_GENERATION_PROMPT, extract_cypher
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
-from src.config import CHAT_MODEL, NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME
+from src.config import NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME
 from src.graph.templates import match_template
+from src.llm import get_chat_llm
 
 _chain: GraphCypherQAChain | None = None
 
@@ -62,7 +62,7 @@ def _get_chain() -> GraphCypherQAChain:
     global _chain
     if _chain is None:
         graph = Neo4jGraph(url=NEO4J_URI, username=NEO4J_USERNAME, password=NEO4J_PASSWORD)
-        llm = ChatAnthropic(model=CHAT_MODEL)
+        llm = get_chat_llm()
         _chain = GraphCypherQAChain.from_llm(
             llm=llm,
             graph=graph,

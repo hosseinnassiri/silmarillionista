@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Silmarillion Agent</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f7f4ee;
+    --fg: #2a2118;
+    --accent: #7a4b21;
+    --card: #ffffff;
+    --border: #ddd3c0;
+    --muted: #6b6155;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1b1712;
+      --fg: #ece5d8;
+      --accent: #c9974f;
+      --card: #241f18;
+      --border: #3a332a;
+      --muted: #a89f8f;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    background: var(--bg);
+    color: var(--fg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+  }
+  h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
+  p.subtitle { color: var(--muted); margin-top: 0; margin-bottom: 2rem; text-align: center; }
+  .container { width: 100%; max-width: 640px; }
+  form { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+  input[type=text] {
+    flex: 1;
+    padding: 0.7rem 0.9rem;
+    font-size: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--card);
+    color: var(--fg);
+    font-family: inherit;
+  }
+  button {
+    padding: 0.7rem 1.2rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  button:disabled { opacity: 0.5; cursor: default; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1rem;
+    white-space: pre-wrap;
+    line-height: 1.5;
+  }
+  .route { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+  .sources { font-size: 0.85rem; color: var(--muted); margin-top: 0.8rem; }
+  .error { color: #b3432b; }
+  .examples { font-size: 0.85rem; color: var(--muted); }
+  .examples button {
+    background: none;
+    color: var(--accent);
+    border: 1px solid var(--border);
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    margin: 0.2rem 0.3rem 0.2rem 0;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>The Silmarillion, Answered</h1>
+  <p class="subtitle">Ask about characters, places, and events — cited from the text and a knowledge graph.</p>
+
+  <form id="ask-form">
+    <input type="text" id="question" placeholder="Who is Beren?" autocomplete="off" maxlength="500">
+    <button type="submit" id="submit-btn">Ask</button>
+  </form>
+
+  <div class="examples">
+    Try:
+    <button type="button" class="ex">Who are the children of Feanor?</button>
+    <button type="button" class="ex">Describe location Gondolin</button>
+    <button type="button" class="ex">Explain Dagor Bragollach event</button>
+  </div>
+
+  <div id="result"></div>
+</div>
+
+<script>
+  const form = document.getElementById('ask-form');
+  const input = document.getElementById('question');
+  const btn = document.getElementById('submit-btn');
+  const resultDiv = document.getElementById('result');
+
+  document.querySelectorAll('.ex').forEach(b => {
+    b.addEventListener('click', () => { input.value = b.textContent; form.requestSubmit(); });
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const question = input.value.trim();
+    if (!question) return;
+
+    btn.disabled = true;
+    resultDiv.innerHTML = '<div class="card">Thinking…</div>';
+
+    try {
+      const res = await fetch('/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question })
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        resultDiv.innerHTML = `<div class="card error">${data.detail || 'Something went wrong.'}</div>`;
+        return;
+      }
+
+      const sources = (data.sources && data.sources.length)
+        ? `<div class="sources">Sources: ${data.sources.join(', ')}</div>`
+        : '';
+      resultDiv.innerHTML = `
+        <div class="card">
+          <div class="route">route: ${data.route || 'n/a'}</div>
+          ${data.answer || ''}
+          ${sources}
+        </div>`;
+    } catch (err) {
+      resultDiv.innerHTML = '<div class="card error">Network error — please try again.</div>';
+    } finally {
+      btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

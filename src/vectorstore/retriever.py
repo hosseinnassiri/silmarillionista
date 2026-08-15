@@ -5,10 +5,10 @@ from pathlib import Path
 
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
-from langchain_openai import OpenAIEmbeddings
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
-from src.config import CHROMA_DIR, EMBEDDING_MODEL
+from src.config import CHROMA_DIR
+from src.llm import get_embeddings
 from src.vectorstore.build_index import COLLECTION_NAME
 
 _store: Chroma | None = None
@@ -21,7 +21,7 @@ def _get_store() -> Chroma:
             raise FileNotFoundError(f"{CHROMA_DIR} not found — run vectorstore/build_index.py first.")
         _store = Chroma(
             collection_name=COLLECTION_NAME,
-            embedding_function=OpenAIEmbeddings(model=EMBEDDING_MODEL),
+            embedding_function=get_embeddings(),
             persist_directory=str(CHROMA_DIR),
         )
     return _store
