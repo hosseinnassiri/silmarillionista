@@ -1,8 +1,3 @@
-// Main FastAPI Container App (src/api/app.py). Pulls its image from ACR via
-// its own managed identity (no stored registry credential — see rbac.bicep
-// for the AcrPull grant) and reads both secrets from Key Vault rather than
-// inlining them.
-
 param location string
 param containerAppEnvironmentId string
 param containerAppName string
@@ -19,7 +14,7 @@ param neo4jUri string
 param neo4jUsername string
 param keyVaultUri string
 
-resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
+resource containerApp 'Microsoft.App/containerApps@2026-01-01' = {
   name: containerAppName
   location: location
   identity: {

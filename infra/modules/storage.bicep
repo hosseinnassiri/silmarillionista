@@ -1,8 +1,3 @@
-// Neo4j's persistent storage: Azure Files share + the Container Apps
-// Environment storage link that lets neo4j.bicep mount it as a volume.
-// Takes the environment by NAME (not ID) since the storage-link resource
-// must be declared as a child of it.
-
 param location string
 param storageAccountName string
 param fileShareName string
@@ -10,7 +5,7 @@ param fileShareQuotaGb int
 param containerAppEnvironmentName string
 param envStorageName string
 
-resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2026-04-01' = {
   name: storageAccountName
   location: location
   sku: {
@@ -23,12 +18,12 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   }
 }
 
-resource fileService 'Microsoft.Storage/storageAccounts/fileServices@2023-01-01' = {
+resource fileService 'Microsoft.Storage/storageAccounts/fileServices@2026-04-01' = {
   parent: storageAccount
   name: 'default'
 }
 
-resource neo4jFileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2023-01-01' = {
+resource neo4jFileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2026-04-01' = {
   parent: fileService
   name: fileShareName
   properties: {
@@ -36,11 +31,11 @@ resource neo4jFileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2
   }
 }
 
-resource containerAppEnv 'Microsoft.App/managedEnvironments@2024-03-01' existing = {
+resource containerAppEnv 'Microsoft.App/managedEnvironments@2026-01-01' existing = {
   name: containerAppEnvironmentName
 }
 
-resource envStorage 'Microsoft.App/managedEnvironments/storages@2024-03-01' = {
+resource envStorage 'Microsoft.App/managedEnvironments/storages@2026-01-01' = {
   parent: containerAppEnv
   name: envStorageName
   properties: {

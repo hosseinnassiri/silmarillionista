@@ -5,7 +5,7 @@ param budgetAmount int
 param budgetContactEmail string
 param budgetStartDate string
 
-resource budget 'Microsoft.Consumption/budgets@2023-05-01' = {
+resource budget 'Microsoft.Consumption/budgets@2024-08-01' = {
   name: budgetName
   properties: {
     category: 'Cost'

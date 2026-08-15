@@ -1,12 +1,8 @@
-// Shared platform: Log Analytics workspace + Container Apps Environment.
-// Both container apps (main app, neo4j) and the future budget/rbac wiring
-// depend on this — no dependencies of its own.
-
 param location string
 param logAnalyticsName string
 param containerAppEnvName string
 
-resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
+resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2025-07-01' = {
   name: logAnalyticsName
   location: location
   properties: {
@@ -17,7 +13,7 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   }
 }
 
-resource containerAppEnv 'Microsoft.App/managedEnvironments@2024-03-01' = {
+resource containerAppEnv 'Microsoft.App/managedEnvironments@2026-01-01' = {
   name: containerAppEnvName
   location: location
   properties: {

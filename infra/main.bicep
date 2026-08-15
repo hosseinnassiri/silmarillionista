@@ -27,7 +27,7 @@ param containerAppImage string = 'mcr.microsoft.com/k8se/quickstart:latest'
 @description('Azure Container Registry name (globally unique, alphanumeric only, CAF cr prefix concatenated per ACR naming rules). Verify availability with `az acr check-name` before first apply.')
 param acrName string = 'cr${workloadName}${environmentName}${regionAbbreviation}${instanceNumber}'
 
-@description('Object ID of the GitHub Actions deploy service principal (silmarillion-agent-deploy). Granted AcrPush, Key Vault Secrets Officer (self-grant), via modules/rbac.bicep.')
+@description('Object ID of the GitHub Actions deploy service principal (silmarillion-agent-deploy). Granted AcrPush in modules/registry.bicep and Key Vault Secrets Officer (self-grant) in modules/keyVault.bicep.')
 param deployServicePrincipalObjectId string
 
 @description('Azure OpenAI chat deployment name.')
@@ -82,7 +82,11 @@ var nameSuffix = '${workloadName}-${environmentName}-${regionAbbreviation}-${ins
 var logAnalyticsName = 'log-${nameSuffix}'
 var containerAppEnvName = 'cae-${nameSuffix}'
 var containerAppName = 'ca-${workloadName}-app-${environmentName}-${regionAbbreviation}-${instanceNumber}'
-var neo4jContainerAppName = 'ca-${workloadName}-neo4j-${environmentName}-${regionAbbreviation}-${instanceNumber}'
+// Container App names are capped at 32 chars. 'ca-<workload>-app-<env>-<region>-<instance>'
+// lands exactly at 32 for this workload; 'neo4j' (5 chars) is 2 longer than
+// 'app' (3), so this one drops the environment segment to fit — same
+// tightest-limit-first approach as keyVaultName above.
+var neo4jContainerAppName = 'ca-${workloadName}-neo4j-${regionAbbreviation}-${instanceNumber}'
 var openAiAccountName = 'oai-${nameSuffix}'
 var budgetName = 'budget-${workloadName}-${environmentName}-${instanceNumber}'
 var storageAccountName = 'st${workloadName}${environmentName}${regionAbbreviation}${instanceNumber}'
@@ -90,6 +94,14 @@ var keyVaultName = 'kv-${workloadName}-${regionAbbreviation}-${instanceNumber}'
 var neo4jFileShareName = 'neo4j-data'
 var neo4jEnvStorageName = 'neo4j-data'
 var neo4jUsername = 'neo4j'
+// Computed directly (not read back from registry.outputs/keyVault.outputs)
+// so app.bicep/neo4j.bicep don't create a module dependency on
+// registry.bicep/keyVault.bicep — those two now depend on app/neo4j
+// instead (for the principal IDs their role assignments target), and
+// Bicep doesn't allow a two-way module dependency. Both formats are
+// deterministic/documented Azure conventions, not a guess.
+var acrLoginServer = '${acrName}.azurecr.io'
+var keyVaultUri = 'https://${keyVaultName}${az.environment().suffixes.keyvaultDns}/'
 
 module environment 'modules/environment.bicep' = {
   name: 'environment'
@@ -115,14 +127,22 @@ module openAi 'modules/openAi.bicep' = {
   }
 }
 
+// Depends on app.outputs.principalId for its AcrPull grant — see the
+// acrLoginServer var above for why this doesn't create a cycle back.
 module registry 'modules/registry.bicep' = {
   name: 'registry'
   params: {
     location: location
     acrName: acrName
+    appPrincipalId: app.outputs.principalId
+    deployServicePrincipalObjectId: deployServicePrincipalObjectId
   }
 }
 
+// Depends on openAi.outputs.accountName (existing-lookup + listKeys() done
+// internally) and app/neo4j's principal IDs for its Key Vault Secrets User
+// grants — see the keyVaultUri var above for why this doesn't create a
+// cycle back.
 module keyVault 'modules/keyVault.bicep' = {
   name: 'keyVault'
   params: {
@@ -131,6 +151,9 @@ module keyVault 'modules/keyVault.bicep' = {
     tenantId: subscription().tenantId
     openAiAccountName: openAi.outputs.accountName
     neo4jUsername: neo4jUsername
+    appPrincipalId: app.outputs.principalId
+    neo4jPrincipalId: neo4j.outputs.principalId
+    deployServicePrincipalObjectId: deployServicePrincipalObjectId
   }
 }
 
@@ -154,7 +177,7 @@ module neo4j 'modules/neo4j.bicep' = {
     containerAppName: neo4jContainerAppName
     neo4jBoltPort: neo4jBoltPort
     envStorageName: neo4jEnvStorageName
-    keyVaultUri: keyVault.outputs.vaultUri
+    keyVaultUri: keyVaultUri
   }
   dependsOn: [
     storage
@@ -168,7 +191,7 @@ module app 'modules/app.bicep' = {
     containerAppEnvironmentId: environment.outputs.environmentId
     containerAppName: containerAppName
     containerAppImage: containerAppImage
-    acrLoginServer: registry.outputs.loginServer
+    acrLoginServer: acrLoginServer
     targetPort: targetPort
     minReplicas: minReplicas
     maxReplicas: maxReplicas
@@ -178,18 +201,7 @@ module app 'modules/app.bicep' = {
     embeddingDeploymentName: embeddingDeploymentName
     neo4jUri: 'bolt://${neo4j.outputs.fqdn}:${neo4jBoltPort}'
     neo4jUsername: neo4jUsername
-    keyVaultUri: keyVault.outputs.vaultUri
-  }
-}
-
-module rbac 'modules/rbac.bicep' = {
-  name: 'rbac'
-  params: {
-    acrId: registry.outputs.id
-    keyVaultId: keyVault.outputs.id
-    appPrincipalId: app.outputs.principalId
-    neo4jPrincipalId: neo4j.outputs.principalId
-    deployServicePrincipalObjectId: deployServicePrincipalObjectId
+    keyVaultUri: keyVaultUri
   }
 }
 
@@ -218,4 +230,4 @@ output neo4jUsername string = neo4jUsername
 // Vault's own audited access path instead of ARM deployment history:
 //   az keyvault secret show --vault-name <name> --name neo4j-password --query value -o tsv
 output keyVaultName string = keyVault.outputs.name
-output keyVaultUri string = keyVault.outputs.vaultUri
+output keyVaultUri string = keyVaultUri

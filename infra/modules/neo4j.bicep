@@ -1,12 +1,3 @@
-// Self-hosted Neo4j Community Edition (replaces Aura Free) — same
-// Cypher/APOC surface the app code already targets. External TCP ingress
-// (not internal-only) so local scripts (src/graph/extract.py, dedupe.py,
-// timeline.py, query.py) can reach it directly, same as they did against
-// the local Docker instance. Traffic isn't TLS-wrapped at the Container
-// Apps layer for raw TCP ingress — accepted tradeoff for a personal
-// project; the password (now Key Vault-sourced, never inlined) is the
-// actual protection.
-
 param location string
 param containerAppEnvironmentId string
 param containerAppName string
@@ -14,7 +5,7 @@ param neo4jBoltPort int
 param envStorageName string
 param keyVaultUri string
 
-resource neo4jApp 'Microsoft.App/containerApps@2024-03-01' = {
+resource neo4jApp 'Microsoft.App/containerApps@2026-01-01' = {
   name: containerAppName
   location: location
   identity: {

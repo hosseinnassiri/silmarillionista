@@ -1,7 +1,3 @@
-// Azure OpenAI account + chat/embedding deployments. No dependencies —
-// keyVault.bicep looks this account up by name (existing + listKeys())
-// rather than this module ever outputting the key itself.
-
 param location string
 param openAiAccountName string
 param chatDeploymentName string
@@ -12,7 +8,7 @@ param embeddingDeploymentName string
 param embeddingModelVersion string
 param embeddingModelCapacity int
 
-resource openAiAccount 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
+resource openAiAccount 'Microsoft.CognitiveServices/accounts@2026-05-15-preview' = {
   name: openAiAccountName
   location: location
   kind: 'OpenAI'
@@ -25,7 +21,7 @@ resource openAiAccount 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
   }
 }
 
-resource chatDeployment 'Microsoft.CognitiveServices/accounts/deployments@2024-10-01' = {
+resource chatDeployment 'Microsoft.CognitiveServices/accounts/deployments@2026-05-15-preview' = {
   parent: openAiAccount
   name: chatDeploymentName
   sku: {
@@ -41,7 +37,7 @@ resource chatDeployment 'Microsoft.CognitiveServices/accounts/deployments@2024-1
   }
 }
 
-resource embeddingDeployment 'Microsoft.CognitiveServices/accounts/deployments@2024-10-01' = {
+resource embeddingDeployment 'Microsoft.CognitiveServices/accounts/deployments@2026-05-15-preview' = {
   parent: openAiAccount
   name: embeddingDeploymentName
   sku: {
