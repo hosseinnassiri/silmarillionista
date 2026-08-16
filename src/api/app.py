@@ -14,7 +14,7 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from openai import APIError
+from openai import OpenAIError
 from pydantic import BaseModel
 
 from src.agent.graph_app import ask
@@ -72,7 +72,13 @@ def ask_endpoint(body: AskRequest, request: Request) -> AskResponse:
 
     try:
         result = ask(question)
-    except APIError as e:
+    except OpenAIError as e:
+        # OpenAIError is the SDK's actual base exception — APIError (used
+        # here previously) only covers call-time failures like content
+        # filtering; config-time errors (e.g. missing/invalid credentials,
+        # raised directly as OpenAIError by the Azure client constructor)
+        # slipped past that narrower catch and hit Starlette's default
+        # plain-text 500 handler instead of this one.
         logger.exception("LLM call failed for question: %r", question)
         if "content_filter" in str(e):
             raise HTTPException(
