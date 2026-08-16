@@ -23,7 +23,12 @@ from src.graph.schema import ALLOWED_NODES, ALLOWED_RELATIONSHIPS
 from src.llm import get_chat_llm
 
 BATCH_SIZE = 20
-CONCURRENCY = 8
+# The chat deployment this now targets (get_chat_llm() -> Azure OpenAI, see
+# src/llm.py) is provisioned at 10K TPM in infra/modules/openAi.bicep — sized
+# for light interactive /ask traffic, not bulk extraction. Concurrency=8 was
+# tuned for an earlier, unrestricted provider and reliably 429s here; keep
+# this low so a batch of BATCH_SIZE chunks' prompts don't all queue at once.
+CONCURRENCY = 2
 
 
 def load_documents() -> list[Document]:
