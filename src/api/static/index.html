@@ -72,6 +72,17 @@
   }
   .route { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
   .sources { font-size: 0.85rem; color: var(--muted); margin-top: 0.8rem; }
+  .illustrations { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.8rem; }
+  .illustrations figure { margin: 0; width: 140px; }
+  .illustrations img {
+    display: block;
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .illustrations figcaption { font-size: 0.75rem; color: var(--muted); margin-top: 0.25rem; text-align: center; }
   .error { color: #b3432b; }
   .examples { font-size: 0.85rem; color: var(--muted); }
   .examples button {
@@ -138,10 +149,16 @@
       const sources = (data.sources && data.sources.length)
         ? `<div class="sources">Sources: ${data.sources.join(', ')}</div>`
         : '';
+      const images = (data.images && data.images.length)
+        ? `<div class="illustrations">${data.images.map(im => `
+            <figure><img src="${im.url}" alt="${im.name}"><figcaption>${im.name}</figcaption></figure>
+          `).join('')}</div>`
+        : '';
       resultDiv.innerHTML = `
         <div class="card">
           <div class="route">route: ${data.route || 'n/a'}</div>
           ${data.answer || ''}
+          ${images}
           ${sources}
         </div>`;
     } catch (err) {

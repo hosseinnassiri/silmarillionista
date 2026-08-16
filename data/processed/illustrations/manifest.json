@@ -1,0 +1,298 @@
+[
+  {
+    "id": "Morgoth",
+    "aliases": [
+      "Melkor",
+      "Angainor",
+      "Morgoth Bauglir",
+      "King Of The World"
+    ],
+    "type": "Vala",
+    "file": "morgoth.png",
+    "prompt": "Shadow-mode epic fantasy illustration: Morgoth as a vast, almost formless dark spirit striding through the wastes of Araman, between the looming Mountains of the Pelóri and the cold Great Sea. Barren plains stretch toward the Helcaraxë, where grinding ice vanishes into the great mists of Oiomúrë. His presence bends the scene into fear: deep black shadow swallowing the last pale rays of Valinor, with only red-orange embers of fire and wrath burning within the darkness around him. Behind and around him, distant dreadful shapes of corrupted spirits and fiery Valaraukar loom like scourges of flame, half-lost in smoke. Cinematic scale, oppressive high contrast, cold mist and ice against furnace-like darkness, richly painted watercolor/gouache texture, no text, no borders."
+  },
+  {
+    "id": "Sauron",
+    "aliases": [
+      "Gorthaur The Cruel",
+      "Sorcerer Of Dol Guldur",
+      "Dark Lord",
+      "Lord Of The Earth",
+      "Annatar",
+      "Eye Of Sauron",
+      "King Of Men",
+      "Gorthaur"
+    ],
+    "type": "Maia",
+    "file": "sauron.png",
+    "prompt": "Shadow-mode, richly painted fantasy illustration with watercolor/gouache texture: in Mordor, the Dark Lord dwells dark and silent in Barad-dûr, an image of malice and hatred made visible rather than mortal flesh. At the center, a vast intolerable Eye burns above a black seat, its fierce glare the only clear focal light; around his abode coils a ring of fire, casting red embers into a near-monochrome darkness. His shadow spreads outward over Middle-earth like a black wind, swallowing distant woods, mountains, towns, and stone walls where fearful hosts gather under his dominion. Tiny fleeing figures vanish toward dark fastnesses, dwarfed by the oppressive scale. Cinematic high contrast, deep smoke, ruinous atmosphere, no text, no logos, no borders."
+  },
+  {
+    "id": "Féanor",
+    "aliases": [
+      "Curufinwe"
+    ],
+    "type": "Elf",
+    "file": "féanor.png",
+    "prompt": "A richly painted fantasy portrait of Féanor in the Noontide of the Blessed Realm: a tall, fair-faced Elf with raven-dark hair and piercingly bright eyes, intent and masterful, bent over work in metal and stone. His restless hands shape pale, colourless gems beneath a high wash of starlight; the jewels blaze with blue and silver fire, the glowing focal point of the scene. Around him lie polished stone, bright metal, and newly graven signs for recording speech and song, suggesting subtle mind and unmatched craft. Warm gold and white radiance from Valinor mingles with cool star-blue reflections, casting deep dramatic shadows across his face, as if a secret fire burns within him. Epic, luminous, awe-filled, painterly watercolor/gouache texture, no text, no logos, no watermark."
+  },
+  {
+    "id": "Fingolfin",
+    "aliases": [],
+    "type": "Elf",
+    "file": "fingolfin.png",
+    "prompt": "A richly painted dark fantasy illustration at the brazen gates of Angband: Fingolfin stands alone beneath the towering shadow of Morgoth, gleaming like a star in silver-overlaid mail, his blue shield set with crystals cracked and lifted against the weight above. Ringil, his sword, glitters like ice as the cold focal light amid smoke, dust, and fire. Morgoth looms before him like a black-armoured tower, iron-crowned, vast sable shield spreading over the Elf like a stormcloud; Grond has torn burning pits in the earth, where black smoking blood gathers. The ground is rent and scarred from thunderous blows. High-contrast shadow mode palette: near-black stone, ash-grey dust, ember-red fissures, and icy silver light, cinematic scale, no text, no borders."
+  },
+  {
+    "id": "Luthien",
+    "aliases": [
+      "Song Of Parting",
+      "Tinúviel",
+      "Lúthien Tinúviel",
+      "Luthien Tintviel"
+    ],
+    "type": "Elf",
+    "file": "luthien.png",
+    "prompt": "A richly painted fantasy illustration of Lüthien escaping her prison in Hírilorn: the greatest beech of Neldoreth rises immense and branchless, three smooth equal trunks climbing into darkness, dwarfing the small wooden house built far aloft between them. From a high window a rope of dark hair hangs swaying, its end above the guards below, who have fallen into deep enchanted sleep at the roots. Lüthien descends in silence, wrapped in a shadowy robe woven from her own hair, her beauty almost hidden like a moving patch of night. Cold starlight and the faint lights of heaven edge the trunks and her pale face, while the forest beneath is deep blue-black shadow. Cinematic, high-contrast watercolor/gouache texture, solemn and magical, no text or borders."
+  },
+  {
+    "id": "Beren",
+    "aliases": [
+      "Lay Of Leithian",
+      "Beren Camlost",
+      "Beren Erchamion",
+      "Camlost",
+      "Erchamion",
+      "Angrist",
+      "Seven Stars",
+      "One-Hand"
+    ],
+    "type": "Man",
+    "file": "beren.png",
+    "prompt": "A solitary mortal outlaw stands beside Tarn Aeluin at cold second morning, before a rough cairn of boulders raised over his father’s bones, one hand pressed to the stone as he swears vengeance. Around him the hidden lair lies silent and emptied; alder-trees crowd the dark water, their branches heavy with carrion-birds that croak in mockery, while others lift from the ground in black wings. Paint the land of Dorthonion as tainted and forsaken, all clean life departing, with mist over the mere and a bruised dawn barely cutting through deep shadow. Rich watercolor-gouache or digital matte-painting texture, cinematic high contrast, near-monochrome blues and charcoal, a single cold shaft of light striking the cairn and the outlaw’s bowed figure. No text, logos, or borders."
+  },
+  {
+    "id": "Turin",
+    "aliases": [
+      "Narn I Hin Hurin",
+      "Neithan",
+      "Turambar",
+      "Black Sword Of The South",
+      "Black Sword Of Nargothrond",
+      "Wildman Of The Woods",
+      "Mormegil",
+      "Adanedhel",
+      "Agarwaen",
+      "Helm Of Hador",
+      "Gorthol"
+    ],
+    "type": "Man",
+    "file": "turin.png",
+    "prompt": "A shadowed fantasy illustration of Túrin at Cabed-en-Aras in the moment of doom: a lone, wayworn Man collapsed beside the roaring gorge, the black sword Gurthang broken in dark shards near his body, its hilt still stark against the frozen earth. All around, forest trees shed sere leaves as if winter has fallen at once; cold mist rises from the unseen waters below. In the background lies the vast dead shape of Glaurung, half-lost in smoke and gloom, dwarfing the gathered Elves and Men who stand aghast in grief. Use a near-monochrome winter palette of charcoal, iron grey, and dead brown, with one cold shaft of light catching the blade fragments and Túrin’s still form; richly painted, cinematic, tragic, no text."
+  },
+  {
+    "id": "Hurin",
+    "aliases": [
+      "Hurin Of Dor-Lómin",
+      "Hurin Thalion"
+    ],
+    "type": "Man",
+    "file": "hurin.png",
+    "prompt": "Shadow-mode fantasy illustration of Húrin standing alone on a high rock before the silent cliffs of the Echoriath, dwarfed by the barren wilderness around him. He is grim and aged after long captivity: long white hair and beard, walking unbowed, one hand gripping a great black staff, a sword girt at his side. The westering sun pierces torn clouds and stains his white hair blood-red, while the Mountains of Shadow swallow the light behind him. Dry grasses bend in a harsh wind across the waste; beyond the cliffs there is no answer, only emptiness. His posture is one of defiance broken into despair, crying out toward hidden Gondolin. Use a dark, near-monochrome palette with cold stone greys and deep shadow, the red sunset as the single glowing focal light."
+  },
+  {
+    "id": "Thingol",
+    "aliases": [
+      "Hidden King",
+      "Elwé Singollo",
+      "Elu Thingol",
+      "Beleg Strongbow"
+    ],
+    "type": "Elf",
+    "file": "thingol.png",
+    "prompt": "A richly painted shadow-mode fantasy illustration of Thingol in the deep places of Menegroth, a vast underground hall hewn from living stone, its passages vanishing into darkness like the Thousand Caves. He stands tall and proud in a grey mantle among shorter Dwarf-smiths, alone and imperiled, one hand reaching toward the Nauglamír. The necklace blazes at the center of the composition: countless jewels scattering marvellous hues around the white fire of the Silmaril, the only pure light in the cavern. Around him the Dwarves rise in rage, closing in with grasping hands, their faces lit by cold jewel-light and dim forge embers. Massive stone vaults dwarf every figure; deep shadows press inward, tragic and oppressive, as Thingol’s final gaze fixes on the shining jewel."
+  },
+  {
+    "id": "Turgon",
+    "aliases": [],
+    "type": "Elf",
+    "file": "turgon.png",
+    "prompt": "A richly painted luminous fantasy illustration of Turgon, a regal Elf-king, standing in the courts of hidden Gondolin upon Amon Gwareth. Around him rise high white walls, smooth stairs, and the tall strong Tower of the King, all dwarfed by a vast ring of sheer mountains enclosing the green vale of Tumladen. Shining fountains play in the courtyard. Beside Turgon stand two wondrous tree-images wrought with elven-craft: one of radiant gold, one with silver flowers, their glow casting warm gold and cool white light across the stone. The mood is serene and awe-inspiring, a secret city thriving in long peace. Watercolor-gouache or digital matte-painting texture, cinematic backlighting, deep soft shadows, epic scale, no text, no logos, no borders."
+  },
+  {
+    "id": "Eärendil",
+    "aliases": [
+      "Eärendil Halfelven",
+      "Eärendil The Mariner",
+      "Eärendil The Blessed"
+    ],
+    "type": "Man",
+    "file": "eärendil.png",
+    "prompt": "A lone mariner climbs the green hill of Túna into silent Tirion, its white stairs and deserted streets empty under a festival hush. His raiment and shoes glitter with diamond dust, catching a great light he bears so that his whole figure shines against the stillness. Far off, a few small watchers stand upon the walls, dwarfed by the pale city and the wide cleft of Calacirya behind him. The shoreward road lies below, leading back toward the sea, while on the hill a single herald-like figure calls from afar. Richly painted luminous fantasy illustration, warm gold and white with soft blue shadows, radiant backlighting from the glowing focal light, cinematic scale, deep quiet awe, watercolor/gouache or digital matte texture, no text or borders."
+  },
+  {
+    "id": "Ungoliant",
+    "aliases": [],
+    "type": "Maia",
+    "file": "ungoliant.png",
+    "prompt": "A richly painted shadow-mode fantasy illustration: Ungoliant, in monstrous spider form, towers in a northern waste between hills and sea, her darkness closing like a cloud around a tall, terrible dark Lord. All her eyes fix upon him as black webs and clinging thongs coil from jagged rock to rock, tightening around him to strangle him. The land convulses: riven stones split open, steep mountains loom through void-black vapour. Far off, Balrogs arrive as a tempest of fire, their whips of flame carving orange-red light through the strangling nets. Ungoliant quails but remains vast, belching black vapours to cover her flight. Cinematic high-contrast lighting, near-monochrome blacks and ash greys pierced by burning fire, deep shadows, epic scale, textured watercolor-gouache matte-painting finish, no text."
+  },
+  {
+    "id": "Manwë",
+    "aliases": [
+      "Eónwé",
+      "Sülimo"
+    ],
+    "type": "Vala",
+    "file": "manwë.png",
+    "prompt": "Richly painted luminous fantasy illustration of Manwë enthroned in majesty upon the snow-crowned pinnacle of Taniquetil, highest mountain of the world, rising on the margin of the sea. He appears in a form of serene splendour, robed in deep blue, blue fire shining in his eyes, a sapphire sceptre in his hand. Vast winds and layered clouds stream around the peak, from high heavens down toward grass-faint distant lands, while strong-winged hawks and eagles, spirits in bird-shape, fly to and from his high halls. Beside him stands Varda in radiant starlit beauty, her face filled with living light. Warm gold, white, and soft blue palette, radiant backlighting through mist and cloud, epic scale, awe-inspiring peace, deep shadows below, no text or borders."
+  },
+  {
+    "id": "Varda",
+    "aliases": [
+      "Elbereth",
+      "Tintallé",
+      "Elentári"
+    ],
+    "type": "Vala",
+    "file": "varda.png",
+    "prompt": "Richly painted fantasy illustration in luminous mode: Varda standing on the height of Taniquetil above everlasting snow, a radiant figure whose face holds living light, gazing out over the darkness of Middle-earth beneath faint, far stars. Before her gleam vats of silver dew from Telperion, and from her lifted hands new stars blaze brighter into the heavens. The sky becomes the vast focal point: gathered constellations forming signs, Menelmacar striding upward with a shining belt, Helluin flickering blue in the mists at the world’s edge, and high in the north the seven mighty stars of Valacirca swinging like a crown and a challenge. Far below, a starlit mere suggests Cuiviénen, silent figures newly awakened beside the water, their eyes turned first toward the stars. Cinematic, awe-filled, no text."
+  },
+  {
+    "id": "Melian",
+    "aliases": [],
+    "type": "Maia",
+    "file": "melian.png",
+    "prompt": "A richly painted fantasy illustration in watercolor-gouache texture: a starlit glade deep within Nan Elmoth, surrounded by immense dark trees and heavy shadow. At the center stands a radiant Maia in the form of the Elder Children, beautiful and still, her face lit with the remembered light of Aman, a soft golden-white glow against the blue-black forest. Nightingales cluster in the branches and sweep through the air around her, their song seeming to hold the whole wood enchanted. At the edge of the darkness, Elwë stands motionless and alone, half-hidden among the trunks, gazing in wonder as if all purposes have left him. Cinematic directional light, serene yet mysterious, epic silence, no text, no borders, no watermark."
+  },
+  {
+    "id": "Valinor",
+    "aliases": [
+      "Land Of The Dead That Live",
+      "Nimloth The Fair"
+    ],
+    "type": "Place",
+    "file": "valinor.png",
+    "prompt": "A luminous fantasy matte painting of the Blessed Realm behind the vast walls of the Pelóri: a serene plain filled with hallowed waters, flawless flowers and leaves, gardens, mansions, and high towers glowing in warm gold, white, and soft blue. At the center rises the city of many bells, its golden gates opening toward a green mound before them. Upon the mound two slender shoots have grown into tall flowering Trees, radiating the gathered light of the land as the single glowing focal point. Around them, silent thrones form a solemn ring of council, dwarfed by the mountains and the radiant city beyond. The atmosphere is pure and unwithered, every stone and pool seeming blessed; cinematic backlighting, deep but gentle shadows, richly painted watercolor-gouache texture, epic scale, no text."
+  },
+  {
+    "id": "Gondolin",
+    "aliases": [
+      "Ondolindé"
+    ],
+    "type": "Place",
+    "file": "gondolin.png",
+    "prompt": "A richly painted fantasy matte illustration of the Hidden Rock: a radiant white Elven city rising upon a hill within a secret vale, completely encircled by pathless mountains and deep shadowed passes. High white walls, smooth ascending stairs, and a tall strong king’s tower catch warm gold and soft blue light. Shining fountains play across terraces and courts, their water glittering like music. In the central court stand two crafted trees: one of gold, one with silver flowers, glowing as the focal wonder. Tiny distant Elven figures suggest scale and peace, dwarfed by the architecture and mountains. Eagles wheel high above the ridges, guarding the hidden land. The mood is serene and awe-inspiring, yet secluded, with luminous backlighting and deep shadows beyond the encircling peaks; no text, logos, or borders."
+  },
+  {
+    "id": "Doriath",
+    "aliases": [
+      "Eglador"
+    ],
+    "type": "Place",
+    "file": "doriath.png",
+    "prompt": "A richly painted fantasy landscape of the guarded woods of Doriath, vast and ancient beneath dramatic slanting light. Dense forests of Neldoreth and Region fill the scene, their trunks dark and towering, with the black river Esgalduin bending westward through deep shadow. On its southern bank, the mouths of the Caves of Menegroth open into the hillside, small against the immense woodland. Farther west, the Sirion broadens into mist-wrapped Twilight Meres, with pools, marshes, and many wandering channels fading into silver haze. Great oak-trees stand in the narrow western woodland. Around the realm hangs a barely visible girdle of shadow and bewilderment, a protective veil separating watchful peace within from dim peril beyond. Watercolor/gouache matte texture, cinematic scale, no text."
+  },
+  {
+    "id": "Angband",
+    "aliases": [],
+    "type": "Place",
+    "file": "angband.png",
+    "prompt": "A richly painted shadow-mode fantasy landscape of Angband, Morgoth’s fortress and armoury in the far north-west: the stronghold crouches beneath the great curving wall of the Iron Mountains, whose snow and ice make either side impassable. From the mountain front thrust the immense towers of Thangorodrim, dwarfing all below; at their base, sealed gates sit in deep black shadow, feared by even Morgoth’s servants after the long siege. In the foreground, a distant ordered watch of the Noldor forms a thin leaguer line across the bleak land, unable to encircle the fortress fully. Cold starlight and a harsh northern glow catch the ice ridges, while the fortress remains nearly monochrome, oppressive, with faint red embers glimmering from within like hidden malice. Cinematic scale, deep shadow, no text."
+  },
+  {
+    "id": "Nargothrond",
+    "aliases": [],
+    "type": "Place",
+    "file": "nargothrond.png",
+    "prompt": "A shadowed, richly painted fantasy illustration of the Caverns of Narog during their ruin: a vast cliff-face above a deep river, pierced by gaping fortress doors, with a great stone bridge spanning the water and leading straight into destruction. Glaurung the dragon looms before the broken entrance in full fire, red-orange flame lighting black stone, smoke, and the terraces where captives are herded in despair. Within the caverns, glimpses of deep halls and armouries vanish into darkness as Orcs plunder and destroy. In the foreground, Túrin stands nearly alone on the bridge, sword-edge shining like flame, facing the dragon between him and escape. Autumn leaves whip through a bitter wind beneath a dire winter sky. Oppressive high contrast, near-monochrome blacks and greys, one brutal fiery glow, epic scale, no text."
+  },
+  {
+    "id": "Nümenor",
+    "aliases": [
+      "Andor",
+      "Mar-Nu-Falmar",
+      "Atalantë",
+      "Elenna",
+      "Akallabeth"
+    ],
+    "type": "Place",
+    "file": "nümenor.png",
+    "prompt": "A richly painted fantasy matte illustration in shadow mode: a tall, steep mountain rises at the heart of an island as fire bursts from its summit, the open unroofed holy place silhouetted against a reeling sky. At its feet, the tombs of kings crack and sink; nearby a fair city with tower and citadel, halls, gardens, and carved riches collapses as hills slide toward the sea. A mighty green, cold wave plumed with foam climbs over the land, swallowing towers and treasures. On the steep way upward, a lone queen, pale as silver, ivory, and pearls, reaches too late toward the summit as wind and roaring water engulf her. Deep storm shadows, ember-red volcanic light, vast scale, tragic and overwhelming, no text."
+  },
+  {
+    "id": "Dagor Bragollach",
+    "aliases": [],
+    "type": "Event",
+    "file": "dagor-bragollach.png",
+    "prompt": "A richly painted dark fantasy panorama of a moonless winter night on Ard-galen beneath cold stars, the plain stretching from low Noldorin hill-forts and dying watchfires to the black feet of Thangorodrim. From the Iron Mountains, vast rivers of flame surge downhill across the grasses, unnaturally swift, flooding the land in red and poisonous green-blue fire; choking fumes and dust roll over scattered camps where tiny figures flee toward the hills. In the blazing forefront moves Glaurung the golden, immense and terrible, his scales catching the furnace-light; behind him stride Balrogs in smoke and shadow, and farther back a multitude of Orcs pours from the north. The slopes of Dorthonion and Ered Wethrin hold back the fiery torrents, but their woods burn fiercely. High-contrast shadow mode, ember-lit, oppressive, cinematic scale, no text."
+  },
+  {
+    "id": "Nirnaeth Arnoediad",
+    "aliases": [],
+    "type": "Event",
+    "file": "nirnaeth-arnoediad.png",
+    "prompt": "A shadow-mode epic fantasy illustration of the last stand behind the Fen of Serech: at sunset, the dark mass of Ered Wethrin casts a deep shadow over the stream of Rivil, its waters choked and bridged with the dead. In the center, Húrin stands alone on blood-dark ground, shield cast aside, swinging a two-handed axe that smokes with black blood as Orcs and the troll-guard surge around him like a tide around a rock. Severed grasping hands cling to him while more enemies press in from every side. Nearby lie Huor and the valiant Men of Hador in a golden heap beneath the red western light. The palette is near-monochrome charcoal and iron, cut by embers of sunset and storm-lit clouds gathering from the West. No text, no borders."
+  },
+  {
+    "id": "Kinslaying At Alqualondé",
+    "aliases": [],
+    "type": "Event",
+    "file": "kinslaying-at-alqualondé.png",
+    "prompt": "A richly painted dark fantasy illustration of the Haven of the Swans at night, in shadow mode: white ships being seized and rowed from their moorings while a bitter fight rages across their decks, the lamplit quays and piers, and the great arch of the harbor gate. Fierce Noldor with drawn swords press forward in desperate ranks; Teleri mariners resist with slender bows, some figures struggling at the water’s edge where others are cast into the sea. The harbor lamps cast small pools of gold against a near-monochrome blue-black scene, reflected in dark water. Beyond the ships, the sea rises in wrath, waves heaving against the stolen vessels under heavy clouds. Cinematic high contrast, deep shadows, tragic scale, watercolor-gouache texture, no text or borders."
+  },
+  {
+    "id": "War Of Wrath",
+    "aliases": [
+      "Great Battle"
+    ],
+    "type": "Event",
+    "file": "war-of-wrath.png",
+    "prompt": "A vast cinematic fantasy battlefield at the north of Middle-earth: from the western sea, ships bearing the host of Valinor crowd the horizon, their mariners remaining aboard, while a radiant army marches inland beneath white banners. Young, fair, terrible figures advance in ordered ranks, their weapons blazing with gold-white glory so bright that Beleriand seems aflame; trumpeters lift horns toward a storm-dark sky, their challenge echoing among ringing mountains. Opposite them, across the immense plain of Anfauglith, the whole power of the North gathers beyond counting, a black tide too vast for the land to contain, lit by red fires and smoke. Strong directional light from the West cuts through oppressive shadow, creating an epic contrast of holy brilliance and war-dark ruin, with mountains dwarfed beneath marching feet."
+  },
+  {
+    "id": "Oath Of Fëanor",
+    "aliases": [],
+    "type": "Event",
+    "file": "oath-of-fëanor.png",
+    "prompt": "A richly painted shadow-mode fantasy illustration of the high court on the summit of Túna in darkened Tirion: Fëanor stands before a vast torchlit multitude, grief and wrath in his posture, while his seven sons leap to his side and raise drawn swords shining red as blood in the glare. The hill, stairs, and climbing streets are crowded with Noldor bearing torches; many faces recoil and quail at the terrible oath. Around them the fair city is dim and mournful, its towers mantled by fog drifting through the Calacirya, with the lamp of the Mindon burning pale in the gloom. Cinematic high contrast: black-blue night, smoky orange torchlight, crimson steel as the glowing focal point, epic scale, deep shadows, no text, no logos, no borders."
+  },
+  {
+    "id": "Silmaril",
+    "aliases": [],
+    "type": "Object",
+    "file": "silmaril.png",
+    "prompt": "Three great jewels in a vast, lightless treasury, rendered as diamond-clear crystal yet alive with inner fire, each gem shining by its own radiance like a star in deep night. Their cores hold blended gold, white, and soft blue light, suggesting the preserved glory of the lost Trees, the glow passing through every facet as if the crystal were only the body of a living flame. Around them, darkness falls away in dramatic shadow, while the jewels receive the faintest stray light and return it in hues more marvellous than before. The mood is awe-struck and sacred, not violent: imperishable beauty, hallowed power, and hidden fate locked within small radiant forms. Rich watercolor-gouache fantasy texture, cinematic contrast, no text or symbols."
+  },
+  {
+    "id": "Two Trees",
+    "aliases": [],
+    "type": "Object",
+    "file": "two-trees.png",
+    "prompt": "A luminous, richly painted fantasy illustration of the Two Trees awakening on the green mound before the golden gates of Valmar. One tree rises with dark green leaves shining silver underneath, countless flowers dripping dew of silver light; beneath it the grass is dappled by fluttering leaf-shadows. Beside it, the other bears young beech-green leaves edged in glittering gold, clusters of yellow flame-shaped blossoms like glowing horns spilling warm golden rain. Their mingled beams fill the plain with soft gold and silver radiance, sinking into earth and air like living water. Yavanna sits singing upon the grass while Nienna waters the mould with tears; around them the Valar sit silent upon thrones in the Ring of Doom. Serene, awe-inspiring scale, radiant backlighting, watercolor-gouache texture, no text."
+  },
+  {
+    "id": "Glaurung",
+    "aliases": [],
+    "type": "Object",
+    "file": "glaurung.png",
+    "prompt": "A single richly painted fantasy illustration in shadow mode: Glaurung, the first fire-drake, coils before the dark doors of Nargothrond, his vast armored body towering over Túrin. The dragon withholds his fiery blast, instead opening wide his lidless serpent-eyes, a cold malign glow that freezes Túrin motionless like carved stone. Túrin stands with raised black sword, its edges shining as with flame, unable to move. Behind them, across the bridge over the foaming Narog, Orcs drive away herded captives; one fair captive cries back as the procession disappears northward. The scene is oppressive and high-contrast, deep black stone, smoky air, embers and red-orange firelight around the dragon’s mouth, cinematic directional light, epic scale, watercolor/gouache or digital matte-painting texture, no text or borders."
+  },
+  {
+    "id": "Carcharoth",
+    "aliases": [
+      "Anfauglir",
+      "Red Maw"
+    ],
+    "type": "Object",
+    "file": "carcharoth.png",
+    "prompt": "Richly painted dark fantasy illustration in shadow mode: a vast, tormented wolf crouches at the foot of steep waterfalls in a dark forest valley, drinking from the torrent of Esgalduin to ease a consuming thirst. His jaws gape in a red maw, his body huge, hungry, and terrible, with a hidden inner fire of anguish searing through his chest and throat like a buried jewel-flame. Around him the shadows grow long among thorn-brakes and black trees. A great hound springs from the thicket onto his back, and the two beasts clash with such force that rocks crack and fall from the cliffs, choking the white water below. Nearby, small figures kneel in alarm beside a fallen man. Near-monochrome blacks and cold greys, violent orange embers, cinematic light, no text."
+  },
+  {
+    "id": "Huan",
+    "aliases": [],
+    "type": "Maia",
+    "file": "huan.png",
+    "prompt": "A richly painted dark fantasy illustration of Huan, the tireless hound of Valinor, springing at the mightiest werewolf that has ever walked the world upon a stark bridge before Sauron’s tower. The scene is in shadow mode: near-monochrome blacks and iron greys, with cold light catching the hound’s straining body and the wet stone of the bridge. Wolf-Sauron looms huge, eyes filled with fell spirit, foul vapour curling from his jaws as he stumbles beneath the dark fold of Lúthien’s cloak cast across his sight. Lúthien lies swooning nearby, half-lost in shadow. Around them the hills echo with imagined howls and baying; across the valley, the distant walls of Ered Wethrin are barely visible. Cinematic scale, deep shadows, violent motion, no text."
+  }
+]

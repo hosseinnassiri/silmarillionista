@@ -10,6 +10,7 @@ on:
       - '.dockerignore'
       - 'pyproject.toml'
       - 'uv.lock'
+      - 'data/processed/**'
   workflow_dispatch: {}
 
 permissions:

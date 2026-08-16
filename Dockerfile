@@ -8,6 +8,7 @@ COPY pyproject.toml uv.lock ./
 COPY src/ ./src/
 COPY main.py ./
 COPY data/processed/chroma_db/ ./data/processed/chroma_db/
+COPY data/processed/illustrations/ ./data/processed/illustrations/
 
 RUN uv sync --frozen
 

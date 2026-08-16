@@ -18,6 +18,8 @@ from openai import APIError
 from pydantic import BaseModel
 
 from src.agent.graph_app import ask
+from src.config import ILLUSTRATIONS_DIR
+from src.illustrations.lookup import find_illustrations
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +56,7 @@ class AskResponse(BaseModel):
     route: str | None = None
     answer: str | None = None
     sources: list[str] | None = None
+    images: list[dict] | None = None
 
 
 @app.post("/ask", response_model=AskResponse)
@@ -81,7 +84,20 @@ def ask_endpoint(body: AskRequest, request: Request) -> AskResponse:
             ) from e
         raise HTTPException(status_code=502, detail="The language model failed to answer. Please try again.") from e
 
-    return AskResponse(route=result.get("route"), answer=result.get("answer"), sources=result.get("sources"))
+    images: list[dict] = []
+    try:
+        images = find_illustrations(result.get("answer") or "")
+    except Exception:
+        # Illustration lookup is cosmetic, not core to the answer — a broken
+        # or missing manifest should never turn a good answer into a 500.
+        logger.exception("Illustration lookup failed for question: %r", question)
+
+    return AskResponse(
+        route=result.get("route"),
+        answer=result.get("answer"),
+        sources=result.get("sources"),
+        images=images or None,
+    )
 
 
 @app.get("/")
@@ -90,3 +106,5 @@ def index() -> FileResponse:
 
 
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+if ILLUSTRATIONS_DIR.exists():
+    app.mount("/illustrations", StaticFiles(directory=ILLUSTRATIONS_DIR), name="illustrations")

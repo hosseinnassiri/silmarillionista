@@ -18,6 +18,7 @@ wheels/
 # GitHub Actions' checkout to find — everything else here regenerates locally.
 data/processed/*
 !data/processed/chroma_db/
+!data/processed/illustrations/
 
 # Local backups/dumps destined for external storage (OneDrive, etc.)
 backups/
