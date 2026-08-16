@@ -3,13 +3,17 @@ param containerAppEnvironmentId string
 param containerAppName string
 param neo4jBoltPort int
 param envStorageName string
+param identityId string
 param keyVaultUri string
 
 resource neo4jApp 'Microsoft.App/containerApps@2026-01-01' = {
   name: containerAppName
   location: location
   identity: {
-    type: 'SystemAssigned'
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${identityId}': {}
+    }
   }
   properties: {
     managedEnvironmentId: containerAppEnvironmentId
@@ -25,7 +29,7 @@ resource neo4jApp 'Microsoft.App/containerApps@2026-01-01' = {
         {
           name: 'neo4j-auth'
           keyVaultUrl: '${keyVaultUri}secrets/neo4j-auth'
-          identity: 'system'
+          identity: identityId
         }
       ]
     }
@@ -84,5 +88,4 @@ resource neo4jApp 'Microsoft.App/containerApps@2026-01-01' = {
 }
 
 output fqdn string = neo4jApp.properties.configuration.ingress.fqdn
-output principalId string = neo4jApp.identity.principalId
 output name string = neo4jApp.name

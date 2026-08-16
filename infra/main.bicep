@@ -81,6 +81,8 @@ param budgetStartDate string = utcNow('yyyy-MM-01')
 var nameSuffix = '${workloadName}-${environmentName}-${regionAbbreviation}-${instanceNumber}'
 var logAnalyticsName = 'log-${nameSuffix}'
 var containerAppEnvName = 'cae-${nameSuffix}'
+var vnetName = 'vnet-${nameSuffix}'
+var infrastructureSubnetName = 'snet-infra-${nameSuffix}'
 var containerAppName = 'ca-${workloadName}-app-${environmentName}-${regionAbbreviation}-${instanceNumber}'
 // Container App names are capped at 32 chars. 'ca-<workload>-app-<env>-<region>-<instance>'
 // lands exactly at 32 for this workload; 'neo4j' (5 chars) is 2 longer than
@@ -94,14 +96,29 @@ var keyVaultName = 'kv-${workloadName}-${regionAbbreviation}-${instanceNumber}'
 var neo4jFileShareName = 'neo4j-data'
 var neo4jEnvStorageName = 'neo4j-data'
 var neo4jUsername = 'neo4j'
-// Computed directly (not read back from registry.outputs/keyVault.outputs)
-// so app.bicep/neo4j.bicep don't create a module dependency on
-// registry.bicep/keyVault.bicep — those two now depend on app/neo4j
-// instead (for the principal IDs their role assignments target), and
-// Bicep doesn't allow a two-way module dependency. Both formats are
-// deterministic/documented Azure conventions, not a guess.
-var acrLoginServer = '${acrName}.azurecr.io'
-var keyVaultUri = 'https://${keyVaultName}${az.environment().suffixes.keyvaultDns}/'
+var appIdentityName = 'id-${workloadName}-app-${environmentName}-${regionAbbreviation}-${instanceNumber}'
+var neo4jIdentityName = 'id-${workloadName}-neo4j-${environmentName}-${regionAbbreviation}-${instanceNumber}'
+
+// User-assigned (not system-assigned) identities for app/neo4j, created here
+// so registry.bicep/keyVault.bicep can grant them AcrPull/Key Vault Secrets
+// User *before* the container apps that use them exist. A system-assigned
+// identity's principalId is only known once its container app finishes
+// deploying — but that container app's first revision needs the Key
+// Vault/ACR grant to already be in place to resolve its secrets and pull
+// its image, which is a real deadlock (confirmed live: the first apply after
+// switching to system-assigned identities failed with "Operation expired"
+// because the revision could never get permission to read its Key Vault
+// secrets). A user-assigned identity's principalId is available immediately
+// on creation, independent of the container app, which breaks the cycle.
+resource appIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2025-05-31-PREVIEW' = {
+  name: appIdentityName
+  location: location
+}
+
+resource neo4jIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2025-05-31-PREVIEW' = {
+  name: neo4jIdentityName
+  location: location
+}
 
 module environment 'modules/environment.bicep' = {
   name: 'environment'
@@ -109,6 +126,8 @@ module environment 'modules/environment.bicep' = {
     location: location
     logAnalyticsName: logAnalyticsName
     containerAppEnvName: containerAppEnvName
+    vnetName: vnetName
+    infrastructureSubnetName: infrastructureSubnetName
   }
 }
 
@@ -127,22 +146,23 @@ module openAi 'modules/openAi.bicep' = {
   }
 }
 
-// Depends on app.outputs.principalId for its AcrPull grant — see the
-// acrLoginServer var above for why this doesn't create a cycle back.
+// Takes appIdentity's principalId directly (a plain resource property, not
+// a module output) so this module has no dependency on the app module
+// itself — it can grant AcrPull before the app container app ever tries to
+// pull its image.
 module registry 'modules/registry.bicep' = {
   name: 'registry'
   params: {
     location: location
     acrName: acrName
-    appPrincipalId: app.outputs.principalId
+    appPrincipalId: appIdentity.properties.principalId
     deployServicePrincipalObjectId: deployServicePrincipalObjectId
   }
 }
 
-// Depends on openAi.outputs.accountName (existing-lookup + listKeys() done
-// internally) and app/neo4j's principal IDs for its Key Vault Secrets User
-// grants — see the keyVaultUri var above for why this doesn't create a
-// cycle back.
+// Same reasoning as registry above: appIdentity/neo4jIdentity's principalIds
+// are plain resource properties, so this module can grant Key Vault Secrets
+// User before app/neo4j's container apps ever try to resolve a secret.
 module keyVault 'modules/keyVault.bicep' = {
   name: 'keyVault'
   params: {
@@ -151,8 +171,8 @@ module keyVault 'modules/keyVault.bicep' = {
     tenantId: subscription().tenantId
     openAiAccountName: openAi.outputs.accountName
     neo4jUsername: neo4jUsername
-    appPrincipalId: app.outputs.principalId
-    neo4jPrincipalId: neo4j.outputs.principalId
+    appPrincipalId: appIdentity.properties.principalId
+    neo4jPrincipalId: neo4jIdentity.properties.principalId
     deployServicePrincipalObjectId: deployServicePrincipalObjectId
   }
 }
@@ -177,7 +197,8 @@ module neo4j 'modules/neo4j.bicep' = {
     containerAppName: neo4jContainerAppName
     neo4jBoltPort: neo4jBoltPort
     envStorageName: neo4jEnvStorageName
-    keyVaultUri: keyVaultUri
+    identityId: neo4jIdentity.id
+    keyVaultUri: keyVault.outputs.vaultUri
   }
   dependsOn: [
     storage
@@ -191,7 +212,8 @@ module app 'modules/app.bicep' = {
     containerAppEnvironmentId: environment.outputs.environmentId
     containerAppName: containerAppName
     containerAppImage: containerAppImage
-    acrLoginServer: acrLoginServer
+    identityId: appIdentity.id
+    acrLoginServer: registry.outputs.loginServer
     targetPort: targetPort
     minReplicas: minReplicas
     maxReplicas: maxReplicas
@@ -201,7 +223,7 @@ module app 'modules/app.bicep' = {
     embeddingDeploymentName: embeddingDeploymentName
     neo4jUri: 'bolt://${neo4j.outputs.fqdn}:${neo4jBoltPort}'
     neo4jUsername: neo4jUsername
-    keyVaultUri: keyVaultUri
+    keyVaultUri: keyVault.outputs.vaultUri
   }
 }
 
@@ -230,4 +252,4 @@ output neo4jUsername string = neo4jUsername
 // Vault's own audited access path instead of ARM deployment history:
 //   az keyvault secret show --vault-name <name> --name neo4j-password --query value -o tsv
 output keyVaultName string = keyVault.outputs.name
-output keyVaultUri string = keyVaultUri
+output keyVaultUri string = keyVault.outputs.vaultUri

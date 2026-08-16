@@ -2,6 +2,7 @@ param location string
 param containerAppEnvironmentId string
 param containerAppName string
 param containerAppImage string
+param identityId string
 param acrLoginServer string
 param targetPort int
 param minReplicas int
@@ -18,7 +19,10 @@ resource containerApp 'Microsoft.App/containerApps@2026-01-01' = {
   name: containerAppName
   location: location
   identity: {
-    type: 'SystemAssigned'
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${identityId}': {}
+    }
   }
   properties: {
     managedEnvironmentId: containerAppEnvironmentId
@@ -31,19 +35,19 @@ resource containerApp 'Microsoft.App/containerApps@2026-01-01' = {
       registries: [
         {
           server: acrLoginServer
-          identity: 'system'
+          identity: identityId
         }
       ]
       secrets: [
         {
           name: 'azure-openai-api-key'
           keyVaultUrl: '${keyVaultUri}secrets/azure-openai-api-key'
-          identity: 'system'
+          identity: identityId
         }
         {
           name: 'neo4j-password'
           keyVaultUrl: '${keyVaultUri}secrets/neo4j-password'
-          identity: 'system'
+          identity: identityId
         }
       ]
     }
@@ -77,5 +81,4 @@ resource containerApp 'Microsoft.App/containerApps@2026-01-01' = {
 }
 
 output fqdn string = containerApp.properties.configuration.ingress.fqdn
-output principalId string = containerApp.identity.principalId
 output name string = containerApp.name

@@ -15,18 +15,22 @@
 // lookup + listKeys() internally, so only the account name (not the key)
 // is ever passed between modules.
 //
-// Because appPrincipalId/neo4jPrincipalId come from app.bicep/neo4j.bicep,
-// and those modules get this vault's URI as a plain computed string from
-// main.bicep (not this module's output) specifically to avoid a circular
-// module dependency, this module structurally runs AFTER app/neo4j. The
-// deploySP -> Key Vault Secrets Officer grant is a self-grant (made
+// appPrincipalId/neo4jPrincipalId come from user-assigned identities created
+// directly in main.bicep (see appIdentity/neo4jIdentity there), not from
+// app.bicep/neo4j.bicep's own outputs — those identities' principalIds are
+// available immediately on creation, independent of whether the container
+// apps that use them ever succeed. That lets this module run BEFORE
+// app/neo4j (which consume keyVault.outputs.vaultUri), so the Key Vault
+// Secrets User grants exist before either container app's first revision
+// tries to resolve its secrets. (Confirmed live: with system-assigned
+// identities this was a real deadlock, not just an RBAC-propagation lag —
+// app's principalId only existed once its container app deployment
+// succeeded, but that deployment could never succeed without the grant this
+// module creates.)
+//
+// The deploySP -> Key Vault Secrets Officer grant is a self-grant, made
 // possible because the deploy SP already has User Access Administrator at
-// the resource-group scope — see README's bootstrap section), and because
-// it's created in the same deployment as the secrets it's needed to write,
-// the very FIRST apply predictably fails on the secret-write step and needs
-// one workflow_dispatch re-run — the role assignment itself still succeeds
-// (it only needs the vault to exist), so the re-run succeeds without any
-// other change.
+// the resource-group scope — see README's bootstrap section.
 
 param location string
 param keyVaultName string
