@@ -72,7 +72,10 @@ def run_dedupe(graph: Neo4jGraph) -> int:
 
 
 def main() -> None:
-    graph = Neo4jGraph(url=NEO4J_URI, username=NEO4J_USERNAME, password=NEO4J_PASSWORD)
+    # refresh_schema=False: see the same note in extract.py/timeline.py.
+    graph = Neo4jGraph(
+        url=NEO4J_URI, username=NEO4J_USERNAME, password=NEO4J_PASSWORD, refresh_schema=False
+    )
     run_dedupe(graph)
 
 

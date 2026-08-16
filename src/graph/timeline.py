@@ -117,7 +117,13 @@ def normalize(name: str) -> str:
 
 
 def main() -> None:
-    graph = Neo4jGraph(url=NEO4J_URI, username=NEO4J_USERNAME, password=NEO4J_PASSWORD)
+    # refresh_schema=False: this script only runs direct MATCH/MERGE queries,
+    # never LangChain's schema-dependent Cypher generation, so it doesn't need
+    # apoc.meta.data() — which prod's narrow APOC allowlist doesn't permit
+    # (see infra/modules/neo4j.bicep's NEO4J_dbms_security_procedures_allowlist).
+    graph = Neo4jGraph(
+        url=NEO4J_URI, username=NEO4J_USERNAME, password=NEO4J_PASSWORD, refresh_schema=False
+    )
 
     existing_events = graph.query("MATCH (e:Event) RETURN e.id AS id")
     by_norm = {normalize(r["id"]): r["id"] for r in existing_events}

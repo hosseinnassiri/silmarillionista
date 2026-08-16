@@ -82,7 +82,13 @@ async def convert_batch(
 async def main_async() -> None:
     documents = load_documents()
     transformer = build_transformer()
-    graph = Neo4jGraph(url=NEO4J_URI, username=NEO4J_USERNAME, password=NEO4J_PASSWORD)
+    # refresh_schema=False: this script only runs direct MATCH/CALL queries,
+    # never LangChain's schema-dependent Cypher generation, so it doesn't need
+    # apoc.meta.data() — which a narrowly-allowlisted Neo4j instance may not permit
+    # (see infra/modules/neo4j.bicep's NEO4J_dbms_security_procedures_allowlist).
+    graph = Neo4jGraph(
+        url=NEO4J_URI, username=NEO4J_USERNAME, password=NEO4J_PASSWORD, refresh_schema=False
+    )
 
     done_keys = already_processed_keys(graph)
     remaining = [d for d in documents if chunk_key(d.metadata) not in done_keys]

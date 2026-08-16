@@ -73,7 +73,13 @@ _graph: Neo4jGraph | None = None
 def _get_graph() -> Neo4jGraph:
     global _graph
     if _graph is None:
-        _graph = Neo4jGraph(url=NEO4J_URI, username=NEO4J_USERNAME, password=NEO4J_PASSWORD)
+        # refresh_schema=False: only direct MATCH/SET queries run here, never
+        # LangChain's schema-dependent Cypher generation, so this doesn't need
+        # apoc.meta.data() — which prod's narrow APOC allowlist doesn't permit
+        # (see infra/modules/neo4j.bicep's NEO4J_dbms_security_procedures_allowlist).
+        _graph = Neo4jGraph(
+            url=NEO4J_URI, username=NEO4J_USERNAME, password=NEO4J_PASSWORD, refresh_schema=False
+        )
     return _graph
 
 

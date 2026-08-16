@@ -43,11 +43,11 @@ resource neo4jApp 'Microsoft.App/containerApps@2026-01-01' = {
             { name: 'NEO4J_PLUGINS', value: '["apoc"]' }
             {
               name: 'NEO4J_dbms_security_procedures_unrestricted'
-              value: 'apoc.text.clean,apoc.refactor.mergeNodes'
+              value: 'apoc.text.clean,apoc.refactor.mergeNodes,apoc.meta.data,apoc.merge.node,apoc.merge.relationship'
             }
             {
               name: 'NEO4J_dbms_security_procedures_allowlist'
-              value: 'apoc.text.clean,apoc.refactor.mergeNodes'
+              value: 'apoc.text.clean,apoc.refactor.mergeNodes,apoc.meta.data,apoc.merge.node,apoc.merge.relationship'
             }
           ]
           resources: {
