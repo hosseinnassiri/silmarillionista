@@ -12,8 +12,12 @@ wheels/
 # Secrets
 .env
 
-# Generated data artifacts (regenerable via src/ingest, src/vectorstore, src/graph)
-data/processed/
+# Generated data artifacts (regenerable via src/ingest, src/vectorstore, src/graph).
+# chroma_db is the exception: Dockerfile bakes it into the deployed image
+# (see .dockerignore), so it has to actually be committed to be there for
+# GitHub Actions' checkout to find — everything else here regenerates locally.
+data/processed/*
+!data/processed/chroma_db/
 
 # Local backups/dumps destined for external storage (OneDrive, etc.)
 backups/
