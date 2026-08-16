@@ -19,7 +19,8 @@ from pydantic import BaseModel
 
 from src.agent.graph_app import ask
 from src.config import ILLUSTRATIONS_DIR
-from src.illustrations.lookup import find_illustrations
+from src.graph.major_events import get_timeline
+from src.illustrations.lookup import find_illustrations, get_illustration
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +58,20 @@ class AskResponse(BaseModel):
     answer: str | None = None
     sources: list[str] | None = None
     images: list[dict] | None = None
+
+
+class TimelineEvent(BaseModel):
+    id: str
+    illustration: dict | None = None
+
+
+class TimelineEra(BaseModel):
+    era: str
+    events: list[TimelineEvent]
+
+
+class TimelineResponse(BaseModel):
+    eras: list[TimelineEra]
 
 
 @app.post("/ask", response_model=AskResponse)
@@ -103,6 +118,28 @@ def ask_endpoint(body: AskRequest, request: Request) -> AskResponse:
         answer=result.get("answer"),
         sources=result.get("sources"),
         images=images or None,
+    )
+
+
+@app.get("/timeline", response_model=TimelineResponse)
+def timeline_endpoint() -> TimelineResponse:
+    try:
+        eras = get_timeline()
+    except Exception as e:
+        logger.exception("Timeline query failed")
+        raise HTTPException(status_code=502, detail="Could not load the timeline. Please try again.") from e
+
+    return TimelineResponse(
+        eras=[
+            TimelineEra(
+                era=era["era"],
+                events=[
+                    TimelineEvent(id=ev["id"], illustration=get_illustration(ev["id"]))
+                    for ev in era["events"]
+                ],
+            )
+            for era in eras
+        ]
     )
 
 

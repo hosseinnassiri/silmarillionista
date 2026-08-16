@@ -57,6 +57,11 @@ SHORTLIST = [
     "War Of Wrath", "Oath Of Feanor",
     # Objects/creatures
     "Silmaril", "Two Trees", "Glaurung", "Carcharoth", "Huan",
+    # Battles (broadened coverage — grounded against the live graph's
+    # actual :Event nodes, see the timeline/major_events plan)
+    "Battle Of The Powers", "Dagor-Nuin-Giliath", "Dagor Aglareb",
+    "Battle Of Sarn Athrad", "Fall Of Gondolin", "Assault On The Havens Of Sirion",
+    "Sons Of Feanor'S Assault On Doriath", "Battle Of Tumhalad",
 ]
 
 STYLE_GUIDE = """\

@@ -55,3 +55,13 @@ def find_illustrations(text: str, limit: int = 2) -> list[dict]:
             break
 
     return matches
+
+
+def get_illustration(entity_id: str) -> dict | None:
+    """Exact (normalized) id lookup — for callers that already know the
+    canonical entity id, rather than scanning free text for mentions."""
+    target = normalize(entity_id)
+    for entry in _load_manifest():
+        if normalize(entry["id"]) == target:
+            return {"name": entry["id"], "type": entry["type"], "url": f"/illustrations/{entry['file']}"}
+    return None

@@ -294,5 +294,75 @@
     "type": "Maia",
     "file": "huan.png",
     "prompt": "A richly painted dark fantasy illustration of Huan, the tireless hound of Valinor, springing at the mightiest werewolf that has ever walked the world upon a stark bridge before Sauron’s tower. The scene is in shadow mode: near-monochrome blacks and iron greys, with cold light catching the hound’s straining body and the wet stone of the bridge. Wolf-Sauron looms huge, eyes filled with fell spirit, foul vapour curling from his jaws as he stumbles beneath the dark fold of Lúthien’s cloak cast across his sight. Lúthien lies swooning nearby, half-lost in shadow. Around them the hills echo with imagined howls and baying; across the valley, the distant walls of Ered Wethrin are barely visible. Cinematic scale, deep shadows, violent motion, no text."
+  },
+  {
+    "id": "Battle Of The Powers",
+    "aliases": [],
+    "type": "Event",
+    "file": "battle-of-the-powers.png",
+    "prompt": "A vast shadow-mode fantasy battlefield in the far north of Middle-earth: the hosts of the West advance from a cold, pale western light toward the black, deeply delved fortress of Utumno. The land is broken and heaved as if the earth itself groans; cliffs split, waters surge, and the widening sea gnaws at shattered coasts. Before the fortress gates, tiny ranks clash amid smoke and flying ash, while the servants of Melkor flee back into pits filled with red fire. The whole northern horizon burns with mighty flames under cold stars, making the desolate land nearly monochrome except for ember-orange fissures and a single severe white radiance from the West. Epic scale, figures dwarfed by mountains, storm, and ruin; richly painted cinematic gouache texture, no text."
+  },
+  {
+    "id": "Dagor-Nuin-Giliath",
+    "aliases": [
+      "Battle-under-Stars",
+      "Battle Under Stars"
+    ],
+    "type": "Event",
+    "file": "dagor-nuin-giliath.png",
+    "prompt": "A single richly painted fantasy illustration in shadow mode: the Battle-under-Stars on the grey fields of Mithrim, before the Moon has risen. Cold starlight glints over the long lake’s northern shore and the unfinished encampment of the Noldor, suddenly assailed by a vast Orc-host pouring from the dark passes of the Mountains of Shadow. The Elves, outnumbered and taken unawares, surge forward with fierce wrath, their eyes still bright with the undimmed light of Aman, long terrible swords flashing like pale fire in the darkness. Orcs recoil and flee amid deep blue-black shadows, scattered bodies, and churned earth. Behind them loom the Echoing Hills and Ered Wethrin, immense and oppressive beneath a star-filled sky. Cinematic high contrast, cold silver light, no sun, no moon, no text."
+  },
+  {
+    "id": "Dagor Aglareb",
+    "aliases": [
+      "Glorious Battle",
+      "Third Battle"
+    ],
+    "type": "Event",
+    "file": "dagor-aglareb.png",
+    "prompt": "A vast battlefield on the plain of Ard-galen beneath the Iron Mountains, painted in shadow mode: dark earth split by fiery fissures, distant peaks vomiting flame under a smoke-black sky. Orcs pour across the plain in a broken, panicked mass as two great hosts of the Noldor strike them from either side while they assault the heights of Dorthonion. The composition should show the battle turning into a rout: spears and blades catching harsh red light, scattered bands fleeing northward, the main host driven back across the open plain. Far beyond, the grim gates of Angband loom at the foot of the mountains, lit by volcanic fire. Epic scale, deep shadows, embers and ash in the air, a terrible yet triumphant atmosphere: the Glorious Battle."
+  },
+  {
+    "id": "Battle Of Sarn Athrad",
+    "aliases": [],
+    "type": "Event",
+    "file": "battle-of-sarn-athrad.png",
+    "prompt": "A shadowed fantasy battle at the ford of a wide river beneath steep wooded banks: a diminished host of Dwarves struggles upward, burdened with heaps of gold, gems, and spoils, as arrows fly from every side out of the dark trees. The unseen ambushers are suggested only by horn-shapes and glints among the leaves. In the foreground Beren stands over the dying Lord of Nogrod, wresting away the bloodied Necklace of the Dwarves; at its heart a single jewel blazes with cold white fire amid gold and gems, the only pure light in the scene. Blood runs into the river where treasure is being cast beneath the water, turning the current to a dim golden shimmer. Deep forest shadows, stormy sky, dramatic high contrast, epic painted texture."
+  },
+  {
+    "id": "Fall Of Gondolin",
+    "aliases": [
+      "The Fall Of Gondolin",
+      "Sack Of Gondolin"
+    ],
+    "type": "Event",
+    "file": "fall-of-gondolin.png",
+    "prompt": "A single richly painted fantasy illustration of Gondolin’s fall at night: the hidden city rises upon Amon Gwareth, high white walls, smooth stairs, shining fountains, and the tall strong Tower of the King stark against deep shadow. Along the walls, the people have gathered for the Gates of Summer, awaiting sunrise, but a dreadful red light climbs over the northern hills instead of the east. From that height descends Morgoth’s host: masses of Orcs, wolves, many terrible dragons of Glaurung’s brood, and Balrogs pressing beneath the very walls. The city is beleaguered without hope; fire and crimson glare swallow the pale stone. In the King’s square, desperate warriors clash in chaos, while the great tower begins to break and fall, dwarfing all figures beneath it. Shadow mode: near-black palette, ember-red horizon, violent contrast, no text."
+  },
+  {
+    "id": "Assault On The Havens Of Sirion",
+    "aliases": [
+      "Second Kinslaying"
+    ],
+    "type": "Event",
+    "file": "assault-on-the-havens-of-sirion.png",
+    "prompt": "Richly painted dark fantasy illustration, gouache and digital matte texture: a coastal haven under siege before winter, its stone walls shattered by great engines tended by smiths, miners, and masters of fire. A black host pours down from river valleys toward the sea; wolves and Orcs move amid smoke and falling masonry. The tower on the shore lies broken, its pale stones collapsing into ember-lit ruin. Deep shadow dominates the scene, cut by furnace-red fire and sparks from siege works. In the distance, a few ships push out into the cold grey sea, carrying a remnant away from slaughter and bondage. Near the river-mouth creeks, light swift vessels lie half-hidden among reeds dense as a forest. Epic scale, cinematic high contrast, no text or borders."
+  },
+  {
+    "id": "Sons Of Féanor'S Assault On Doriath",
+    "aliases": [
+      "Third Kinslaying",
+      "Ruin Of Doriath"
+    ],
+    "type": "Event",
+    "file": "sons-of-féanor-s-assault-on-doriath.png",
+    "prompt": "Shadow-mode fantasy illustration of the second slaying of Elf by Elf: the Thousand Caves of Doriath in the middle of winter, vast stone halls swallowed by darkness while snow glimmers at a distant entrance. Armed Elves clash beneath cavern vaults, their blades catching a cold, hard light; bodies lie among broken shadows, including fallen princes and Dior’s slain household, with Nimloth beside him. The mood is tragic, not triumphant. In the deep background, a small remnant flees through the cave gloom, guarding Elwing as she bears the single radiant Silmaril, its white fire the only pure light in the scene. Use a near-monochrome palette of black, blue-grey, and ash, with sharp silver highlights and oppressive contrast, richly painted watercolor/gouache or digital matte texture, epic scale, no text."
+  },
+  {
+    "id": "Battle Of Tumhalad",
+    "aliases": [],
+    "type": "Event",
+    "file": "battle-of-tumhalad.png",
+    "prompt": "A shadowed battlefield at sunset on a barren plain, rendered as a richly painted fantasy illustration with deep gouache texture and cinematic contrast. In the foreground, a lone warrior stands amid a heap of fallen men, shield cast aside, gripping a two-handed axe dark with black blood, while countless Orcs swarm over him like a rising tide. Before him a narrow stream is choked and bridged with bodies; behind, the dark slopes of distant mountains fall into shadow as the sun sinks westward. Around the field, helmets and severed golden heads catch the last red light, a grim ember-glow in near-monochrome darkness. Far off, oppressive black gates and volcanic gloom loom beneath storm clouds driven by a violent western wind. No text, no borders."
   }
 ]

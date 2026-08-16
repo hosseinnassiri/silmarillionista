@@ -80,6 +80,7 @@ EVENT_ERA = {
     "Fall Of Gondolin": "Years of the Sun",
     "The Fall Of Gondolin": "Years of the Sun",
     "Sack Of Gondolin": "Years of the Sun",
+    "Battle Of Tumhalad": "Years of the Sun",
     "Gates Of Summer": "Years of the Sun",
     "Midsummer": "Years of the Sun",
     "Sons Of Feanor'S Assault On Doriath": "Years of the Sun",
