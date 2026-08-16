@@ -6,6 +6,7 @@ cap, set at deployment time (see README/deploy notes) — but it stops a single
 client from hammering the endpoint and keeps response latency fair.
 """
 
+import logging
 import time
 from collections import defaultdict
 from pathlib import Path
@@ -13,9 +14,12 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from openai import APIError
 from pydantic import BaseModel
 
 from src.agent.graph_app import ask
+
+logger = logging.getLogger(__name__)
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 
@@ -63,7 +67,20 @@ def ask_endpoint(body: AskRequest, request: Request) -> AskResponse:
     client_ip = request.client.host if request.client else "unknown"
     _check_rate_limit(client_ip)
 
-    result = ask(question)
+    try:
+        result = ask(question)
+    except APIError as e:
+        logger.exception("LLM call failed for question: %r", question)
+        if "content_filter" in str(e):
+            raise HTTPException(
+                status_code=422,
+                detail=(
+                    "Azure's content filter blocked this answer (battle/violence content in the "
+                    "source text is a common trigger). Try rephrasing the question."
+                ),
+            ) from e
+        raise HTTPException(status_code=502, detail="The language model failed to answer. Please try again.") from e
+
     return AskResponse(route=result.get("route"), answer=result.get("answer"), sources=result.get("sources"))
 
 
