@@ -21,3 +21,6 @@ data/processed/*
 
 # Local backups/dumps destined for external storage (OneDrive, etc.)
 backups/
+
+# Personal Claude Code permission/tool preferences, not shared project config
+.claude/settings.local.json
