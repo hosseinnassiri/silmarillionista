@@ -324,7 +324,10 @@
   },
   {
     "id": "Battle Of Sarn Athrad",
-    "aliases": [],
+    "aliases": [
+      "Battle At Sarn Athrad",
+      "Battle By Sarn Athrad"
+    ],
     "type": "Event",
     "file": "battle-of-sarn-athrad.png",
     "prompt": "A shadowed fantasy battle at the ford of a wide river beneath steep wooded banks: a diminished host of Dwarves struggles upward, burdened with heaps of gold, gems, and spoils, as arrows fly from every side out of the dark trees. The unseen ambushers are suggested only by horn-shapes and glints among the leaves. In the foreground Beren stands over the dying Lord of Nogrod, wresting away the bloodied Necklace of the Dwarves; at its heart a single jewel blazes with cold white fire amid gold and gems, the only pure light in the scene. Blood runs into the river where treasure is being cast beneath the water, turning the current to a dim golden shimmer. Deep forest shadows, stormy sky, dramatic high contrast, epic painted texture."
@@ -342,6 +345,8 @@
   {
     "id": "Assault On The Havens Of Sirion",
     "aliases": [
+      "Assault Upon The Havens",
+      "Battle At The Havens Of Sirion",
       "Second Kinslaying"
     ],
     "type": "Event",
@@ -351,8 +356,8 @@
   {
     "id": "Sons Of Féanor'S Assault On Doriath",
     "aliases": [
-      "Third Kinslaying",
-      "Ruin Of Doriath"
+      "Ruin Of Doriath",
+      "Third Kinslaying"
     ],
     "type": "Event",
     "file": "sons-of-féanor-s-assault-on-doriath.png",

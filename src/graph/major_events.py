@@ -20,9 +20,19 @@ own chapter_title metadata -- some are unambiguous from the title alone,
 e.g. ch.20 "Of the Fifth Battle: Nirnaeth Arnoediad", ch.23 "Of Tuor and
 the Fall of Gondolin", ch.22 "Of the Ruin of Doriath"). List position is
 the order -- no runtime scan needed.
+
+Each entry is either a single name, or a tuple of candidate spellings for
+the same conceptual event, tried in order -- matched case/diacritic-
+insensitively via normalize() (same NFKD-based normalize dedupe.py already
+uses), not raw string equality. Extraction is a non-deterministic LLM pass:
+re-running it (e.g. against a fresh database) can legitimately produce
+different exact wording for the same event -- "Battle Of Sarn Athrad" one
+run, "Battle At Sarn Athrad" another -- so a single hardcoded spelling isn't
+reliable across runs, only within the one that first justified the entry.
 """
 
 import sys
+import unicodedata
 from pathlib import Path
 
 from langchain_neo4j import Neo4jGraph
@@ -30,7 +40,14 @@ from langchain_neo4j import Neo4jGraph
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from src.config import NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME
 
-MAJOR_EVENTS = [
+
+def normalize(name: str) -> str:
+    decomposed = unicodedata.normalize("NFKD", name)
+    stripped = "".join(c for c in decomposed if not unicodedata.combining(c))
+    return " ".join(stripped.lower().split())
+
+
+MAJOR_EVENTS: list[str | tuple[str, ...]] = [
     # Years of the Lamps (ch. 1-3)
     "Music Of The Ainur",
     "Battle Of The Powers",
@@ -52,12 +69,12 @@ MAJOR_EVENTS = [
     "Nirnaeth Arnoediad",
     "Battle Of Tumhalad",
     "Fall Of Gondolin",
-    "Sons Of Féanor'S Assault On Doriath",
-    "Battle Of Sarn Athrad",
-    "Assault On The Havens Of Sirion",
+    ("Sons Of Féanor'S Assault On Doriath", "Ruin Of Doriath"),
+    ("Battle Of Sarn Athrad", "Battle At Sarn Athrad", "Battle By Sarn Athrad"),
+    ("Assault On The Havens Of Sirion", "Battle At The Havens Of Sirion", "Assault Upon The Havens"),
     "War Of Wrath",
     # Second Age
-    "Downfall Of Númenor",
+    ("Downfall Of Númenor", "Drowning Of Nümenor"),
     "Siege Of Barad-Dûr",
     # Third Age
     "Battle Of Dagorlad",
@@ -106,17 +123,21 @@ def get_timeline() -> list[dict]:
 def main() -> None:
     graph = _get_graph()
     existing = graph.query("MATCH (e:Event) RETURN e.id AS id")
-    existing_ids = {r["id"] for r in existing}
+    by_norm = {normalize(r["id"]): r["id"] for r in existing if r["id"]}
 
     set_count = 0
     missing = []
-    for order, event_id in enumerate(MAJOR_EVENTS):
-        if event_id not in existing_ids:
-            missing.append(event_id)
+    for order, candidates in enumerate(MAJOR_EVENTS):
+        if isinstance(candidates, str):
+            candidates = (candidates,)
+
+        actual_id = next((by_norm[normalize(c)] for c in candidates if normalize(c) in by_norm), None)
+        if actual_id is None:
+            missing.append(candidates[0])
             continue
         graph.query(
             "MATCH (e {id: $id}) SET e.timeline_order = $order",
-            params={"id": event_id, "order": order},
+            params={"id": actual_id, "order": order},
         )
         set_count += 1
 
