@@ -437,7 +437,9 @@
   },
   {
     "id": "Downfall Of Númenor",
-    "aliases": [],
+    "aliases": [
+      "Drowning Of Nümenor"
+    ],
     "type": "Event",
     "file": "downfall-of-númenor.png",
     "prompt": "A single richly painted fantasy illustration in shadow mode: a vast island kingdom collapsing into the sea beneath a reeling sky. Fire bursts from the summit of the Meneltarma, casting red light through smoke and storm, while hills slide and towers, halls, gardens, tombs, jewels, and carven works vanish into darkness. The Great Seas surge over the land; a green, cold, foam-plumed wave climbs the steep ways of the mountain. At the center, Tar-Míriel, fair as silver, ivory, and pearls, struggles upward toward the holy place, dwarfed by the oncoming water, her cry lost in the roaring wind. Far beyond, a great rift opens in the sea, cataracts plunging into an abyss, drawing tall ships down forever. Cinematic high contrast, oppressive scale, no text or borders."

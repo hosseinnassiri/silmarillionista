@@ -58,10 +58,16 @@ def find_illustrations(text: str, limit: int = 2) -> list[dict]:
 
 
 def get_illustration(entity_id: str) -> dict | None:
-    """Exact (normalized) id lookup — for callers that already know the
-    canonical entity id, rather than scanning free text for mentions."""
+    """Exact (normalized) id-or-alias lookup — for callers that already know
+    the canonical entity id, rather than scanning free text for mentions.
+    Checks aliases too, not just the primary id: a caller may be passing an
+    id from a different graph than the one the manifest's aliases were
+    curated against (e.g. prod's independently-extracted "Battle At Sarn
+    Athrad" vs. the manifest's own "Battle Of Sarn Athrad"), which is
+    exactly what those aliases exist to bridge.
+    """
     target = normalize(entity_id)
     for entry in _load_manifest():
-        if normalize(entry["id"]) == target:
+        if target in entry["_normalized_names"]:
             return {"name": entry["id"], "type": entry["type"], "url": f"/illustrations/{entry['file']}"}
     return None
