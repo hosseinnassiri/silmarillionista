@@ -62,6 +62,14 @@ SHORTLIST = [
     "Battle Of The Powers", "Dagor-Nuin-Giliath", "Dagor Aglareb",
     "Battle Of Sarn Athrad", "Fall Of Gondolin", "Assault On The Havens Of Sirion",
     "Sons Of Feanor'S Assault On Doriath", "Battle Of Tumhalad",
+    # Remaining curated timeline events (full illustration coverage for the
+    # chevron-strip /timeline redesign — see MAJOR_EVENTS in major_events.py)
+    "Music Of The Ainur", "Chaining Of Melkor", "Spring Of Arda",
+    "Darkening Of Valinor", "Doom Of The Noldor", "Burning Of The Ships At Losgar",
+    "Crossing Of The Helcaraxe", "Mereth Aderthad", "Siege Of Angband",
+    "Downfall Of Numenor", "Siege Of Barad-Dur", "Battle Of Dagorlad",
+    "White Council", "Assault Upon Dol Guldur", "War Of The Ring",
+    "Destruction Of The Ring",
 ]
 
 STYLE_GUIDE = """\

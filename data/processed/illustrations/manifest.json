@@ -369,5 +369,119 @@
     "type": "Event",
     "file": "battle-of-tumhalad.png",
     "prompt": "A shadowed battlefield at sunset on a barren plain, rendered as a richly painted fantasy illustration with deep gouache texture and cinematic contrast. In the foreground, a lone warrior stands amid a heap of fallen men, shield cast aside, gripping a two-handed axe dark with black blood, while countless Orcs swarm over him like a rising tide. Before him a narrow stream is choked and bridged with bodies; behind, the dark slopes of distant mountains fall into shadow as the sun sinks westward. Around the field, helmets and severed golden heads catch the last red light, a grim ember-glow in near-monochrome darkness. Far off, oppressive black gates and volcanic gloom loom beneath storm clouds driven by a violent western wind. No text, no borders."
+  },
+  {
+    "id": "Music Of The Ainur",
+    "aliases": [],
+    "type": "Event",
+    "file": "music-of-the-ainur.png",
+    "prompt": "A luminous cosmic scene in the measureless Void: Ilúvatar seated in radiant stillness, hearkening, while the gathered Ainur bow and sing before him as holy, flame-kindled presences. Their countless voices become visible as vast woven currents of light, like harp, lute, pipe, trumpet, viol, organ, and choir tones made into color, rising beyond hearing into immeasurable heights and depths. The dwelling of Ilúvatar overflows with gold, white, and soft blue radiance, echoing outward until the Void is no longer empty. Within the harmonies appears a vision: a new World, globed and sustained amid darkness, beginning to live and unfold its history. At one edge, a stronger solitary presence threads a darker, restless strand into the music, not yet overwhelming the splendour. Rich watercolor-gouache fantasy painting, dramatic radiant backlighting, epic scale, no text."
+  },
+  {
+    "id": "Chaining Of Melkor",
+    "aliases": [],
+    "type": "Event",
+    "file": "chaining-of-melkor.png",
+    "prompt": "A single richly painted fantasy illustration in shadow mode: the broken gates of Utumno gape open beneath the ruined North, its halls unroofed and descending into an uttermost pit. In the foreground Tulkas, champion of the Valar, has wrestled Melkor down and cast him upon his face; Melkor lies bound hand and foot in the heavy chain Angainor, blindfolded, captive and defeated. Around them loom the shattered vaults and dark caverns the Valar have not fully discovered, with faint suggestions of evil things lingering in the depths. Great clouds rise from the ruin and blot out the stars, while a cold, stark light catches the metal links and the fallen figure. Epic scale, oppressive contrast, deep shadows, embers in the darkness, watercolor-gouache or digital matte-painting texture, no text or borders."
+  },
+  {
+    "id": "Spring Of Arda",
+    "aliases": [],
+    "type": "Event",
+    "file": "spring-of-arda.png",
+    "prompt": "Richly painted epic fantasy illustration of the first Spring of Arda: the Isle of Almaren resting in a vast Great Lake, where the mingled light of the two mighty Lamps pours down in warm gold and pale silver. New-made green covers the earth in wonder—mosses, grasses, great ferns, and immense trees rising like living mountains, their tops crowned with cloud and their roots lost in green twilight. Beasts move across grassy plains, rivers, lakes, and shadowed woods, while no flowers bloom and no birds sing. In the distance, the Valar and their host gather for a feast upon the grass, tiny against the newborn world. Far to the north, a cold dim darkness gathers beneath black mountains, hinting at hidden ruin. Cinematic luminous grandeur, deep shadows, no text."
+  },
+  {
+    "id": "Darkening Of Valinor",
+    "aliases": [],
+    "type": "Event",
+    "file": "darkening-of-valinor.png",
+    "prompt": "Richly painted shadow-mode fantasy illustration: from the summit of Taniquetil, Varda and Manwë appear as small luminous silhouettes on the Holy Mountain, now a lone island rising above a drowned world of night. Below, Valmar is swallowed in a deep black sea of darkness, while sudden towers of gloom soar upward like storm-clouds. A chill east wind drives vast shadowy waves against the shore-walls; far through the mountain pass, the unseen Teleri’s grief is suggested by pale gull-like shapes in the cold air. In the distance a Darkness beyond dark moves northward, impenetrable. Near the lower slopes, the host of Oromë is scattered and blinded around the Cloud of Ungoliant, with only sparks from Nahar’s hooves giving the first returning light. Dramatic high contrast, no text."
+  },
+  {
+    "id": "Doom Of The Noldor",
+    "aliases": [
+      "Prophecy Of The North"
+    ],
+    "type": "Event",
+    "file": "doom-of-the-noldor.png",
+    "prompt": "Richly painted shadow-mode fantasy illustration: in the unmeasured night at the cold mountainous borders of Araman, the host of the Noldor halts along a bleak shore after storm and long march. Some stand crowded on land, others near dim ships on the black water, all turned toward a dark figure high upon a jagged rock overlooking the strand. The figure is almost featureless, solemn and terrible, silhouetted against a faint cold sky, one raised presence commanding stillness. Deep shadows swallow the empty waste behind them; wet stone, restless sea, and distant mountain walls feel fenced and impassable. The composition is epic and hushed, with the vast host dwarfed by rock, shore, and night, as the curse and prophecy fall over them like invisible doom."
+  },
+  {
+    "id": "Burning Of The Ships At Losgar",
+    "aliases": [],
+    "type": "Event",
+    "file": "burning-of-the-ships-at-losgar.png",
+    "prompt": "A richly painted fantasy illustration in shadow mode: a dark northern shore at the outlet of a firth, where the white ships of the Teleri are consumed in a great burning, bright and terrible. Fierce red-orange flames devour the fairest vessels, reflecting on black seawater and staining low clouds crimson. On the strand, Fëanor stands laughing fey, commanding the fire; nearby Maedhros alone stands aside, separated in shadow. The coastline rises into dark echoing hills, the wind carrying sparks and smoke like a tumult of wrath. Far across the darkness, Fingolfin and his people watch the red light beneath the clouds, realizing betrayal. Cinematic directional firelight, deep oppressive shadow, watercolor and gouache texture, epic scale, no text, logos, or borders."
+  },
+  {
+    "id": "Crossing Of The Helcaraxé",
+    "aliases": [],
+    "type": "Event",
+    "file": "crossing-of-the-helcaraxé.png",
+    "prompt": "A vast shadow-mode fantasy painting of Fingolfin’s diminished host attempting the desperate passage through the bitterest North: tiny lines of Noldor figures struggle across cruel, jagged hills of ice in a narrow sea-strait choked with deathly fog. The waters below are black and steel-blue, packed with floating “teeth” of ice and huge clashing bergs, with deep-sunken grinding shapes visible beneath the surface. Wind-driven mist swallows the distance, making the landscape feel endless and lethal. Some figures are isolated or fallen near broken ice, suggesting many lost, while the main host presses onward with grim endurance. Far behind, under low clouds, a faint red glow recalls the burning ships and betrayal; ahead, a cold moonlike light breaks through the mist, casting hard silver highlights and deep blue-black shadows. Richly painted, cinematic, no text."
+  },
+  {
+    "id": "Mereth Aderthad",
+    "aliases": [],
+    "type": "Event",
+    "file": "mereth-aderthad.png",
+    "prompt": "A luminous, richly painted fantasy illustration of a great ordered meeting between Elves and Men in the lands of the Eldar: Elf-kings standing beneath tall forest boughs and open sky, setting apart free lands for the Edain, while human chieftains receive the charge to dwell under their own leaders and remain allies in war. In the foreground, Men of different kindreds gather with solemn dignity, some bearing travel-worn goods, others listening eagerly to elven lore; young warriors stand near the hosts of the kings. Far beyond, a river crossing and deep woods suggest the guarded borders against Orcs. Warm gold and soft blue light stream through the trees, casting long shadows but keeping the mood peaceful, solemn, and awe-filled. Cinematic scale, watercolor/gouache texture, no text."
+  },
+  {
+    "id": "Siege Of Angband",
+    "aliases": [],
+    "type": "Event",
+    "file": "siege-of-angband.png",
+    "prompt": "A vast northern panorama in shadow mode: Angband crouches beneath the Iron Mountains, whose great curving wall of snow and ice makes an impassable rear defense, while the dark towers of Thangorodrim thrust forward like black teeth. Far below, the leaguer of the Noldor forms an incomplete ring of ordered watch around the gates, tiny figures dwarfed by mountains and fortress, their cold spearpoints catching a thin blue light. No servant of Morgoth ventures openly from the gates, yet in the deep northern shadow faint, devious tracks suggest spies slipping out beyond the encirclement. The palette is near-monochrome charcoal, iron grey, and frozen white, broken only by a dull red glow from Angband’s mines and forges, casting oppressive smoke and long shadows across the besieged land."
+  },
+  {
+    "id": "Downfall Of Númenor",
+    "aliases": [],
+    "type": "Event",
+    "file": "downfall-of-númenor.png",
+    "prompt": "A single richly painted fantasy illustration in shadow mode: a vast island kingdom collapsing into the sea beneath a reeling sky. Fire bursts from the summit of the Meneltarma, casting red light through smoke and storm, while hills slide and towers, halls, gardens, tombs, jewels, and carven works vanish into darkness. The Great Seas surge over the land; a green, cold, foam-plumed wave climbs the steep ways of the mountain. At the center, Tar-Míriel, fair as silver, ivory, and pearls, struggles upward toward the holy place, dwarfed by the oncoming water, her cry lost in the roaring wind. Far beyond, a great rift opens in the sea, cataracts plunging into an abyss, drawing tall ships down forever. Cinematic high contrast, oppressive scale, no text or borders."
+  },
+  {
+    "id": "Siege Of Barad-Dûr",
+    "aliases": [],
+    "type": "Event",
+    "file": "siege-of-barad-dûr.png",
+    "prompt": "A shadow-mode epic fantasy siege scene in Mordor’s mountains: the fires of Orodruin are wakened, sending a vast black plume across a near-monochrome sky, its crater glowing dull red like a wound. Beneath it, Sauron’s gathered strength masses in deep ranks from east and south, a dark host of servants and evil lords moving through ash and smoke toward the war against Gondor. Far below, ruined firelight suggests the fall of Minas Ithil and the destroyed White Tree, while beyond a river-land glimmers faintly where Anárion holds Osgiliath against the Enemy. The composition should feel oppressive and immense, with tiny figures dwarfed by mountains, smoke, and flame; strong directional volcanic light, deep shadows, embers in the air, painterly watercolor/gouache or digital matte texture, no text or borders."
+  },
+  {
+    "id": "Battle Of Dagorlad",
+    "aliases": [],
+    "type": "Event",
+    "file": "battle-of-dagorlad.png",
+    "prompt": "A vast battlefield on the burned plain of Anfauglith beneath the dark feet of Thangorodrim: rivers of flame pour from fissures and distant Iron Mountains, staining choking dust with poisonous red and orange light. Black multitudes of Orcs surge across the waste, while Elves and Men hold broken ranks among smoke and charred bones. From the south, a disciplined host in bright mail advances, long swords and spears rising like a forest, their armor catching the cold morning sun like a river of steel. In the center, Glaurung the golden, immense and terrible, drives between the divided hosts; behind him loom shadowed Balrogs and wolves. Cinematic shadow mode, deep contrast, oppressive scale, one blazing dragon-and-fire focal point, richly painted watercolor/gouache fantasy texture, no text."
+  },
+  {
+    "id": "White Council",
+    "aliases": [],
+    "type": "Event",
+    "file": "white-council.png",
+    "prompt": "A richly painted fantasy illustration in shadow mode: the Council of the Wise gathered in solemn debate as darkness gathers over Mirkwood and Dol Guldur. Old but vigorous wizards stand among grave Elven lords; Curunír in white is placed foremost as chosen chief, while Mithrandir stands slightly apart, refusing mastery or summons. Elrond and Galadriel are shown among the central Wise, with Círdan and other Eldar lords in the circle. Between them, a cold pale light falls on no written page, only an empty space of anxious counsel, suggesting the debated lore of the Rings. Beyond them, vast black woods deepen into mist, and the distant hold of the Sorcerer broods under a single red ember-glow. Cinematic high contrast, deep shadows, epic scale, watercolor-gouache matte texture, no text."
+  },
+  {
+    "id": "Assault Upon Dol Guldur",
+    "aliases": [],
+    "type": "Event",
+    "file": "assault-upon-dol-guldur.png",
+    "prompt": "A richly painted dark fantasy illustration of the assault on Dol Guldur: deep Mirkwood fills the scene, its ancient trees drowned in oppressive shadow, while a grim stronghold looms among them as the source of gathering evil. From the forest edge, the strength of the Council advances as pale, concentrated light, led by two robed figures suggesting Mithrandir and Curunír without heroic exaggeration. Above, dark birds wheel like spies against a smoky sky. Evil things flee or dissolve into the blackness around the fortress, their shapes half-seen, united malice breaking under the attack. At the center, a vast shadowy presence is driven from the hold, recoiling into the gloom. Near-monochrome blacks and greys, cold white radiance, faint ember-red highlights, cinematic scale and deep contrast."
+  },
+  {
+    "id": "War Of The Ring",
+    "aliases": [],
+    "type": "Event",
+    "file": "war-of-the-ring.png",
+    "prompt": "A shadow-mode epic fantasy matte painting of the War’s decisive hour: inside Mount Doom, two small Periannath figures stand at the brink of a roaring fire, dwarfed by black volcanic stone and a vast red-orange glow. One bears the Great Ring of Power, its beauty a bright, dangerous focal point just before it is cast into the flame where it was wrought. Beyond the fiery darkness, through smoke and ash, suggest the wider war: the host of the West gathered at Mordor’s Black Gates under deep shadow, with the Heir of Isildur among Men facing death and defeat. In the far distance, Barad-dûr’s towers crumble as Sauron passes away like a shadow of malice. Oppressive contrast, ember-lit ruin, no text."
+  },
+  {
+    "id": "Destruction Of The Ring",
+    "aliases": [],
+    "type": "Event",
+    "file": "destruction-of-the-ring.png",
+    "prompt": "A shadow-mode fantasy illustration of the One Ring’s unmaking in the Mountain of Fire: a vast volcanic chasm in the Land of Shadow, its black stone walls swallowed by smoke, ash, and deep crimson glare. At the center, the small golden Ring falls toward a furnace of molten fire, the only brilliant focal point, its fair surface shining against oppressive darkness. Around it, heat bends the air; sparks and embers rise like a storm. Beyond the open cleft, the ash-filled valley of Gorgoroth stretches under a darkened sky, with the ruined foundations of the Dark Tower lost in smoke. The scene feels like victory mingled with long-foreseen sorrow, the bound strength and will of Sauron dissolving into fire. Richly painted cinematic matte texture, no text."
   }
 ]

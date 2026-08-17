@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Silmarillion Agent</title>
+<link rel="stylesheet" href="/static/timeline.css">
 <style>
   :root {
     color-scheme: light dark;
@@ -70,7 +71,6 @@
     white-space: pre-wrap;
     line-height: 1.5;
   }
-  .card.timeline-card { white-space: normal; }
   .route { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
   .sources { font-size: 0.85rem; color: var(--muted); margin-top: 0.8rem; }
   .illustrations { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.8rem; }
@@ -94,28 +94,6 @@
     font-size: 0.8rem;
     margin: 0.2rem 0.3rem 0.2rem 0;
   }
-  .era-block { margin-bottom: 1rem; }
-  .era-block:last-child { margin-bottom: 0; }
-  .era-title { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
-  .era-events { display: flex; flex-wrap: wrap; gap: 0.6rem; }
-  .era-event { width: 140px; text-align: center; }
-  .era-event img {
-    display: block;
-    width: 140px;
-    height: 140px;
-    object-fit: cover;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    margin-bottom: 0.25rem;
-  }
-  .era-event .placeholder {
-    width: 140px;
-    height: 140px;
-    border-radius: 6px;
-    border: 1px dashed var(--border);
-    margin-bottom: 0.25rem;
-  }
-  .era-event span { font-size: 0.75rem; color: var(--muted); }
 </style>
 </head>
 <body>
@@ -147,43 +125,6 @@
 
   document.querySelectorAll('.ex').forEach(b => {
     b.addEventListener('click', () => { input.value = b.textContent; form.requestSubmit(); });
-  });
-
-  const timelineBtn = document.getElementById('timeline-btn');
-  timelineBtn.addEventListener('click', async () => {
-    timelineBtn.disabled = true;
-    resultDiv.innerHTML = '<div class="card">Loading timeline…</div>';
-
-    try {
-      const res = await fetch('/timeline');
-      const data = await res.json();
-
-      if (!res.ok) {
-        resultDiv.innerHTML = `<div class="card error">${data.detail || 'Something went wrong.'}</div>`;
-        return;
-      }
-
-      const eras = data.eras.map(era => `
-        <div class="era-block">
-          <div class="era-title">${era.era}</div>
-          <div class="era-events">
-            ${era.events.map(ev => `
-              <div class="era-event">
-                ${ev.illustration
-                  ? `<img src="${ev.illustration.url}" alt="${ev.id}">`
-                  : `<div class="placeholder"></div>`}
-                <span>${ev.id}</span>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `).join('');
-      resultDiv.innerHTML = `<div class="card timeline-card">${eras}</div>`;
-    } catch (err) {
-      resultDiv.innerHTML = '<div class="card error">Network error — please try again.</div>';
-    } finally {
-      timelineBtn.disabled = false;
-    }
   });
 
   form.addEventListener('submit', async (e) => {
@@ -229,5 +170,6 @@
     }
   });
 </script>
+<script src="/static/timeline.js"></script>
 </body>
 </html>
