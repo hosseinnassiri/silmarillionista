@@ -70,6 +70,7 @@
     white-space: pre-wrap;
     line-height: 1.5;
   }
+  .card.timeline-card { white-space: normal; }
   .route { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
   .sources { font-size: 0.85rem; color: var(--muted); margin-top: 0.8rem; }
   .illustrations { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.8rem; }
@@ -177,7 +178,7 @@
           </div>
         </div>
       `).join('');
-      resultDiv.innerHTML = `<div class="card">${eras}</div>`;
+      resultDiv.innerHTML = `<div class="card timeline-card">${eras}</div>`;
     } catch (err) {
       resultDiv.innerHTML = '<div class="card error">Network error — please try again.</div>';
     } finally {
