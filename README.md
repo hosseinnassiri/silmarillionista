@@ -10,6 +10,18 @@ layer → LangGraph agent → eval harness) are done. `main.py` is the single
 store and graph can also still be queried independently. Current numbers
 and a running list of what's been tuned live in [Evaluation](#evaluation).
 
+## License & attribution
+
+This is an unofficial, non-commercial fan project — not affiliated with or
+endorsed by the Tolkien Estate, HarperCollins, or Amazon. The text and
+characters of *The Silmarillion* belong to their respective rights holders;
+`data/raw/` contains the book's text for this project's own ingestion
+pipeline only, and isn't served by any app route (`src/api/app.py` only
+mounts `/static` and `/illustrations`). Illustrations under
+`data/processed/illustrations/` are AI-generated (Azure OpenAI
+`gpt-image-1`) fan art inspired by the book's descriptions, not official
+artwork.
+
 ## How it works
 
 ```mermaid
