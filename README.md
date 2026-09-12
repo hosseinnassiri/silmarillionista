@@ -303,7 +303,51 @@ OpenAI (`gpt-5.5` chat + `text-embedding-3-large`), a self-hosted Neo4j
 Community Edition Container App (replacing local Docker for the deployed
 version — same Cypher/APOC surface), Azure Container Registry with
 managed-identity pull/push (no stored registry credential), the main app's
-Container App, and a monthly budget alert. Two workflows apply it:
+Container App, a storage account (Neo4j's data volume, plus a Table Storage
+cache for repeated `/ask` questions — see
+[Response cache](#response-cache)), and a monthly budget alert.
+
+```mermaid
+flowchart TD
+    users(("End users")) -->|HTTPS| app
+    scripts(("Local pipeline scripts<br/><sub>extract / dedupe / timeline / generate</sub>")) -->|"HTTPS + ADMIN_API_KEY<br/>POST /admin/cypher"| app
+    gha["GitHub Actions<br/><sub>infra.yml + deploy.yml</sub>"] -.->|OIDC, no stored secret| rg
+
+    subgraph rg["Resource group: rg-silmarillion-prod-cac-001"]
+        subgraph cae["Container Apps Environment — no VNet<br/><sub>cae-silmarillion-prod-cac-001-v2</sub>"]
+            app["Main app<br/><sub>external HTTP ingress</sub>"]
+            neo4jApp[("Neo4j<br/><sub>internal-only Bolt ingress</sub>")]
+            app -->|Bolt, internal DNS, no public IP| neo4jApp
+        end
+
+        oai[("Azure OpenAI<br/><sub>gpt-5.5 chat + text-embedding-3-large</sub>")]
+        acr["Container Registry<br/><sub>Basic SKU</sub>"]
+        kv[("Key Vault<br/><sub>RBAC-mode secrets</sub>")]
+        storage[("Storage account<br/><sub>Files: Neo4j data · Table: askcache</sub>")]
+        logs[("Log Analytics")]
+        budget{{"Budget<br/><sub>50/80/100% alerts</sub>"}}
+
+        app -->|chat + embeddings| oai
+        app -->|"pull image<br/>(managed identity)"| acr
+        app -->|"read secrets<br/>(managed identity)"| kv
+        neo4jApp -->|"read secrets<br/>(managed identity)"| kv
+        neo4jApp -->|mount data volume| storage
+        app -->|"read/write askcache<br/>(managed identity)"| storage
+        app -.->|logs| logs
+        neo4jApp -.->|logs| logs
+        budget -.->|monitors spend| rg
+    end
+```
+
+No stored credentials anywhere in this picture — every arrow labeled "managed
+identity" is a user-assigned identity + RBAC role assignment
+(`infra/modules/*.bicep`, each grant colocated with the resource it's scoped
+to), and GitHub Actions itself authenticates via OIDC federation, not a
+stored Azure secret. Neo4j's Bolt ingress is internal-only (see
+[Reaching the deployed graph from local scripts](#reaching-the-deployed-graph-from-local-scripts))
+— there's deliberately no VNet, Load Balancer, or public IP for it, which is
+what the [one-time environment cutover](#one-time-environment-cutover-dropping-the-custom-vnet)
+below was for. Two workflows apply this:
 
 - **`.github/workflows/infra.yml`** — `az deployment group create` against
   `infra/main.bicep`. Runs on push to `main` touching `infra/**`, or manually
@@ -412,11 +456,34 @@ route every query through the app's authenticated `POST /admin/cypher`
 proxy over HTTPS instead of a direct Bolt connection. Leave them blank for
 normal local development.
 
+### Response cache
+
+`/ask` is public and unauthenticated, so repeated questions (bots, crawlers,
+or just someone retrying the same example) would otherwise pay full Azure
+OpenAI cost every time, even though the underlying text never changes.
+`src/cache.py` caches by normalized question in an Azure Table Storage table
+(`askcache`, on the same storage account as Neo4j's file share — no new
+billable resource), keyed with a `CACHE_VERSION` bumped to invalidate
+everything after a prompt/model change, plus a 90-day soft-expiry checked at
+read time. Illustrations are deliberately **not** cached — `find_illustrations()`
+still runs fresh on every request, cache hit or miss.
+
+Scoped to `POST /ask` itself (`src/api/app.py`) — never inside
+`src/agent/graph_app.py`'s `ask()`, since that's also called directly by
+`main.py` and `eval/run_eval.py`; caching there would silently serve stale
+answers to eval reruns instead of exercising the current code/prompts. Auth
+is managed identity + RBAC (`Storage Table Data Contributor`, granted in
+`infra/modules/storage.bicep`) — no stored account key. Local development is
+a no-op by default: `AZURE_STORAGE_ACCOUNT_NAME`/`AZURE_CLIENT_ID` are only
+set in the deployed Container App's env (see `.env.example` to point a local
+run at the live cache instead).
+
 ## Project layout
 
 ```text
 main.py                      # CLI entrypoint: ask(question) -> cited answer
 src/
+├── cache.py                 # /ask response cache (Table Storage; see Response cache)
 ├── config.py               # env vars, model names, paths
 ├── ingest/
 │   ├── clean_text.py       # raw .txt -> data/processed/chapters.json
@@ -430,6 +497,7 @@ src/
 │   ├── dedupe.py             # merge duplicate entity nodes
 │   ├── timeline.py           # curated era timeline -> HAPPENED_DURING edges
 │   ├── templates.py           # hand-written Cypher fallback for known question shapes
+│   ├── remote_graph.py        # get_graph() -> local Bolt, or the deployed admin-cypher proxy
 │   └── query.py             # graph_query(question) -> cypher + records
 └── agent/
     ├── state.py             # LangGraph state schema
