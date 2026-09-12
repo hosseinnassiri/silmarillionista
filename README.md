@@ -324,7 +324,6 @@ flowchart TD
     kv[("Key Vault<br/><sub>RBAC-mode secrets</sub>")]
     storage[("Storage account<br/><sub>Files: Neo4j data · Table: askcache</sub>")]
     logs[("Log Analytics")]
-    budget{{"Budget<br/><sub>50/80/100% alerts</sub>"}}
 
     app -->|chat + embeddings| oai
     app -->|"pull image<br/>(managed identity)"| acr
@@ -334,11 +333,6 @@ flowchart TD
     app -->|"read/write askcache<br/>(managed identity)"| storage
     app -.->|logs| logs
     neo4jApp -.->|logs| logs
-    budget -.->|monitors spend| cae
-    budget -.-> oai
-    budget -.-> acr
-    budget -.-> kv
-    budget -.-> storage
 ```
 
 All of this lives in one resource group (`rg-silmarillion-prod-cac-001`) —
