@@ -29,8 +29,9 @@ from langchain_neo4j import Neo4jGraph
 from openai import AzureOpenAI, BadRequestError
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
-from src.config import ILLUSTRATIONS_DIR, ILLUSTRATIONS_MANIFEST, NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME
+from src.config import ILLUSTRATIONS_DIR, ILLUSTRATIONS_MANIFEST
 from src.graph.dedupe import normalize
+from src.graph.remote_graph import get_graph
 from src.llm import get_chat_llm
 from src.vectorstore.retriever import vector_search
 
@@ -192,7 +193,10 @@ def main() -> None:
     ILLUSTRATIONS_DIR.mkdir(parents=True, exist_ok=True)
     manifest_by_id = {e["id"]: e for e in _load_manifest()}
 
-    graph = Neo4jGraph(url=NEO4J_URI, username=NEO4J_USERNAME, password=NEO4J_PASSWORD)
+    # refresh_schema=False: this script only runs direct MATCH queries, never
+    # LangChain's schema-dependent Cypher generation, so it doesn't need
+    # apoc.meta.data() (see the same note in extract.py/timeline.py).
+    graph = get_graph(refresh_schema=False)
     id_index = _build_id_index(graph)
     chat_llm = get_chat_llm()
     image_client = AzureOpenAI(azure_endpoint=image_endpoint, api_key=image_api_key, api_version=IMAGE_API_VERSION)

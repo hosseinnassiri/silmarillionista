@@ -80,9 +80,16 @@ param budgetStartDate string = utcNow('yyyy-MM-01')
 
 var nameSuffix = '${workloadName}-${environmentName}-${regionAbbreviation}-${instanceNumber}'
 var logAnalyticsName = 'log-${nameSuffix}'
-var containerAppEnvName = 'cae-${nameSuffix}'
-var vnetName = 'vnet-${nameSuffix}'
-var infrastructureSubnetName = 'snet-infra-${nameSuffix}'
+// '-v2' (not just nameSuffix) deliberately: a managed environment's VNet
+// integration is set at creation and can't be changed on an existing one —
+// dropping vnetConfiguration here requires a genuinely new environment
+// resource, not an in-place update of the old VNet-integrated one. Only
+// this name changes; nameSuffix (used for every other resource) is
+// untouched. See README's "Azure deployment" section for the cutover/cleanup
+// steps this requires — deleting the old cae-<nameSuffix> environment (and
+// its auto-managed resource group holding the old Standard Load Balancer +
+// public IP) is a manual, one-time step Bicep won't do for you.
+var containerAppEnvName = 'cae-${nameSuffix}-v2'
 var containerAppName = 'ca-${workloadName}-app-${environmentName}-${regionAbbreviation}-${instanceNumber}'
 // Container App names are capped at 32 chars. 'ca-<workload>-app-<env>-<region>-<instance>'
 // lands exactly at 32 for this workload; 'neo4j' (5 chars) is 2 longer than
@@ -126,8 +133,6 @@ module environment 'modules/environment.bicep' = {
     location: location
     logAnalyticsName: logAnalyticsName
     containerAppEnvName: containerAppEnvName
-    vnetName: vnetName
-    infrastructureSubnetName: infrastructureSubnetName
   }
 }
 
@@ -243,13 +248,17 @@ output openAiEndpoint string = openAi.outputs.endpoint
 output logAnalyticsName string = environment.outputs.logAnalyticsName
 output acrLoginServer string = registry.outputs.loginServer
 
-// So local scripts (src/graph/extract.py, dedupe.py, timeline.py, query.py)
-// and .env can point at this instance the same way they pointed at Aura.
+// Informational only — Neo4j has no external ingress (see neo4j.bicep), so
+// this URI only resolves from inside the Container Apps environment. Local
+// scripts no longer connect here directly; they go through the app's
+// authenticated /admin/cypher proxy (ADMIN_API_URL/ADMIN_API_KEY in .env —
+// see .env.example and src/graph/remote_graph.py).
 output neo4jUri string = 'bolt://${neo4j.outputs.fqdn}:${neo4jBoltPort}'
 output neo4jUsername string = neo4jUsername
 
-// Passwords are no longer deployment outputs — retrieve them via Key
+// Passwords/keys are no longer deployment outputs — retrieve them via Key
 // Vault's own audited access path instead of ARM deployment history:
 //   az keyvault secret show --vault-name <name> --name neo4j-password --query value -o tsv
+//   az keyvault secret show --vault-name <name> --name admin-api-key --query value -o tsv
 output keyVaultName string = keyVault.outputs.name
 output keyVaultUri string = keyVault.outputs.vaultUri

@@ -49,6 +49,11 @@ resource containerApp 'Microsoft.App/containerApps@2026-01-01' = {
           keyVaultUrl: '${keyVaultUri}secrets/neo4j-password'
           identity: identityId
         }
+        {
+          name: 'admin-api-key'
+          keyVaultUrl: '${keyVaultUri}secrets/admin-api-key'
+          identity: identityId
+        }
       ]
     }
     template: {
@@ -65,6 +70,7 @@ resource containerApp 'Microsoft.App/containerApps@2026-01-01' = {
             { name: 'NEO4J_URI', value: neo4jUri }
             { name: 'NEO4J_USERNAME', value: neo4jUsername }
             { name: 'NEO4J_PASSWORD', secretRef: 'neo4j-password' }
+            { name: 'ADMIN_API_KEY', secretRef: 'admin-api-key' }
           ]
           resources: {
             cpu: json('0.5')

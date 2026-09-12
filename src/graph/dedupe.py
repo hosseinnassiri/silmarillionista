@@ -15,7 +15,7 @@ from pathlib import Path
 from langchain_neo4j import Neo4jGraph
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
-from src.config import NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME
+from src.graph.remote_graph import get_graph
 
 
 def normalize(name: str) -> str:
@@ -73,9 +73,7 @@ def run_dedupe(graph: Neo4jGraph) -> int:
 
 def main() -> None:
     # refresh_schema=False: see the same note in extract.py/timeline.py.
-    graph = Neo4jGraph(
-        url=NEO4J_URI, username=NEO4J_USERNAME, password=NEO4J_PASSWORD, refresh_schema=False
-    )
+    graph = get_graph(refresh_schema=False)
     run_dedupe(graph)
 
 

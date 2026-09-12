@@ -80,6 +80,22 @@ resource neo4jAuthSecret 'Microsoft.KeyVault/vaults/secrets@2026-03-01-preview' 
   }
 }
 
+// Shared secret for the app's own POST /admin/cypher proxy (see
+// src/api/app.py / src/graph/remote_graph.py) — lets local pipeline scripts
+// (extract.py, dedupe.py, timeline.py, major_events.py, illustrations/
+// generate.py) run Cypher against the deployed graph over HTTPS now that
+// Neo4j has no external Bolt ingress. Deterministic per resource group,
+// same rationale as neo4jPasswordValue above.
+var adminApiKeyValue = guid(resourceGroup().id, 'admin-api-key')
+
+resource adminApiKeySecret 'Microsoft.KeyVault/vaults/secrets@2026-03-01-preview' = {
+  parent: keyVault
+  name: 'admin-api-key'
+  properties: {
+    value: adminApiKeyValue
+  }
+}
+
 resource openAiAccount 'Microsoft.CognitiveServices/accounts@2026-05-15-preview' existing = {
   name: openAiAccountName
 }

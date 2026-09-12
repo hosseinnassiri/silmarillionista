@@ -14,10 +14,8 @@ import sys
 import unicodedata
 from pathlib import Path
 
-from langchain_neo4j import Neo4jGraph
-
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
-from src.config import NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME
+from src.graph.remote_graph import get_graph
 
 ERAS = [
     ("Years of the Lamps", 1),
@@ -124,9 +122,7 @@ def main() -> None:
     # never LangChain's schema-dependent Cypher generation, so it doesn't need
     # apoc.meta.data() — which prod's narrow APOC allowlist doesn't permit
     # (see infra/modules/neo4j.bicep's NEO4J_dbms_security_procedures_allowlist).
-    graph = Neo4jGraph(
-        url=NEO4J_URI, username=NEO4J_USERNAME, password=NEO4J_PASSWORD, refresh_schema=False
-    )
+    graph = get_graph(refresh_schema=False)
 
     existing_events = graph.query("MATCH (e:Event) RETURN e.id AS id")
     by_norm = {normalize(r["id"]): r["id"] for r in existing_events}

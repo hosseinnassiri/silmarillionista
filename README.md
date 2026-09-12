@@ -301,10 +301,9 @@ Chroma is just files on disk — zip `data/processed/chroma_db/` directly.
 `infra/main.bicep` provisions everything the hosted version needs — Azure
 OpenAI (`gpt-5.5` chat + `text-embedding-3-large`), a self-hosted Neo4j
 Community Edition Container App (replacing local Docker for the deployed
-version — same Cypher/APOC surface, no code changes), Azure Container
-Registry with managed-identity pull/push (no stored registry credential),
-the main app's Container App, and a monthly budget alert. Two workflows
-apply it:
+version — same Cypher/APOC surface), Azure Container Registry with
+managed-identity pull/push (no stored registry credential), the main app's
+Container App, and a monthly budget alert. Two workflows apply it:
 
 - **`.github/workflows/infra.yml`** — `az deployment group create` against
   `infra/main.bicep`. Runs on push to `main` touching `infra/**`, or manually
@@ -317,6 +316,29 @@ apply it:
 
 Both authenticate to Azure via **OIDC** (`azure/login@v2`, no stored Azure
 secret in GitHub) using a federated identity credential scoped to this repo.
+
+### One-time environment cutover (dropping the custom VNet)
+
+A Container Apps environment's VNet integration is set at creation and
+can't be changed in place, so removing the custom VNet (previously needed
+only for Neo4j's external Bolt ingress — see `infra/modules/environment.bicep`)
+meant renaming the environment (`cae-<nameSuffix>-v2` in `infra/main.bicep`)
+rather than editing the existing one. Pushing this creates a **new**
+environment and redeploys the app + Neo4j Container Apps into it (brief
+downtime for both while that happens; the Neo4j data itself is untouched —
+it lives on the Azure Files share, a separate resource the new environment
+remounts by name). The old `cae-<nameSuffix>` environment and its
+auto-managed resource group (the Standard Load Balancer + public IP this
+whole change was meant to stop paying for) are **not** deleted
+automatically — after confirming the app and `/timeline` work against the
+new environment, delete the old one manually:
+
+```bash
+az containerapp env delete --name cae-silmarillion-prod-cac-001 \
+  --resource-group rg-silmarillion-prod-cac-001 --yes
+```
+
+Skipping this step means paying for both environments at once.
 
 ### One-time bootstrap (not managed by Bicep, done once via `az`/`gh` CLI)
 
@@ -376,6 +398,19 @@ No `NEO4J_*` or registry-credential secrets are needed — Neo4j is
 self-hosted inside the same resource group with a password Bicep generates
 deterministically at deploy time, and ACR access uses the Container App's
 own managed identity rather than a stored PAT/credential.
+
+### Reaching the deployed graph from local scripts
+
+Neo4j has no external ingress — it's reachable over Bolt only from inside
+the Container Apps environment (i.e. from the main app itself), which keeps
+this deployment from needing a custom VNet + Standard Load Balancer +
+public IP billed 24/7 just to expose a rarely-used admin path. To run
+`extract.py`/`dedupe.py`/`timeline.py`/`major_events.py`/`illustrations/
+generate.py` against the deployed graph instead of your local Docker Neo4j,
+set `ADMIN_API_URL`/`ADMIN_API_KEY` in `.env` (see `.env.example`) — these
+route every query through the app's authenticated `POST /admin/cypher`
+proxy over HTTPS instead of a direct Bolt connection. Leave them blank for
+normal local development.
 
 ## Project layout
 

@@ -17,8 +17,9 @@ from langchain_core.documents import Document
 from langchain_neo4j import LLMGraphTransformer, Neo4jGraph
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
-from src.config import CHUNKS_PATH, NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME
+from src.config import CHUNKS_PATH
 from src.graph.dedupe import run_dedupe
+from src.graph.remote_graph import get_graph
 from src.graph.schema import ALLOWED_NODES, ALLOWED_RELATIONSHIPS
 from src.llm import get_chat_llm
 
@@ -91,9 +92,7 @@ async def main_async() -> None:
     # never LangChain's schema-dependent Cypher generation, so it doesn't need
     # apoc.meta.data() — which a narrowly-allowlisted Neo4j instance may not permit
     # (see infra/modules/neo4j.bicep's NEO4J_dbms_security_procedures_allowlist).
-    graph = Neo4jGraph(
-        url=NEO4J_URI, username=NEO4J_USERNAME, password=NEO4J_PASSWORD, refresh_schema=False
-    )
+    graph = get_graph(refresh_schema=False)
 
     done_keys = already_processed_keys(graph)
     remaining = [d for d in documents if chunk_key(d.metadata) not in done_keys]

@@ -6,6 +6,7 @@ cap, set at deployment time (see README/deploy notes) — but it stops a single
 client from hammering the endpoint and keeps response latency fair.
 """
 
+import hmac
 import logging
 import time
 from collections import defaultdict
@@ -14,11 +15,12 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from langchain_neo4j import Neo4jGraph
 from openai import OpenAIError
 from pydantic import BaseModel
 
 from src.agent.graph_app import ask
-from src.config import ILLUSTRATIONS_DIR
+from src.config import ADMIN_API_KEY, ILLUSTRATIONS_DIR, NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME
 from src.graph.major_events import get_timeline
 from src.illustrations.lookup import find_illustrations, get_illustration
 
@@ -72,6 +74,15 @@ class TimelineEra(BaseModel):
 
 class TimelineResponse(BaseModel):
     eras: list[TimelineEra]
+
+
+class CypherRequest(BaseModel):
+    query: str
+    params: dict = {}
+
+
+class CypherResponse(BaseModel):
+    records: list[dict]
 
 
 @app.post("/ask", response_model=AskResponse)
@@ -141,6 +152,41 @@ def timeline_endpoint() -> TimelineResponse:
             for era in eras
         ]
     )
+
+
+_admin_graph: Neo4jGraph | None = None
+
+
+def _get_admin_graph() -> Neo4jGraph:
+    global _admin_graph
+    if _admin_graph is None:
+        _admin_graph = Neo4jGraph(
+            url=NEO4J_URI, username=NEO4J_USERNAME, password=NEO4J_PASSWORD, refresh_schema=False
+        )
+    return _admin_graph
+
+
+@app.post("/admin/cypher", response_model=CypherResponse)
+def admin_cypher(body: CypherRequest, request: Request) -> CypherResponse:
+    """Arbitrary Cypher execution against Neo4j, over the app's own (already
+    public) HTTPS ingress. This is how local pipeline scripts (extract.py,
+    dedupe.py, timeline.py, major_events.py, illustrations/generate.py)
+    reach the deployed graph now that Neo4j has no external Bolt ingress —
+    see src/graph/remote_graph.py. Gated on a shared secret rather than
+    request shape, since these scripts legitimately need full MERGE/DELETE/
+    APOC access, not just reads.
+    """
+    key = request.headers.get("X-Admin-Key", "")
+    if not ADMIN_API_KEY or not hmac.compare_digest(key, ADMIN_API_KEY):
+        raise HTTPException(status_code=401, detail="unauthorized")
+
+    try:
+        records = _get_admin_graph().query(body.query, params=body.params)
+    except Exception as e:
+        logger.exception("Admin Cypher query failed: %r", body.query)
+        raise HTTPException(status_code=502, detail=str(e)) from e
+
+    return CypherResponse(records=records)
 
 
 @app.get("/")

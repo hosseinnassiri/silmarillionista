@@ -39,6 +39,7 @@ from langchain_neo4j import Neo4jGraph
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from src.config import NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME
+from src.graph.remote_graph import get_graph
 
 
 def normalize(name: str) -> str:
@@ -88,6 +89,12 @@ _graph: Neo4jGraph | None = None
 
 
 def _get_graph() -> Neo4jGraph:
+    """Used by get_timeline() only, which runs inside the deployed app — a
+    direct Bolt connection over the Container Apps environment's internal
+    DNS. main() (the local CLI entry point below) uses get_graph() instead,
+    since it also needs to support targeting the deployed graph remotely
+    (see src/graph/remote_graph.py).
+    """
     global _graph
     if _graph is None:
         # refresh_schema=False: only direct MATCH/SET queries run here, never
@@ -121,7 +128,7 @@ def get_timeline() -> list[dict]:
 
 
 def main() -> None:
-    graph = _get_graph()
+    graph = get_graph(refresh_schema=False)
     existing = graph.query("MATCH (e:Event) RETURN e.id AS id")
     by_norm = {normalize(r["id"]): r["id"] for r in existing if r["id"]}
 

@@ -19,11 +19,17 @@ resource neo4jApp 'Microsoft.App/containerApps@2026-01-01' = {
     managedEnvironmentId: containerAppEnvironmentId
     configuration: {
       activeRevisionsMode: 'Single'
+      // external: false — Bolt is internal-only now. External TCP ingress
+      // required its own VNet + Standard Load Balancer + public IP, billed
+      // 24/7 regardless of traffic. Only the main app talks Bolt to Neo4j
+      // now (via the app.bicep-configured NEO4J_URI, resolved over the
+      // environment's internal DNS); local scripts go through the app's
+      // authenticated /admin/cypher proxy instead (see
+      // src/graph/remote_graph.py).
       ingress: {
-        external: true
+        external: false
         transport: 'tcp'
         targetPort: neo4jBoltPort
-        exposedPort: neo4jBoltPort
       }
       secrets: [
         {
