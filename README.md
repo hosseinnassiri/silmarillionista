@@ -311,35 +311,40 @@ cache for repeated `/ask` questions — see
 flowchart TD
     users(("End users")) -->|HTTPS| app
     scripts(("Local pipeline scripts<br/><sub>extract / dedupe / timeline / generate</sub>")) -->|"HTTPS + ADMIN_API_KEY<br/>POST /admin/cypher"| app
-    gha["GitHub Actions<br/><sub>infra.yml + deploy.yml</sub>"] -.->|OIDC, no stored secret| rg
+    gha["GitHub Actions<br/><sub>infra.yml + deploy.yml</sub>"] -.->|OIDC, no stored secret| cae
 
-    subgraph rg["Resource group: rg-silmarillion-prod-cac-001"]
-        subgraph cae["Container Apps Environment — no VNet<br/><sub>cae-silmarillion-prod-cac-001-v2</sub>"]
-            app["Main app<br/><sub>external HTTP ingress</sub>"]
-            neo4jApp[("Neo4j<br/><sub>internal-only Bolt ingress</sub>")]
-            app -->|Bolt, internal DNS, no public IP| neo4jApp
-        end
-
-        oai[("Azure OpenAI<br/><sub>gpt-5.5 chat + text-embedding-3-large</sub>")]
-        acr["Container Registry<br/><sub>Basic SKU</sub>"]
-        kv[("Key Vault<br/><sub>RBAC-mode secrets</sub>")]
-        storage[("Storage account<br/><sub>Files: Neo4j data · Table: askcache</sub>")]
-        logs[("Log Analytics")]
-        budget{{"Budget<br/><sub>50/80/100% alerts</sub>"}}
-
-        app -->|chat + embeddings| oai
-        app -->|"pull image<br/>(managed identity)"| acr
-        app -->|"read secrets<br/>(managed identity)"| kv
-        neo4jApp -->|"read secrets<br/>(managed identity)"| kv
-        neo4jApp -->|mount data volume| storage
-        app -->|"read/write askcache<br/>(managed identity)"| storage
-        app -.->|logs| logs
-        neo4jApp -.->|logs| logs
-        budget -.->|monitors spend| rg
+    subgraph cae["Container Apps Environment — no VNet<br/><sub>cae-silmarillion-prod-cac-001-v2</sub>"]
+        app["Main app<br/><sub>external HTTP ingress</sub>"]
+        neo4jApp[("Neo4j<br/><sub>internal-only Bolt ingress</sub>")]
+        app -->|Bolt, internal DNS, no public IP| neo4jApp
     end
+
+    oai[("Azure OpenAI<br/><sub>gpt-5.5 chat + text-embedding-3-large</sub>")]
+    acr["Container Registry<br/><sub>Basic SKU</sub>"]
+    kv[("Key Vault<br/><sub>RBAC-mode secrets</sub>")]
+    storage[("Storage account<br/><sub>Files: Neo4j data · Table: askcache</sub>")]
+    logs[("Log Analytics")]
+    budget{{"Budget<br/><sub>50/80/100% alerts</sub>"}}
+
+    app -->|chat + embeddings| oai
+    app -->|"pull image<br/>(managed identity)"| acr
+    app -->|"read secrets<br/>(managed identity)"| kv
+    neo4jApp -->|"read secrets<br/>(managed identity)"| kv
+    neo4jApp -->|mount data volume| storage
+    app -->|"read/write askcache<br/>(managed identity)"| storage
+    app -.->|logs| logs
+    neo4jApp -.->|logs| logs
+    budget -.->|monitors spend| cae
+    budget -.-> oai
+    budget -.-> acr
+    budget -.-> kv
+    budget -.-> storage
 ```
 
-No stored credentials anywhere in this picture — every arrow labeled "managed
+All of this lives in one resource group (`rg-silmarillion-prod-cac-001`) —
+flattened here since nesting a resource-group box around an environment box
+that itself contains apps isn't something Mermaid renders reliably. No
+stored credentials anywhere in this picture — every arrow labeled "managed
 identity" is a user-assigned identity + RBAC role assignment
 (`infra/modules/*.bicep`, each grant colocated with the resource it's scoped
 to), and GitHub Actions itself authenticates via OIDC federation, not a
