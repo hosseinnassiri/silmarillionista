@@ -14,6 +14,8 @@ param embeddingDeploymentName string
 param neo4jUri string
 param neo4jUsername string
 param keyVaultUri string
+param storageAccountName string
+param appIdentityClientId string
 
 resource containerApp 'Microsoft.App/containerApps@2026-01-01' = {
   name: containerAppName
@@ -71,6 +73,8 @@ resource containerApp 'Microsoft.App/containerApps@2026-01-01' = {
             { name: 'NEO4J_USERNAME', value: neo4jUsername }
             { name: 'NEO4J_PASSWORD', secretRef: 'neo4j-password' }
             { name: 'ADMIN_API_KEY', secretRef: 'admin-api-key' }
+            { name: 'AZURE_STORAGE_ACCOUNT_NAME', value: storageAccountName }
+            { name: 'AZURE_CLIENT_ID', value: appIdentityClientId }
           ]
           resources: {
             cpu: json('0.5')

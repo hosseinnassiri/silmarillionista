@@ -191,6 +191,7 @@ module storage 'modules/storage.bicep' = {
     fileShareQuotaGb: neo4jFileShareQuotaGb
     containerAppEnvironmentName: environment.outputs.environmentName
     envStorageName: neo4jEnvStorageName
+    appPrincipalId: appIdentity.properties.principalId
   }
 }
 
@@ -229,6 +230,8 @@ module app 'modules/app.bicep' = {
     neo4jUri: 'bolt://${neo4j.outputs.fqdn}:${neo4jBoltPort}'
     neo4jUsername: neo4jUsername
     keyVaultUri: keyVault.outputs.vaultUri
+    storageAccountName: storage.outputs.storageAccountName
+    appIdentityClientId: appIdentity.properties.clientId
   }
 }
 

@@ -20,6 +20,7 @@ from openai import OpenAIError
 from pydantic import BaseModel
 
 from src.agent.graph_app import ask
+from src.cache import get_cached_answer, set_cached_answer
 from src.config import ADMIN_API_KEY, ILLUSTRATIONS_DIR, NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME
 from src.graph.major_events import get_timeline
 from src.illustrations.lookup import find_illustrations, get_illustration
@@ -96,25 +97,30 @@ def ask_endpoint(body: AskRequest, request: Request) -> AskResponse:
     client_ip = request.client.host if request.client else "unknown"
     _check_rate_limit(client_ip)
 
-    try:
-        result = ask(question)
-    except OpenAIError as e:
-        # OpenAIError is the SDK's actual base exception — APIError (used
-        # here previously) only covers call-time failures like content
-        # filtering; config-time errors (e.g. missing/invalid credentials,
-        # raised directly as OpenAIError by the Azure client constructor)
-        # slipped past that narrower catch and hit Starlette's default
-        # plain-text 500 handler instead of this one.
-        logger.exception("LLM call failed for question: %r", question)
-        if "content_filter" in str(e):
+    result = get_cached_answer(question)
+    if result is None:
+        try:
+            result = ask(question)
+        except OpenAIError as e:
+            # OpenAIError is the SDK's actual base exception — APIError (used
+            # here previously) only covers call-time failures like content
+            # filtering; config-time errors (e.g. missing/invalid credentials,
+            # raised directly as OpenAIError by the Azure client constructor)
+            # slipped past that narrower catch and hit Starlette's default
+            # plain-text 500 handler instead of this one.
+            logger.exception("LLM call failed for question: %r", question)
+            if "content_filter" in str(e):
+                raise HTTPException(
+                    status_code=422,
+                    detail=(
+                        "Azure's content filter blocked this answer (battle/violence content in the "
+                        "source text is a common trigger). Try rephrasing the question."
+                    ),
+                ) from e
             raise HTTPException(
-                status_code=422,
-                detail=(
-                    "Azure's content filter blocked this answer (battle/violence content in the "
-                    "source text is a common trigger). Try rephrasing the question."
-                ),
+                status_code=502, detail="The language model failed to answer. Please try again."
             ) from e
-        raise HTTPException(status_code=502, detail="The language model failed to answer. Please try again.") from e
+        set_cached_answer(question, result)
 
     images: list[dict] = []
     try:

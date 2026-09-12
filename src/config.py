@@ -38,5 +38,16 @@ NEO4J_PASSWORD = os.environ.get("NEO4J_PASSWORD")
 ADMIN_API_URL = os.environ.get("ADMIN_API_URL", "")
 ADMIN_API_KEY = os.environ.get("ADMIN_API_KEY", "")
 
+# Table Storage-backed /ask response cache (src/cache.py). Empty by default --
+# local Docker dev has no managed identity to authenticate with and no Table
+# Storage to hit, so the cache silently no-ops (every question is a miss,
+# ask() runs normally) until these are set, which only happens via
+# app.bicep's container env in the deployed Container App. AZURE_CLIENT_ID is
+# the app's user-assigned identity's client ID -- needed because this
+# container app has no system-assigned identity, and DefaultAzureCredential
+# alone doesn't reliably resolve a user-assigned-only identity.
+AZURE_STORAGE_ACCOUNT_NAME = os.environ.get("AZURE_STORAGE_ACCOUNT_NAME", "")
+AZURE_CLIENT_ID = os.environ.get("AZURE_CLIENT_ID", "")
+
 CHUNK_SIZE = 500
 CHUNK_OVERLAP = 50
