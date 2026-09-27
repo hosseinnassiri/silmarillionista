@@ -19,10 +19,14 @@ ILLUSTRATIONS_MANIFEST = ILLUSTRATIONS_DIR / "manifest.json"
 AZURE_OPENAI_API_KEY = os.environ.get("AZURE_OPENAI_API_KEY")
 AZURE_OPENAI_ENDPOINT = os.environ.get("AZURE_OPENAI_ENDPOINT")
 AZURE_OPENAI_API_VERSION = os.environ.get("AZURE_OPENAI_API_VERSION", "2024-10-21")
-AZURE_OPENAI_CHAT_DEPLOYMENT = os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT", "gpt-5.5")
+AZURE_OPENAI_CHAT_DEPLOYMENT = os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT", "gpt-5.6-terra")
 AZURE_OPENAI_EMBEDDING_DEPLOYMENT = os.environ.get(
     "AZURE_OPENAI_EMBEDDING_DEPLOYMENT", "text-embedding-3-large"
 )
+# Cheap/fast deployment for router_node's classification only (src/llm.py's
+# get_router_llm()) -- synthesis and Cypher generation stay on the deployment
+# above.
+AZURE_OPENAI_ROUTER_DEPLOYMENT = os.environ.get("AZURE_OPENAI_ROUTER_DEPLOYMENT", "gpt-5.6-luna")
 
 NEO4J_URI = os.environ.get("NEO4J_URI", "bolt://localhost:7687")
 NEO4J_USERNAME = os.environ.get("NEO4J_USERNAME", "neo4j")

@@ -4,11 +4,15 @@ param chatDeploymentName string
 param chatModelName string
 param chatModelVersion string
 param chatModelCapacity int
+param routerDeploymentName string
+param routerModelName string
+param routerModelVersion string
+param routerModelCapacity int
 param embeddingDeploymentName string
 param embeddingModelVersion string
 param embeddingModelCapacity int
 
-resource openAiAccount 'Microsoft.CognitiveServices/accounts@2026-05-15-preview' = {
+resource openAiAccount 'Microsoft.CognitiveServices/accounts@2026-07-01' = {
   name: openAiAccountName
   location: location
   kind: 'OpenAI'
@@ -30,7 +34,7 @@ resource openAiAccount 'Microsoft.CognitiveServices/accounts@2026-05-15-preview'
 // severe/extreme content); Hate/Sexual/Selfharm stay at the default Medium.
 // Raising a threshold like this is self-service — no Limited Access
 // approval needed, unlike disabling a category outright.
-resource chatRaiPolicy 'Microsoft.CognitiveServices/accounts/raiPolicies@2026-05-15-preview' = {
+resource chatRaiPolicy 'Microsoft.CognitiveServices/accounts/raiPolicies@2026-07-01' = {
   parent: openAiAccount
   name: 'silmarillion-narrative'
   properties: {
@@ -49,7 +53,7 @@ resource chatRaiPolicy 'Microsoft.CognitiveServices/accounts/raiPolicies@2026-05
   }
 }
 
-resource chatDeployment 'Microsoft.CognitiveServices/accounts/deployments@2026-05-15-preview' = {
+resource chatDeployment 'Microsoft.CognitiveServices/accounts/deployments@2026-07-01' = {
   parent: openAiAccount
   name: chatDeploymentName
   sku: {
@@ -66,7 +70,7 @@ resource chatDeployment 'Microsoft.CognitiveServices/accounts/deployments@2026-0
   }
 }
 
-resource embeddingDeployment 'Microsoft.CognitiveServices/accounts/deployments@2026-05-15-preview' = {
+resource embeddingDeployment 'Microsoft.CognitiveServices/accounts/deployments@2026-07-01' = {
   parent: openAiAccount
   name: embeddingDeploymentName
   sku: {
@@ -82,6 +86,30 @@ resource embeddingDeployment 'Microsoft.CognitiveServices/accounts/deployments@2
   }
   dependsOn: [
     chatDeployment
+  ]
+}
+
+// Cheap/fast deployment for router_node's 3-way classification only (see
+// src/llm.py:get_router_llm()) — synthesis and Cypher generation stay on
+// chatDeployment. Same RAI policy as chatDeployment: the router still sees
+// the raw user question, so it needs the same Violence-severity override.
+resource routerDeployment 'Microsoft.CognitiveServices/accounts/deployments@2026-07-01' = {
+  parent: openAiAccount
+  name: routerDeploymentName
+  sku: {
+    name: 'GlobalStandard'
+    capacity: routerModelCapacity
+  }
+  properties: {
+    model: {
+      format: 'OpenAI'
+      name: routerModelName
+      version: routerModelVersion
+    }
+    raiPolicyName: chatRaiPolicy.name
+  }
+  dependsOn: [
+    embeddingDeployment
   ]
 }
 

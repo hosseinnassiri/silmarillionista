@@ -30,17 +30,29 @@ param acrName string = 'cr${workloadName}${environmentName}${regionAbbreviation}
 @description('Object ID of the GitHub Actions deploy service principal (silmarillion-agent-deploy). Granted AcrPush in modules/registry.bicep and Key Vault Secrets Officer (self-grant) in modules/keyVault.bicep.')
 param deployServicePrincipalObjectId string
 
-@description('Azure OpenAI chat deployment name.')
-param chatDeploymentName string = 'gpt-5.5'
+@description('Azure OpenAI chat deployment name — used for Cypher generation and answer synthesis (the quality-sensitive steps). Routing uses the separate, cheaper deployment below.')
+param chatDeploymentName string = 'gpt-5.6-terra'
 
 @description('Azure OpenAI chat model name as it appears in the Azure model catalog. CONFIRM GlobalStandard SKU availability for the exact model+version+region combination against `az cognitiveservices model list --location <region>` before changing this — availability is not consistent across model versions even within the same model family.')
-param chatModelName string = 'gpt-5.5'
+param chatModelName string = 'gpt-5.6-terra'
 
 @description('Azure OpenAI chat model version.')
-param chatModelVersion string = '2026-04-24'
+param chatModelVersion string = '2026-07-09'
 
 @description('Chat deployment capacity in units of 1K tokens/minute. Kept low as the primary abuse/cost guardrail.')
 param chatModelCapacity int = 10
+
+@description('Azure OpenAI router deployment name — used only for router_node\'s 3-way classification (see src/llm.py:get_router_llm()). Deliberately a cheaper/faster tier than chatDeploymentName; this step runs on every question and doesn\'t need frontier-model reasoning.')
+param routerDeploymentName string = 'gpt-5.6-luna'
+
+@description('Azure OpenAI router model name. Same availability caveat as chatModelName.')
+param routerModelName string = 'gpt-5.6-luna'
+
+@description('Azure OpenAI router model version.')
+param routerModelVersion string = '2026-07-09'
+
+@description('Router deployment capacity in units of 1K tokens/minute.')
+param routerModelCapacity int = 10
 
 @description('Azure OpenAI embedding deployment name.')
 param embeddingDeploymentName string = 'text-embedding-3-large'
@@ -145,6 +157,10 @@ module openAi 'modules/openAi.bicep' = {
     chatModelName: chatModelName
     chatModelVersion: chatModelVersion
     chatModelCapacity: chatModelCapacity
+    routerDeploymentName: routerDeploymentName
+    routerModelName: routerModelName
+    routerModelVersion: routerModelVersion
+    routerModelCapacity: routerModelCapacity
     embeddingDeploymentName: embeddingDeploymentName
     embeddingModelVersion: embeddingModelVersion
     embeddingModelCapacity: embeddingModelCapacity
@@ -226,6 +242,7 @@ module app 'modules/app.bicep' = {
     azureOpenAiEndpoint: openAi.outputs.endpoint
     azureOpenAiApiVersion: azureOpenAiApiVersion
     chatDeploymentName: chatDeploymentName
+    routerDeploymentName: routerDeploymentName
     embeddingDeploymentName: embeddingDeploymentName
     neo4jUri: 'bolt://${neo4j.outputs.fqdn}:${neo4jBoltPort}'
     neo4jUsername: neo4jUsername

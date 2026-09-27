@@ -10,7 +10,7 @@ from pydantic import BaseModel
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from src.agent.state import AgentState
 from src.graph.query import graph_query
-from src.llm import get_chat_llm
+from src.llm import get_chat_llm, get_router_llm
 from src.vectorstore.retriever import vector_search
 
 ROUTER_SYSTEM = """\
@@ -54,7 +54,7 @@ _router_llm = None
 def _get_router_llm():
     global _router_llm
     if _router_llm is None:
-        _router_llm = get_chat_llm().with_structured_output(RouteDecision)
+        _router_llm = get_router_llm().with_structured_output(RouteDecision)
     return _router_llm
 
 

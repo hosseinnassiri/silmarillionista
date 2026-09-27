@@ -10,6 +10,7 @@ param maxReplicas int
 param azureOpenAiEndpoint string
 param azureOpenAiApiVersion string
 param chatDeploymentName string
+param routerDeploymentName string
 param embeddingDeploymentName string
 param neo4jUri string
 param neo4jUsername string
@@ -68,6 +69,7 @@ resource containerApp 'Microsoft.App/containerApps@2026-01-01' = {
             { name: 'AZURE_OPENAI_ENDPOINT', value: azureOpenAiEndpoint }
             { name: 'AZURE_OPENAI_API_VERSION', value: azureOpenAiApiVersion }
             { name: 'AZURE_OPENAI_CHAT_DEPLOYMENT', value: chatDeploymentName }
+            { name: 'AZURE_OPENAI_ROUTER_DEPLOYMENT', value: routerDeploymentName }
             { name: 'AZURE_OPENAI_EMBEDDING_DEPLOYMENT', value: embeddingDeploymentName }
             { name: 'NEO4J_URI', value: neo4jUri }
             { name: 'NEO4J_USERNAME', value: neo4jUsername }
