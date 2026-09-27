@@ -87,8 +87,8 @@ param budgetAmount int = 50
 @description('Email notified at 50/80/100% of the monthly budget.')
 param budgetContactEmail string = 'hossein.nassiri@gmail.com'
 
-@description('First day of the current month, used as the budget start date. Do not override — utcNow() is only valid as a parameter default.')
-param budgetStartDate string = utcNow('yyyy-MM-01')
+@description('Budget start date — fixed at the date the budget was first created (2026-08-01), not recomputed. Azure Consumption budgets reject any update that changes an existing budget\'s startDate ("Start date of budgets cannot be updated"), so this must stay a stable literal, not utcNow(), or every redeploy in a new calendar month fails the budget module.')
+param budgetStartDate string = '2026-08-01'
 
 var nameSuffix = '${workloadName}-${environmentName}-${regionAbbreviation}-${instanceNumber}'
 var logAnalyticsName = 'log-${nameSuffix}'
