@@ -9,6 +9,7 @@ COPY src/ ./src/
 COPY main.py ./
 COPY data/processed/chroma_db/ ./data/processed/chroma_db/
 COPY data/processed/illustrations/ ./data/processed/illustrations/
+COPY data/eval/questions.json ./data/eval/questions.json
 
 RUN uv sync --frozen
 

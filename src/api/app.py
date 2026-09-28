@@ -7,6 +7,7 @@ client from hammering the endpoint and keeps response latency fair.
 """
 
 import hmac
+import json
 import logging
 import time
 from collections import defaultdict
@@ -21,7 +22,7 @@ from pydantic import BaseModel
 
 from src.agent.graph_app import ask
 from src.cache import get_cached_answer, set_cached_answer
-from src.config import ADMIN_API_KEY, ILLUSTRATIONS_DIR, NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME
+from src.config import ADMIN_API_KEY, EVAL_DIR, ILLUSTRATIONS_DIR, NEO4J_PASSWORD, NEO4J_URI, NEO4J_USERNAME
 from src.graph.major_events import get_timeline
 from src.illustrations.lookup import find_illustrations, get_illustration
 
@@ -84,6 +85,29 @@ class CypherRequest(BaseModel):
 
 class CypherResponse(BaseModel):
     records: list[dict]
+
+
+class EvalRequest(BaseModel):
+    limit: int | None = None
+
+
+class EvalResultItem(BaseModel):
+    id: str
+    category: str
+    question: str
+    expected_route: str
+    actual_route: str | None = None
+    answer: str | None = None
+    sources: list[str] | None = None
+    error: str | None = None
+
+
+class EvalResponse(BaseModel):
+    results: list[EvalResultItem]
+    total: int
+    errors: int
+    route_correct: int
+    route_accuracy: float
 
 
 @app.post("/ask", response_model=AskResponse)
@@ -193,6 +217,69 @@ def admin_cypher(body: CypherRequest, request: Request) -> CypherResponse:
         raise HTTPException(status_code=502, detail=str(e)) from e
 
     return CypherResponse(records=records)
+
+
+@app.post("/admin/eval", response_model=EvalResponse)
+def admin_eval(body: EvalRequest, request: Request) -> EvalResponse:
+    """Runs data/eval/questions.json through ask() in-process, against
+    whatever's actually deployed right now -- the live-deployment equivalent
+    of eval/run_eval.py. Added because injecting and running that script via
+    `az containerapp exec` proved unreliable (rate-limited/flaky WebSocket
+    handshakes on this environment). Calls ask() directly, same as
+    run_eval.py, so this never touches the /ask response cache -- eval
+    results must always reflect the current code/prompts, never a cached
+    answer from before. Gated the same way as /admin/cypher; body.limit lets
+    you run a cheap subset before committing to the full (slow, costly) set.
+    """
+    key = request.headers.get("X-Admin-Key", "")
+    if not ADMIN_API_KEY or not hmac.compare_digest(key, ADMIN_API_KEY):
+        raise HTTPException(status_code=401, detail="unauthorized")
+
+    questions = json.loads((EVAL_DIR / "questions.json").read_text(encoding="utf-8"))
+    if body.limit is not None:
+        questions = questions[: body.limit]
+
+    results: list[EvalResultItem] = []
+    route_correct = 0
+    errors = 0
+    for q in questions:
+        try:
+            state = ask(q["question"])
+            actual_route = state.get("route")
+            if actual_route == q["expected_route"]:
+                route_correct += 1
+            results.append(
+                EvalResultItem(
+                    id=q["id"],
+                    category=q["category"],
+                    question=q["question"],
+                    expected_route=q["expected_route"],
+                    actual_route=actual_route,
+                    answer=state.get("answer"),
+                    sources=state.get("sources"),
+                )
+            )
+        except Exception as e:
+            errors += 1
+            logger.exception("Eval question failed: %r", q["question"])
+            results.append(
+                EvalResultItem(
+                    id=q["id"],
+                    category=q["category"],
+                    question=q["question"],
+                    expected_route=q["expected_route"],
+                    error=str(e),
+                )
+            )
+
+    total = len(questions)
+    return EvalResponse(
+        results=results,
+        total=total,
+        errors=errors,
+        route_correct=route_correct,
+        route_accuracy=route_correct / total if total else 0.0,
+    )
 
 
 @app.get("/")
