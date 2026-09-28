@@ -10,5 +10,6 @@ backups/
 data/raw/
 data/processed/neo4j_db/
 data/eval/
+!data/eval/questions.json
 eval/
 README.md
