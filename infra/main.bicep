@@ -81,15 +81,6 @@ param maxReplicas int = 2
 @description('Port the main app listens on inside its container.')
 param targetPort int = 8000
 
-@description('Monthly budget amount in USD.')
-param budgetAmount int = 50
-
-@description('Email notified at 50/80/100% of the monthly budget.')
-param budgetContactEmail string = 'hossein.nassiri@gmail.com'
-
-@description('Budget start date — fixed at the date the budget was first created (2026-08-01), not recomputed. Azure Consumption budgets reject any update that changes an existing budget\'s startDate ("Start date of budgets cannot be updated"), so this must stay a stable literal, not utcNow(), or every redeploy in a new calendar month fails the budget module.')
-param budgetStartDate string = '2026-08-01'
-
 var nameSuffix = '${workloadName}-${environmentName}-${regionAbbreviation}-${instanceNumber}'
 var logAnalyticsName = 'log-${nameSuffix}'
 // '-v2' (not just nameSuffix) deliberately: a managed environment's VNet
@@ -109,7 +100,6 @@ var containerAppName = 'ca-${workloadName}-app-${environmentName}-${regionAbbrev
 // tightest-limit-first approach as keyVaultName above.
 var neo4jContainerAppName = 'ca-${workloadName}-neo4j-${regionAbbreviation}-${instanceNumber}'
 var openAiAccountName = 'oai-${nameSuffix}'
-var budgetName = 'budget-${workloadName}-${environmentName}-${instanceNumber}'
 var storageAccountName = 'st${workloadName}${environmentName}${regionAbbreviation}${instanceNumber}'
 var keyVaultName = 'kv-${workloadName}-${regionAbbreviation}-${instanceNumber}'
 var neo4jFileShareName = 'neo4j-data'
@@ -249,16 +239,6 @@ module app 'modules/app.bicep' = {
     keyVaultUri: keyVault.outputs.vaultUri
     storageAccountName: storage.outputs.storageAccountName
     appIdentityClientId: appIdentity.properties.clientId
-  }
-}
-
-module budget 'modules/budget.bicep' = {
-  name: 'budget'
-  params: {
-    budgetName: budgetName
-    budgetAmount: budgetAmount
-    budgetContactEmail: budgetContactEmail
-    budgetStartDate: budgetStartDate
   }
 }
 

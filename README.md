@@ -299,13 +299,13 @@ Chroma is just files on disk — zip `data/processed/chroma_db/` directly.
 ## Azure deployment
 
 `infra/main.bicep` provisions everything the hosted version needs — Azure
-OpenAI (`gpt-5.5` chat + `text-embedding-3-large`), a self-hosted Neo4j
-Community Edition Container App (replacing local Docker for the deployed
-version — same Cypher/APOC surface), Azure Container Registry with
-managed-identity pull/push (no stored registry credential), the main app's
-Container App, a storage account (Neo4j's data volume, plus a Table Storage
-cache for repeated `/ask` questions — see
-[Response cache](#response-cache)), and a monthly budget alert.
+OpenAI (`gpt-5.6-terra` chat + `gpt-5.6-luna` for routing + `text-embedding-3-large`),
+a self-hosted Neo4j Community Edition Container App (replacing local Docker
+for the deployed version — same Cypher/APOC surface), Azure Container
+Registry with managed-identity pull/push (no stored registry credential),
+the main app's Container App, and a storage account (Neo4j's data volume,
+plus a Table Storage cache for repeated `/ask` questions — see
+[Response cache](#response-cache)).
 
 ```mermaid
 flowchart TD
