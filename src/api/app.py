@@ -88,6 +88,7 @@ class CypherResponse(BaseModel):
 
 
 class EvalRequest(BaseModel):
+    offset: int = 0
     limit: int | None = None
 
 
@@ -104,6 +105,7 @@ class EvalResultItem(BaseModel):
 
 class EvalResponse(BaseModel):
     results: list[EvalResultItem]
+    dataset_total: int
     total: int
     errors: int
     route_correct: int
@@ -228,14 +230,19 @@ def admin_eval(body: EvalRequest, request: Request) -> EvalResponse:
     handshakes on this environment). Calls ask() directly, same as
     run_eval.py, so this never touches the /ask response cache -- eval
     results must always reflect the current code/prompts, never a cached
-    answer from before. Gated the same way as /admin/cypher; body.limit lets
-    you run a cheap subset before committing to the full (slow, costly) set.
+    answer from before. Gated the same way as /admin/cypher.
+
+    offset/limit page through the set: the full 43-question run exceeds
+    Container Apps' 240s ingress request timeout in one call, so batch it,
+    e.g. {"offset": 0, "limit": 15}, {"offset": 15, "limit": 15}, ...
     """
     key = request.headers.get("X-Admin-Key", "")
     if not ADMIN_API_KEY or not hmac.compare_digest(key, ADMIN_API_KEY):
         raise HTTPException(status_code=401, detail="unauthorized")
 
-    questions = json.loads((EVAL_DIR / "questions.json").read_text(encoding="utf-8"))
+    all_questions = json.loads((EVAL_DIR / "questions.json").read_text(encoding="utf-8"))
+    dataset_total = len(all_questions)
+    questions = all_questions[body.offset :]
     if body.limit is not None:
         questions = questions[: body.limit]
 
@@ -275,6 +282,7 @@ def admin_eval(body: EvalRequest, request: Request) -> EvalResponse:
     total = len(questions)
     return EvalResponse(
         results=results,
+        dataset_total=dataset_total,
         total=total,
         errors=errors,
         route_correct=route_correct,
