@@ -19,7 +19,7 @@ import json
 import logging
 import time
 
-from azure.core.exceptions import AzureError, ResourceExistsError, ResourceNotFoundError
+from azure.core.exceptions import ResourceExistsError, ResourceNotFoundError
 from azure.data.tables import TableClient
 from azure.identity import DefaultAzureCredential, ManagedIdentityCredential
 
@@ -88,22 +88,24 @@ def get_cached_answer(question: str) -> dict | None:
     if client is None:
         return None
 
+    # Broad except by design (not just AzureError): a cache read must never
+    # be the reason /ask fails, whatever the failure mode turns out to be
+    # (network, auth, or -- as happened live -- a value that doesn't
+    # (de)serialize the way we expect). Degrade to "miss," always.
     try:
         entity = client.get_entity(partition_key=CACHE_PARTITION_KEY, row_key=_cache_key(question))
+        if time.time() - entity.get("cached_at", 0) > CACHE_MAX_AGE_SECONDS:
+            return None
+        return {
+            "route": entity.get("route"),
+            "answer": entity.get("answer"),
+            "sources": json.loads(entity.get("sources") or "[]"),
+        }
     except ResourceNotFoundError:
         return None
-    except AzureError:
+    except Exception:
         logger.warning("Cache read failed", exc_info=True)
         return None
-
-    if time.time() - entity.get("cached_at", 0) > CACHE_MAX_AGE_SECONDS:
-        return None
-
-    return {
-        "route": entity.get("route"),
-        "answer": entity.get("answer"),
-        "sources": json.loads(entity.get("sources") or "[]"),
-    }
 
 
 def set_cached_answer(question: str, result: dict) -> None:
@@ -111,15 +113,17 @@ def set_cached_answer(question: str, result: dict) -> None:
     if client is None:
         return
 
-    entity = {
-        "PartitionKey": CACHE_PARTITION_KEY,
-        "RowKey": _cache_key(question),
-        "route": result.get("route") or "",
-        "answer": result.get("answer") or "",
-        "sources": json.dumps(result.get("sources") or []),
-        "cached_at": int(time.time()),
-    }
+    # Broad except, same reasoning as get_cached_answer above -- a cache
+    # write must never be the reason /ask fails.
     try:
+        entity = {
+            "PartitionKey": CACHE_PARTITION_KEY,
+            "RowKey": _cache_key(question),
+            "route": str(result.get("route") or ""),
+            "answer": str(result.get("answer") or ""),
+            "sources": json.dumps(result.get("sources") or []),
+            "cached_at": int(time.time()),
+        }
         client.upsert_entity(entity)
-    except AzureError:
+    except Exception:
         logger.warning("Cache write failed", exc_info=True)

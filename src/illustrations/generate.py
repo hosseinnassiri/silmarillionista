@@ -168,7 +168,7 @@ def _write_image_prompt(chat_llm, entity_id: str, entity_type: str) -> str:
             HumanMessage(content=f"Entity: {entity_id} ({entity_type})\n\nPassages:\n{passages}"),
         ]
     )
-    return response.text.strip()
+    return str(response.text).strip()
 
 
 def _generate_image(image_client: AzureOpenAI, prompt: str) -> bytes:

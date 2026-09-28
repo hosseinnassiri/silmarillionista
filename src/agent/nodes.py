@@ -157,5 +157,9 @@ def synthesize_node(state: AgentState) -> dict:
 
     # response.content can be a list of content blocks (e.g. thinking + text)
     # rather than a plain string, depending on the model's response shape.
-    # .text extracts only the text blocks, joined into a plain str.
-    return {"answer": response.text, "sources": sorted(set(sources))}
+    # .text extracts only the text blocks -- but as of langchain-core 1.5,
+    # it returns a TextAccessor wrapper, not a plain str (it behaves like one
+    # almost everywhere, but strict type checks like azure-data-tables'
+    # entity serializer reject anything that isn't literally str). str(...)
+    # guarantees a real string downstream.
+    return {"answer": str(response.text), "sources": sorted(set(sources))}
