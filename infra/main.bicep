@@ -234,7 +234,14 @@ module app 'modules/app.bicep' = {
     chatDeploymentName: chatDeploymentName
     routerDeploymentName: routerDeploymentName
     embeddingDeploymentName: embeddingDeploymentName
-    neo4jUri: 'bolt://${neo4j.outputs.fqdn}:${neo4jBoltPort}'
+    // Short app name, not neo4j.outputs.fqdn (the full <app>.internal.<env>
+    // FQDN) — confirmed live that the FQDN's internal DNS entry can get
+    // stuck pointing at a stale IP after Neo4j is recreated, while the
+    // short-name resolution path stays correct. Both are officially
+    // supported ways to reach another app in the same environment (see
+    // Microsoft's connect-apps doc), but only the short name proved
+    // reliable here.
+    neo4jUri: 'bolt://${neo4jContainerAppName}:${neo4jBoltPort}'
     neo4jUsername: neo4jUsername
     keyVaultUri: keyVault.outputs.vaultUri
     storageAccountName: storage.outputs.storageAccountName
@@ -252,8 +259,9 @@ output acrLoginServer string = registry.outputs.loginServer
 // this URI only resolves from inside the Container Apps environment. Local
 // scripts no longer connect here directly; they go through the app's
 // authenticated /admin/cypher proxy (ADMIN_API_URL/ADMIN_API_KEY in .env —
-// see .env.example and src/graph/remote_graph.py).
-output neo4jUri string = 'bolt://${neo4j.outputs.fqdn}:${neo4jBoltPort}'
+// see .env.example and src/graph/remote_graph.py). Short name, not the
+// FQDN — see the neo4jUri comment on the app module call above.
+output neo4jUri string = 'bolt://${neo4jContainerAppName}:${neo4jBoltPort}'
 output neo4jUsername string = neo4jUsername
 
 // Passwords/keys are no longer deployment outputs — retrieve them via Key
